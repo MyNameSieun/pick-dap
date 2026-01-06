@@ -1,5 +1,5 @@
-const CommunityPostEditDetail = () => {
-  return <div>CommunityPostEditDetail</div>;
+const CommunityPostEditDetailPage = () => {
+  return <div>CommunityPostEditDetail Page</div>;
 };
 
-export default CommunityPostEditDetail;
+export default CommunityPostEditDetailPage;
