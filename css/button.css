@@ -7,19 +7,13 @@
 @layer components {
   .button-lg {
     font-size: var(--text-button-lg);
-    line-height: var(--leading-base);
-    font-weight: var(--font-extrabold);
   }
 
   .button-md {
     font-size: var(--text-button-md);
-    line-height: var(--leading-base);
-    font-weight: var(--font-extrabold);
   }
 
   .button-sm {
     font-size: var(--text-button-sm);
-    line-height: var(--leading-base);
-    font-weight: var(--font-extrabold);
   }
 }
