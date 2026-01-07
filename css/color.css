@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+@theme {
+  /* Black & White */
+  --color-black: #0c0c20;
+  --color-white: #ffffff;
+
+  /* Gray */
+  --color-gray-1000: #2f2f2f;
+  --color-gray-900: #454545;
+  --color-gray-800: #595959;
+  --color-gray-700: #727272;
+  --color-gray-600: #979797;
+  --color-gray-500: #bfbfbf;
+  --color-gray-400: #d4d4d4;
+  --color-gray-300: #e4e4e4;
+  --color-gray-200: #efefef;
+  --color-gray-100: #f7f7f7;
+
+  /* Primary */
+  --color-main-500: #1f5fcc;
+  --color-main-400: #2b7fff;
+  --color-main-300: #5da0ff;
+  --color-main-200: #a1c8ff;
+  --color-main-100: #dceaff;
+
+  /* Background */
+  --color-bg-default: #fafaf8;
+  --color-bg-light: #ffffff;
+  --color-bg-deep: #eeeeee;
+
+  /* Tag */
+  --color-tag-text-gray: #777777;
+  --color-tag-text-yellow: #e5b334;
+  --color-tag-text-blue: #4670ec;
+  --color-tag-text-green: #1f7a4c;
+  --color-tag-text-purple: #5a3ee6;
+  --color-tag-text-red: #d12707;
+
+  --color-tag-bg-gray: #eeeeee;
+  --color-tag-bg-yellow: #fef2d1;
+  --color-tag-bg-blue: #dbeafe;
+  --color-tag-bg-green: #e9f8ef;
+  --color-tag-bg-purple: #f2edff;
+  --color-tag-bg-red: #ffe2e2;
+
+  /* Icon */
+  --color-icon-default: #777777;
+  --color-icon-deep: #1f5fcc;
+  --color-icon-light: #dceaff;
+
+  /* Highlight */
+  --color-highlight-deep: #2b7fff;
+  --color-highlight-light: #ebf3ff;
+
+  /* Point */
+  --color-point-star: #fe5a44;
+  --color-point-heart: #da3c48;
+}
