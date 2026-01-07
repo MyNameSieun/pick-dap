@@ -1,8 +1,6 @@
-@import "tailwindcss";
-
 body {
   font-family: var(--font-pretendard), sans-serif;
-  line-height: 140%;
+  line-height: 150%;
   letter-spacing: 0%;
 }
 

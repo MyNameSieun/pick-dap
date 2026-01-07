@@ -1,5 +1,3 @@
-@import "tailwindcss";
-
 @theme {
   --text-button-lg: 16px;
   --text-button-md: 14px;
