@@ -1,6 +1,7 @@
 import Providers from "@/providers/providers";
 import localFont from "next/font/local";
 import "./globals.css";
+import "@/css/index.css";
 import Header from "@/components/common/header/Header";
 
 const pretendard = localFont({
