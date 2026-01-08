@@ -5,11 +5,12 @@ import SideMenuBar from "@/features/mypage/components/SideMenuBar";
 import { Bell } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 
 const Header = () => {
   const pathname = usePathname();
+  const router = useRouter();
   const [isLogin, setLogin] = useState(false);
   const [isVisible, setVisible] = useState(false);
 
@@ -53,10 +54,7 @@ const Header = () => {
           <div className="flex w-1/6 min-w-40 flex-none justify-center">
             {isLogin ? (
               <div className="flex items-center gap-8">
-                <Bell
-                  className="text-icon-default cursor-pointer"
-                  onClick={() => setLogin(!isLogin)}
-                />
+                <Bell className="text-icon-default cursor-pointer" />
                 <div
                   onClick={() => setVisible(!isVisible)}
                   className="relative h-12 w-12 cursor-pointer overflow-hidden rounded-full"
@@ -71,8 +69,15 @@ const Header = () => {
               </div>
             ) : (
               <div className="flex items-center gap-4">
-                <Button onClick={() => setLogin(!isLogin)}>로그인</Button>
-                <Button>회원가입</Button>
+                <Button
+                  onClick={() => {
+                    setLogin(!isLogin);
+                    router.push("/login");
+                  }}
+                >
+                  로그인
+                </Button>
+                <Button onClick={() => router.push("/signup")}>회원가입</Button>
               </div>
             )}
           </div>
@@ -81,7 +86,14 @@ const Header = () => {
           <div className="absolute top-21 right-10 z-50 h-fit w-fit rounded-xl border border-gray-300 bg-white p-4 shadow-md">
             <SideMenuBar />
             <div className="-mx-4 -mb-4">
-              <Button className="text-tag-text-gray h-11 w-full bg-gray-100 text-xs">
+              <Button
+                onClick={() => {
+                  setLogin(!isLogin);
+                  setVisible(false);
+                  router.push("/");
+                }}
+                className="text-tag-text-gray h-11 w-full bg-gray-100 text-xs"
+              >
                 로그아웃
               </Button>
             </div>

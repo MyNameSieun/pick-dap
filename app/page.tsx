@@ -1,3 +1,4 @@
+import Tag from "@/components/common/Tag";
 import { Button } from "@/components/ui/button/Button";
 
 const MainPage = () => {
@@ -30,6 +31,28 @@ const MainPage = () => {
         <Button variant={"secondary"} className="button-sm">
           button-sm
         </Button>
+      </div>
+
+      <div className="flex w-100 gap-1">
+        <Tag size="small" color="gray">
+          TAG
+        </Tag>
+
+        <Tag size="small" color="yellow">
+          TAG
+        </Tag>
+        <Tag size="small" color="blue">
+          TAG
+        </Tag>
+        <Tag size="small" color="green">
+          TAG
+        </Tag>
+        <Tag size="small" color="purple">
+          TAG
+        </Tag>
+        <Tag size="small" color="red">
+          진짜진짜긴태그
+        </Tag>
       </div>
     </div>
   );
