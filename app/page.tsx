@@ -37,7 +37,6 @@ const MainPage = () => {
         <Tag size="small" color="gray">
           TAG
         </Tag>
-
         <Tag size="small" color="yellow">
           TAG
         </Tag>
@@ -51,6 +50,26 @@ const MainPage = () => {
           TAG
         </Tag>
         <Tag size="small" color="red">
+          진짜진짜긴태그
+        </Tag>
+      </div>
+      <div className="flex w-200 gap-1">
+        <Tag size="big" color="gray">
+          TAG
+        </Tag>
+        <Tag size="big" color="yellow">
+          TAG
+        </Tag>
+        <Tag size="big" color="blue">
+          TAG
+        </Tag>
+        <Tag size="big" color="green">
+          TAG
+        </Tag>
+        <Tag size="big" color="purple">
+          TAG
+        </Tag>
+        <Tag size="big" color="red">
           진짜진짜긴태그
         </Tag>
       </div>
