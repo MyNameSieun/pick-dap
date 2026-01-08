@@ -1,4 +1,4 @@
-import Tag from "@/components/common/Tag";
+import Tag from "@/components/common/Tags";
 import { Button } from "@/components/ui/button/Button";
 
 const MainPage = () => {

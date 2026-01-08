@@ -1,17 +1,8 @@
-import { TAG_VARIANTS, TagColor } from "@/constants/Tag.style";
+import { TAG_VARIANTS } from "@/constants/Tag.style";
+import { Tag } from "@/types/tag.types";
 import { twMerge } from "tailwind-merge";
 
-const Tag = ({
-  size = "small",
-  color,
-  children,
-  className,
-}: {
-  size: "small" | "big";
-  color: TagColor;
-  children: string;
-  className?: string;
-}) => {
+const Tags = ({ size = "small", color, children, className }: Tag) => {
   return (
     <>
       {size === "small" && (
@@ -39,4 +30,4 @@ const Tag = ({
     </>
   );
 };
-export default Tag;
+export default Tags;
