@@ -55,7 +55,7 @@ const Header = () => {
           <div className="flex w-1/6 min-w-40 flex-none justify-center">
             {isLogin ? (
               <div className="flex items-center gap-8">
-                <Bell className="text-icon-default cursor-pointer" />
+                <Bell className="text-icon-default hover:text-gray-1000 cursor-pointer" />
                 <div
                   onClick={() => setVisible(!isVisible)}
                   className="relative h-12 w-12 cursor-pointer overflow-hidden rounded-full"
