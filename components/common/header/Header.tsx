@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button/Button";
 import { Bell } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,7 +13,7 @@ const Header = () => {
 
   return (
     <>
-      <header className="c1 bg-bg-default flex h-17.5 w-full items-center border-b-gray-300 px-10">
+      <header className="b2 bg-bg-default flex h-17.5 w-full items-center px-10">
         <div className="relative aspect-[3/2] h-full">
           <Link href="/">
             <Image src="/logo.png" fill className="object-fill" alt="로고" />
@@ -47,7 +48,10 @@ const Header = () => {
         </div>
         <div className="flex-1"></div>
         <div className="flex items-center justify-end gap-8">
-          <Bell className="cursor-pointer" onClick={() => setLogin(!isLogin)} />
+          <Bell
+            className="text-icon-default cursor-pointer"
+            onClick={() => setLogin(!isLogin)}
+          />
           {isLogin ? (
             <div className="relative h-12 w-12 overflow-hidden rounded-full">
               <Image
@@ -58,7 +62,15 @@ const Header = () => {
               />
             </div>
           ) : (
-            <></>
+            <div className="flex gap-3">
+              <Link href={"/login"}>
+                <Button variant={"outline"}>로그인</Button>
+              </Link>
+
+              <Link href={"/signup"}>
+                <Button variant={"default"}>회원가입</Button>
+              </Link>
+            </div>
           )}
         </div>
       </header>
