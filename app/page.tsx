@@ -1,5 +1,5 @@
-import Tag from "@/components/common/Tag";
 import { Button } from "@/components/ui/button/Button";
+import { Heart, Settings } from "lucide-react";
 
 const MainPage = () => {
   return (
@@ -23,36 +23,17 @@ const MainPage = () => {
 
       <br />
 
-      <div className="flex flex-col gap-4">
-        <Button className="button-lg">button-lg</Button>
-        <Button variant={"outline"} className="button-md">
-          button-md
+      <div className="bg-bg-default flex w-100 flex-col gap-4">
+        <Button size="icon">
+          <Settings />
         </Button>
-        <Button variant={"secondary"} className="button-sm">
-          button-sm
+        <Button className="w-fit" variant="link" size="sm">
+          Android
         </Button>
-      </div>
-
-      <div className="flex w-100 gap-1">
-        <Tag size="small" color="gray">
-          TAG
-        </Tag>
-
-        <Tag size="small" color="yellow">
-          TAG
-        </Tag>
-        <Tag size="small" color="blue">
-          TAG
-        </Tag>
-        <Tag size="small" color="green">
-          TAG
-        </Tag>
-        <Tag size="small" color="purple">
-          TAG
-        </Tag>
-        <Tag size="small" color="red">
-          진짜진짜긴태그
-        </Tag>
+        <Button className="w-fit" variant="white" size="sm">
+          <Heart className="fill-point-heart" />
+          123
+        </Button>
       </div>
     </div>
   );
