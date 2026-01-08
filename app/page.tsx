@@ -22,19 +22,6 @@ const MainPage = () => {
       <div className="c2">text-caption2</div>
 
       <br />
-
-      <div className="bg-bg-default flex w-100 flex-col gap-4">
-        <Button size="icon">
-          <Settings />
-        </Button>
-        <Button className="w-fit" variant="link" size="sm">
-          Android
-        </Button>
-        <Button className="w-fit" variant="white" size="sm">
-          <Heart className="fill-point-heart" />
-          123
-        </Button>
-      </div>
     </div>
   );
 };
