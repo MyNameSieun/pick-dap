@@ -16,7 +16,7 @@ const Header = () => {
   return (
     <>
       <div className="relative w-full">
-        <header className="c1 bg-bg-light flex h-17.5 items-center border-b border-b-gray-300 px-10">
+        <header className="b2 bg-bg-light flex h-17.5 items-center border-b border-b-gray-300 px-10">
           <div className="relative aspect-[3/2] h-full">
             <Link href="/">
               <Image src="/logo.png" fill className="object-fill" alt="로고" />
@@ -78,7 +78,7 @@ const Header = () => {
           </div>
         </header>
         {isVisible && (
-          <div className="absolute top-21 right-10 z-50 h-fit w-fit rounded-xl border border-gray-300 p-4 shadow-md">
+          <div className="absolute top-21 right-10 z-50 h-fit w-fit rounded-xl border border-gray-300 bg-white p-4 shadow-md">
             <SideMenuBar />
             <div className="-mx-4 -mb-4">
               <Button className="text-tag-text-gray h-11 w-full bg-gray-100 text-xs">
