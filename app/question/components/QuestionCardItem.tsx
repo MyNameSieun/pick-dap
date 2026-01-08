@@ -25,7 +25,9 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
             </Tags>
           ))}
 
-          <p className="b2 my-3 line-clamp-2 font-bold">{title}</p>
+          <p className="b2 my-3 line-clamp-2 font-bold transition-colors duration-200 ease-out">
+            {title}
+          </p>
           <div className="text-icon-default c2 flex justify-between">
             <time>{createdAt}</time>
             <div className="flex gap-2">

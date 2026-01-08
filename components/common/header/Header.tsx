@@ -7,6 +7,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { twMerge } from "tailwind-merge";
 
 const Header = () => {
   const pathname = usePathname();
@@ -54,7 +55,7 @@ const Header = () => {
           <div className="flex w-1/6 min-w-40 flex-none justify-center">
             {isLogin ? (
               <div className="flex items-center gap-8">
-                <Bell className="text-icon-default cursor-pointer" />
+                <Bell className="text-icon-default hover:text-gray-1000 cursor-pointer" />
                 <div
                   onClick={() => setVisible(!isVisible)}
                   className="relative h-12 w-12 cursor-pointer overflow-hidden rounded-full"
@@ -70,6 +71,9 @@ const Header = () => {
             ) : (
               <div className="flex items-center gap-4">
                 <Button
+                  className="px-6 font-medium"
+                  variant="white"
+                  size="sm"
                   onClick={() => {
                     setLogin(!isLogin);
                     router.push("/login");
@@ -77,7 +81,13 @@ const Header = () => {
                 >
                   로그인
                 </Button>
-                <Button onClick={() => router.push("/signup")}>회원가입</Button>
+                <Button
+                  className="px-6"
+                  size="sm"
+                  onClick={() => router.push("/signup")}
+                >
+                  회원가입
+                </Button>
               </div>
             )}
           </div>
@@ -92,7 +102,12 @@ const Header = () => {
                   setVisible(false);
                   router.push("/");
                 }}
-                className="text-tag-text-gray h-11 w-full bg-gray-100 text-xs"
+                className={twMerge(
+                  "h-11 w-full bg-gray-100 font-medium text-gray-800",
+                  "border-0",
+                )}
+                variant="none"
+                size="sm"
               >
                 로그아웃
               </Button>
