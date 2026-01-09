@@ -1,12 +1,12 @@
 "use client";
 
 import Tags from "@/components/common/Tags";
-import { Button } from "@/components/ui/button";
 import { Bookmark, Send } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import questionData from "@/data/questionData.json";
-import { Textarea } from "@/components/ui/textarea";
+import { Textarea } from "@/components/ui/Textarea";
 import Line from "@/components/common/Line";
+import { Button } from "@/components/ui/button/Button";
 
 const QuestionHeader = () => {
   const pathname = usePathname();

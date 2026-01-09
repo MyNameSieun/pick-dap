@@ -61,10 +61,11 @@ const Header = () => {
                   className="relative h-12 w-12 cursor-pointer overflow-hidden rounded-full"
                 >
                   <Image
-                    className="object-contain"
+                    className="object-cover"
                     src="/profile.jpg"
                     fill
                     alt="프로필"
+                    priority
                   />
                 </div>
               </div>

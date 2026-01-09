@@ -1,6 +1,7 @@
 "use client";
+
 import { Button } from "@/components/ui/button/Button";
-import { Input } from "@/components/ui/input/input";
+import { Input } from "@/components/ui/input/Input";
 import clsx from "clsx";
 import { Filter, Plus, Search } from "lucide-react";
 import { useState } from "react";
