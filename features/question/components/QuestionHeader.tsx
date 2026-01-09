@@ -1,6 +1,6 @@
 "use client";
 
-import Tags from "@/components/common/Tags";
+import Tags from "@/components/common/Tags/Tags";
 import { Bookmark, Send } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import questionData from "@/data/questionData.json";
@@ -29,7 +29,7 @@ const QuestionHeader = () => {
         {pathname.startsWith(`/question/${params.id}`) &&
         !pathname.endsWith("/ai") ? (
           <>
-            <Button variant={"white"}>
+            <Button variant={"white"} className="h-10.5">
               <Bookmark />
               저장
             </Button>
@@ -50,7 +50,7 @@ const QuestionHeader = () => {
             className="bg-bg-default b1 h-45 p-4"
           />
           <div className="flex w-full justify-end">
-            <Button className="mt-4 gap-3.5" variant={"default"}>
+            <Button className="mt-4 h-12 gap-3.5" variant={"default"} size="lg">
               <Send />
               답변 저장
             </Button>
