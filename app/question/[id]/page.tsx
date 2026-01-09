@@ -19,7 +19,7 @@ const QuestionPage = () => {
       <div className="text-gray-1000 mt-10 flex gap-5">
         <Button
           onClick={() => router.push(`/question/${params.id}/list`)}
-          variant={"outline"}
+          variant={"white"}
           className="flex-1 gap-2 py-7"
         >
           <Users />
@@ -27,7 +27,7 @@ const QuestionPage = () => {
         </Button>
         <Button
           onClick={() => router.push(`/question/${params.id}/ai`)}
-          variant={"outline"}
+          variant={"white"}
           className="flex-1 gap-2 py-7"
         >
           <Sparkle />

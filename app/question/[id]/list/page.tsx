@@ -24,7 +24,7 @@ const QuestionPage = () => {
       <section className="rounded-[16] bg-white p-8">
         <article className="flex justify-between">
           <div>추후 프로필 추가</div>
-          <Button variant={"outline"}>
+          <Button variant={"white"}>
             <Heart />
             123
           </Button>
@@ -50,7 +50,7 @@ const QuestionPage = () => {
           </div>
         </article>
 
-        <article className="flex items-center gap-5 mt-7">
+        <article className="mt-7 flex items-center gap-5">
           <Input placeholder="댓글을 입력하세요." />
           <Button variant={"default"}>등록</Button>
         </article>

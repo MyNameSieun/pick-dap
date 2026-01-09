@@ -29,7 +29,7 @@ const QuestionHeader = () => {
         {pathname.startsWith(`/question/${params.id}`) &&
         !pathname.endsWith("/ai") ? (
           <>
-            <Button variant={"outline"}>
+            <Button variant={"white"}>
               <Bookmark />
               저장
             </Button>
