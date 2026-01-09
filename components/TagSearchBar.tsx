@@ -23,7 +23,7 @@ const TagSearchBar = () => {
       <article className="mx-9 flex flex-col gap-3">
         <h5>보유 기술</h5>
         <Input
-          className="c1 h-10 text-gray-600"
+          className="c1 text-gray-1000 h-10"
           type="text"
           placeholder="기술 스택을 입력해주세요 "
         />
