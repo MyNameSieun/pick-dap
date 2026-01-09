@@ -1,12 +1,13 @@
-"use client";
+'use client';
 
-import Tags from "@/components/common/Tags";
-import { Bookmark, Send } from "lucide-react";
-import { useParams, usePathname } from "next/navigation";
-import questionData from "@/data/questionData.json";
-import { Textarea } from "@/components/ui/Textarea";
-import Line from "@/components/common/Line";
-import { Button } from "@/components/ui/button/Button";
+import Tags from '@/components/common/Tags';
+import { Bookmark, Send } from 'lucide-react';
+import { useParams, usePathname } from 'next/navigation';
+import questionData from '@/data/questionData.json';
+import { Textarea } from '@/components/ui/Textarea';
+import Line from '@/components/common/Line';
+import { Button } from '@/components/ui/button/Button';
+import { toast } from 'sonner';
 
 const QuestionHeader = () => {
   const pathname = usePathname();
@@ -14,6 +15,12 @@ const QuestionHeader = () => {
 
   const data = questionData.find((question) => question.id === params.id);
   if (!data) return <p>존재하지 않는 질문입니다.</p>;
+
+  const onClickSaveButtonHandler = () => {
+    toast.success('마이페이지에 저장이 완료되었습니다!', {
+      position: 'top-center',
+    });
+  };
 
   return (
     <div className="rounded-[4] bg-white p-8 shadow-sm">
@@ -27,9 +34,9 @@ const QuestionHeader = () => {
           </Tags>
         </div>
         {pathname.startsWith(`/question/${params.id}`) &&
-        !pathname.endsWith("/ai") ? (
+        !pathname.endsWith('/ai') ? (
           <>
-            <Button variant={"white"}>
+            <Button variant={'white'} onClick={onClickSaveButtonHandler}>
               <Bookmark />
               저장
             </Button>
@@ -50,7 +57,7 @@ const QuestionHeader = () => {
             className="bg-bg-default b1 h-45 p-4"
           />
           <div className="flex w-full justify-end">
-            <Button className="mt-4 gap-3.5" variant={"default"}>
+            <Button className="mt-4 gap-3.5" variant={'default'}>
               <Send />
               답변 저장
             </Button>

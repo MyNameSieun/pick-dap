@@ -1,5 +1,5 @@
-import { Button } from "./ui/button/Button";
-import { Input } from "./ui/input/Input";
+import { Button } from './ui/button/Button';
+import { Input } from './ui/input/Input';
 
 const TagSearchBar = () => {
   return (
@@ -8,13 +8,13 @@ const TagSearchBar = () => {
         <h5>카테고리</h5>
 
         <div className="c1 flex gap-3">
-          <Button variant={"none"} className="h-8.5">
+          <Button variant={'none'} className="h-8.5">
             Front
           </Button>
-          <Button variant={"none"} className="h-8.5">
+          <Button variant={'none'} className="h-8.5">
             Front
           </Button>
-          <Button variant={"none"} className="h-8.5">
+          <Button variant={'none'} className="h-8.5">
             Front
           </Button>
         </div>
@@ -33,13 +33,13 @@ const TagSearchBar = () => {
         <h5>정렬</h5>
         <div className="text-button-sm flex gap-7.5">
           <Button
-            variant={"white"}
+            variant={'white'}
             className="hover:border-main-400 hover:text-main-400 h-9 flex-1 border-2"
           >
             추천순
           </Button>
           <Button
-            variant={"white"}
+            variant={'white'}
             className="hover:border-main-400 hover:text-main-400 h-9 flex-1 border-2"
           >
             최신순

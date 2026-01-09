@@ -1,12 +1,13 @@
-import Providers from "@/providers/providers";
-import localFont from "next/font/local";
-import "@/css/globals.css";
+import Providers from '@/providers/providers';
+import localFont from 'next/font/local';
+import '@/css/globals.css';
 
-import Header from "@/components/common/Header";
+import Header from '@/components/common/Header';
+import { Toaster } from 'sonner';
 
 const pretendard = localFont({
-  variable: "--font-pretendard",
-  src: "../assets/fonts/PretendardVariable.woff2",
+  variable: '--font-pretendard',
+  src: '../assets/fonts/PretendardVariable.woff2',
 });
 
 export default function RootLayout({
@@ -18,6 +19,8 @@ export default function RootLayout({
     <html lang="ko">
       <body className={`${pretendard.variable} bg-bg-default`}>
         <Header />
+        <Toaster />
+
         <main className="mx-auto my-11 w-285">
           <Providers>{children}</Providers>
         </main>
