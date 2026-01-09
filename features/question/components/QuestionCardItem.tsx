@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { Question } from "../types/question.types";
-import Tags from "@/components/common/Tags";
+import Tags from "@/components/common/Tags/Tags";
 import { Bookmark, Crown, Eye } from "lucide-react";
 
 interface QuestionCardItemProps {

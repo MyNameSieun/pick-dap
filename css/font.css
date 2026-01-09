@@ -30,16 +30,16 @@ body {
 @layer components {
   /* body */
   .b1 {
-    @apply text-[16px] font-normal;
+    @apply text-base font-normal;
   }
 
   .b2 {
-    @apply text-[14px] font-normal;
+    @apply text-sm font-normal;
   }
 
   /* caption */
   .c1 {
-    @apply text-[12px] font-normal;
+    @apply text-xs font-normal;
   }
   .c2 {
     @apply text-[10px] font-normal;
