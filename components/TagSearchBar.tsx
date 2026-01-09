@@ -1,5 +1,5 @@
 import { Button } from "./ui/button/Button";
-import { Input } from "./ui/input/input";
+import { Input } from "./ui/input/Input";
 
 const TagSearchBar = () => {
   return (

@@ -1,11 +1,11 @@
 import HeaderTitleBox from "@/components/common/HeaderTitleBox";
-import QuestionHeader from "../../components/QuestionHeader";
+import QuestionHeader from "../../../../features/question/components/QuestionHeader";
 import BackButton from "@/components/common/BackButton";
-import { Crown, Heart, MessageSquare } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { Crown, Heart } from "lucide-react";
 import Line from "@/components/common/Line";
 import Image from "next/image";
-import { Input } from "@/components/ui/input/input";
+import { Input } from "@/components/ui/input/Input";
+import { Button } from "@/components/ui/button/Button";
 
 const QuestionPage = () => {
   return (
@@ -38,7 +38,7 @@ const QuestionPage = () => {
 
         <Line />
         <article className="flex gap-4">
-          <Image src={""} alt="이미지" />
+          <Image src="/profile.jpg" height={16} width={16} alt="이미지" />
           <div className="flex flex-col gap-2">
             <div className="text-gray-1000 flex gap-2">
               <p className="b1 font-bold">건재2</p>
