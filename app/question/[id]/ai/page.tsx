@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import QuestionHeader from "../../components/QuestionHeader";
 import BackButton from "@/components/common/BackButton";
 import HeaderTitleBox from "@/components/common/HeaderTitleBox";
+import { Calendar } from "lucide-react";
 
 const InterviewAiPage = () => {
   const params = useParams();
@@ -19,6 +20,7 @@ const InterviewAiPage = () => {
         <QuestionHeader />
       </div>
       <HeaderTitleBox
+        icon={Calendar}
         title={"프로젝트 추가 "}
         content={"자세히 입력할수록 AI가 더 정확한 질문을 생성할 수 있습니다."}
       />
