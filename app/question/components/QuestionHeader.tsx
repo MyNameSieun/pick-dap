@@ -6,6 +6,7 @@ import { Bookmark, Send } from "lucide-react";
 import { useParams, usePathname } from "next/navigation";
 import questionData from "@/data/questionData.json";
 import { Textarea } from "@/components/ui/textarea";
+import Line from "@/components/common/Line";
 
 const QuestionHeader = () => {
   const pathname = usePathname();
@@ -59,7 +60,7 @@ const QuestionHeader = () => {
         <>
           <h2 className="mt-8 mb-15">{data?.title}</h2>
 
-          <div className="mt-8 mb-8 border border-gray-100" />
+          <Line />
 
           <div className="b1 text-gray-1000">{data.content}</div>
         </>
