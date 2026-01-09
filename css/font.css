@@ -10,20 +10,20 @@ body {
   }
 
   h2 {
-    @apply text-[28px] font-semibold;
+    @apply text-[28px] font-bold;
   }
 
   h3 {
-    @apply text-[24px] font-semibold;
+    @apply text-[24px] font-bold;
   }
   h4 {
-    @apply text-[20px] font-semibold;
+    @apply text-[20px] font-bold;
   }
   h5 {
-    @apply text-[18px] font-medium;
+    @apply text-[18px] font-bold;
   }
   h6 {
-    @apply text-[16px] font-medium;
+    @apply text-[16px] font-bold;
   }
 }
 
@@ -39,9 +39,9 @@ body {
 
   /* caption */
   .c1 {
-    @apply text-[13px] font-normal;
+    @apply text-[12px] font-normal;
   }
   .c2 {
-    @apply text-[12px] font-normal;
+    @apply text-[10px] font-normal;
   }
 }

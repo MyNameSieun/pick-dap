@@ -16,9 +16,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
-      <body className={`${pretendard.variable}`}>
+      <body className={`${pretendard.variable} bg-bg-default`}>
         <Header />
-        <Providers>{children}</Providers>
+        <main className="mx-auto my-11 w-285">
+          <Providers>{children}</Providers>
+        </main>
       </body>
     </html>
   );
