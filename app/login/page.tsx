@@ -7,10 +7,12 @@ import googleLogo from '@/public/logo/goggle-logo.png';
 import kakaoLogo from '@/public/logo/kakao-logo.png';
 import githubLogo from '@/public/logo/github-logo.png';
 import Link from 'next/link';
+import PasswordResetModa from '@/components/modal/PasswordResetModa';
 
 const LoginPage = () => {
   return (
     <div className="mx-auto w-200">
+      <PasswordResetModa />
       <div className="flex flex-col items-center">
         <Image width={230} src={logo} alt="logo" />
         <h3 className="text-main-400 mb-9">AI로 완성하는 면접 준비, 픽답</h3>
