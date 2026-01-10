@@ -1,6 +1,17 @@
-import Image from "next/image";
+'use client';
 
-const InfoAuthor = () => {
+import infoData from '@/data/infoData.json';
+import Image from 'next/image';
+
+const InfoAuthor = ({
+  image,
+  author,
+  createdAt,
+}: {
+  image: string;
+  author: string;
+  createdAt: string;
+}) => {
   return (
     <>
       <div className="flex h-fit w-fit items-center gap-4">
@@ -8,14 +19,16 @@ const InfoAuthor = () => {
           <Image
             className="object-cover"
             alt="작성자 프로필"
-            src="/profile.jpg"
+            src={`${image ?? infoData.author.profileImage}`}
             fill
             priority
           />
         </div>
-        <div className="flex flex-col justify-between">
-          <p className="text-sm font-semibold text-black">j_gun2</p>
-          <p className="c2 text-gray-700">2026.01.02</p>
+        <div className="flex h-12 flex-col justify-between">
+          <p className="text-sm font-semibold text-black">
+            {author ?? infoData.author.username}
+          </p>
+          <p className="c2 text-gray-700">{createdAt ?? infoData.createdAt}</p>
         </div>
       </div>
     </>

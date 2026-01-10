@@ -1,8 +1,16 @@
-[
-  {
-    "views": 45,
-    "comments": 45,
-    "bookmarks": 45,
-    "hearts": 123
+{
+  "id": "1",
+  "title": "프로세스와 스레드의 차이점은?",
+  "createdAt": "2026.01.02",
+  "author": {
+    "id": "1",
+    "username": "j_gun2",
+    "profileImage": "/profile.jpg"
+  },
+  "stats": {
+    "viewCount": 45,
+    "bookmarkCount": 36,
+    "likeCount": 123,
+    "commentCount": 12
   }
-]
+}
