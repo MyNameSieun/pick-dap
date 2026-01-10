@@ -7,7 +7,7 @@ import Image from 'next/image';
 import { Input } from '@/components/ui/input/Input';
 import { Button } from '@/components/ui/button/Button';
 import qustionCommentData from '@/data/questionCommentData.json';
-import EmptyStateBox from '@/features/question/components/EmptyStateBox';
+import EmptyStateBox from '@/components/common/EmptyStateBox/EmptyStateBox';
 
 const QuestionPage = () => {
   const comment = qustionCommentData.map((data) => data.comment);
