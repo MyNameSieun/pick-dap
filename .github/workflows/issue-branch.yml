@@ -4,29 +4,36 @@ on:
   issues:
     types: [opened]
 
+permissions:
+  contents: write
+
 jobs:
   create-branch:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.TOKEN }}
           ref: dev
+          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Create feature branch
         env:
           ISSUE_NUMBER: ${{ github.event.issue.number }}
           ISSUE_TITLE: ${{ github.event.issue.title }}
         run: |
-          # 브랜치 이름 생성 (특수문자 및 공백 처리)
-          ISSUE_TITLE_CLEAN="${ISSUE_TITLE// /-}"               # 공백을 '-'로 대체
-          ISSUE_TITLE_CLEAN="${ISSUE_TITLE_CLEAN//[^a-zA-Z0-9가-힣_-]/}" # 영문, 한글, 숫자, '_'만 남김
+          # 제목 정리: 소문자 변환 → 공백을 '-'로 → 특수문자 제거
+          ISSUE_TITLE_CLEAN=$(echo "$ISSUE_TITLE" \
+            | tr '[:upper:]' '[:lower:]' \
+            | sed 's/ /-/g' \
+            | sed 's/[^a-z0-9-]//g')
 
-          BRANCH_NAME="#${ISSUE_NUMBER}_${ISSUE_TITLE_CLEAN}"
+          BRANCH_NAME="feat/${ISSUE_NUMBER}-${ISSUE_TITLE_CLEAN}"
 
-          # 'dev' 브랜치를 기준으로 새 브랜치 생성 및 푸시
+          echo "Creating branch: $BRANCH_NAME"
+
           git checkout dev
-          git pull origin dev  # 최신 상태로 업데이트
+          git pull origin dev
           git checkout -b "$BRANCH_NAME"
           git push origin "$BRANCH_NAME"
