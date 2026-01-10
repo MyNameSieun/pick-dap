@@ -33,7 +33,7 @@ const SavedQuestionsModal = () => {
           </div>
         </article>
 
-        <Line />
+        <Line my={4} />
 
         <div className="text-button-lg flex gap-7">
           <Button className="flex-1" variant={'white'}>

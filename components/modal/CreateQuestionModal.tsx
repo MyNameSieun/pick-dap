@@ -9,7 +9,9 @@ const CreateQuestionModal = () => {
         <h2 className="text- gray-1000">질문 입력</h2>
         <X className="text-icon-default cursor-pointer" size={24} />
       </div>
-      <Line />
+
+      <Line my={4} borderColor="border-gray-300" />
+
       <article className="flex flex-col gap-4">
         {/* 질문 */}
         <div className="flex flex-col gap-1">
