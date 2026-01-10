@@ -42,6 +42,6 @@ body {
     @apply text-xs font-normal;
   }
   .c2 {
-    @apply text-[10px] font-normal;
+    @apply text-[10px] leading-[1.5] font-normal;
   }
 }

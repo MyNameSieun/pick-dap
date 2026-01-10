@@ -1,4 +1,4 @@
-import InfoAuthor from "@/components/common/Info/InfoAuthor";
+import InfoAuthor from '@/components/common/Info/InfoAuthor';
 
 const MainPage = () => {
   return (
