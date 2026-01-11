@@ -9,6 +9,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Line from './Line';
+import profileImage from '@/public/profile.jpg';
 
 const NAV_LIST = [
   {
@@ -39,7 +40,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="relative w-full">
+      <div className="relative w-full" onDragStart={(e) => e.preventDefault()}>
         <header className="b2 bg-bg-light flex h-17.5 items-center border-b border-b-gray-300 px-10">
           <div className="relative aspect-[3/2] h-full">
             <Link href="/">
@@ -78,7 +79,7 @@ const Header = () => {
                   >
                     <Image
                       className="object-cover"
-                      src="/profile.jpg"
+                      src={profileImage}
                       fill
                       alt="프로필"
                       priority
