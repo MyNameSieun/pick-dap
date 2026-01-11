@@ -13,6 +13,11 @@ const meta: Meta<typeof SelectCountBox> = {
     count: {
       control: { type: 'number', min: 0 },
     },
+    red: {
+      control: 'boolean',
+      description: '삭제(빨간) 스타일 적용 여부',
+      defaultValue: false,
+    },
   },
 };
 
@@ -28,11 +33,12 @@ export const Default: Story = {
   },
 };
 
-export const Community: Story = {
+export const RedVariant: Story = {
   args: {
-    count: 1,
-    name: '글',
-    buttonName: '선택한 글 삭제',
+    count: 5,
+    name: '면접',
+    buttonName: '선택한 면접 삭제',
+    red: true,
   },
 };
 
