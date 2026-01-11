@@ -13,7 +13,7 @@ const SavedQuestionsModal = () => {
 
       <div className="flex flex-col gap-4">
         <article className="flex flex-col gap-4 rounded-[16] border border-gray-500 p-4 shadow-md">
-          <div>
+          <div className="flex flex-wrap">
             <Tags className="mr-1" size="small" color="blue">
               Infra
             </Tags>

@@ -1,32 +1,32 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Button } from "./Button";
-import { Search, ChevronRight, Mail } from "lucide-react";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import { Button } from './Button';
+import { Search, ChevronRight, Mail } from 'lucide-react';
 
 const meta: Meta<typeof Button> = {
-  title: "Components/Common/Button",
+  title: 'Components/Common/Button',
   component: Button,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: "select",
-      options: ["default", "white", "none", "ghost", "link"],
-      description: "버튼의 스타일 변형",
+      control: 'select',
+      options: ['default', 'white', 'none', 'ghost', 'link'],
+      description: '버튼의 스타일 변형',
     },
     size: {
-      control: "select",
-      options: ["default", "xs", "sm", "lg", "icon"],
-      description: "버튼의 크기",
+      control: 'select',
+      options: ['default', 'xs', 'sm', 'lg', 'icon'],
+      description: '버튼의 크기',
     },
     asChild: {
-      control: "boolean",
-      description: "자식 요소를 렌더링할지 여부",
+      control: 'boolean',
+      description: '자식 요소를 렌더링할지 여부',
     },
     disabled: {
-      control: "boolean",
+      control: 'boolean',
     },
   },
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
 };
 
@@ -36,9 +36,9 @@ type Story = StoryObj<typeof Button>;
 // 1. 기본 버튼
 export const Default: Story = {
   args: {
-    children: "Default Button",
-    variant: "default",
-    size: "default",
+    children: 'Default Button',
+    variant: 'default',
+    size: 'default',
   },
 };
 
@@ -105,7 +105,7 @@ export const WithIcon: Story = {
 // 5. 비활성화 상태
 export const Disabled: Story = {
   args: {
-    children: "Disabled Button",
+    children: 'Disabled Button',
     disabled: true,
   },
 };
