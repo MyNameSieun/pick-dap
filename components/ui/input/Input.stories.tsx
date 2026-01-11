@@ -1,35 +1,45 @@
-import type { Meta, StoryObj } from "@storybook/react";
-import { Input } from "./Input"; // 컴포넌트 경로에 맞게 수정하세요.
+import type { Meta, StoryObj } from '@storybook/react';
+import { Input } from './Input'; // 컴포넌트 경로에 맞게 수정하세요.
+import { Eye, Lock, Mail, Search, User } from 'lucide-react';
 
 const meta: Meta<typeof Input> = {
-  title: "Components/Common/Input",
+  title: 'Components/Common/Input',
   component: Input,
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     variant: {
-      control: "select",
-      options: ["default", "gray", "ghost"],
-      description: "입력창의 옵션",
+      control: 'select',
+      options: ['default', 'gray', 'ghost'],
+      description: '입력창의 옵션',
     },
-    showIcon: {
-      control: "boolean",
-      description: "우측 돋보기 아이콘 표시 여부",
+    Icon: {
+      control: 'select',
+      options: ['None', 'Search', 'Mail', 'Lock', 'User', 'Eye'],
+      mapping: {
+        None: undefined,
+        Search: Search,
+        Mail: Mail,
+        Lock: Lock,
+        User: User,
+        Eye: Eye,
+      },
+      description: '우측에 표시될 아이콘',
     },
     inputSize: {
-      control: "radio",
-      options: ["default", "sm", "lg"],
-      description: "입력창의 크기",
+      control: 'radio',
+      options: ['default', 'sm', 'lg'],
+      description: '입력창의 크기',
     },
     disabled: {
-      control: "boolean",
+      control: 'boolean',
     },
     type: {
-      control: "select",
-      options: ["text", "password", "email", "number", "file"],
+      control: 'select',
+      options: ['text', 'password', 'email', 'number', 'file'],
     },
   },
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
 };
 
@@ -39,9 +49,9 @@ type Story = StoryObj<typeof Input>;
 // 1. 기본 인풋
 export const Default: Story = {
   args: {
-    variant: "default",
-    inputSize: "default",
-    placeholder: "내용을 입력해주세요",
+    variant: 'default',
+    inputSize: 'default',
+    placeholder: '내용을 입력해주세요',
   },
 };
 
@@ -65,12 +75,11 @@ export const AllVariants: Story = {
   ),
 };
 
-// 1. 아이콘이 있는 상태
 export const WithIcon: Story = {
   args: {
-    className: "w-100",
-    showIcon: true,
-    placeholder: "아이콘이 보입니다",
+    className: 'w-100',
+    Icon: Search,
+    placeholder: '검색어를 입력하세요',
   },
 };
 
@@ -88,26 +97,26 @@ export const AllSizes: Story = {
 // 4. 에러 상태 (aria-invalid)
 export const Invalid: Story = {
   args: {
-    className: "w-100",
-    "aria-invalid": true,
-    placeholder: "잘못된 입력입니다",
-    defaultValue: "에러 발생 데이터",
+    className: 'w-100',
+    'aria-invalid': true,
+    placeholder: '잘못된 입력입니다',
+    defaultValue: '에러 발생 데이터',
   },
 };
 
 // 5. 비활성화 상태
 export const Disabled: Story = {
   args: {
-    className: "w-100",
+    className: 'w-100',
     disabled: true,
-    placeholder: "입력할 수 없습니다",
+    placeholder: '입력할 수 없습니다',
   },
 };
 
 // 6. 파일 업로드 타입
 export const FileInput: Story = {
   args: {
-    className: "w-100",
-    type: "file",
+    className: 'w-100',
+    type: 'file',
   },
 };
