@@ -1,7 +1,7 @@
-import React from "react";
+import React from 'react';
 
 const MypageCommunityPage = () => {
-  return <div>MypageCommunityPage</div>;
+  return <div></div>;
 };
 
 export default MypageCommunityPage;
