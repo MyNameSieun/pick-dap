@@ -1,3 +1,5 @@
+'use client';
+
 import Line from '@/components/common/Line';
 import { Settings } from 'lucide-react';
 
@@ -12,6 +14,7 @@ const MypageUserMenu = () => {
         <article className="flex flex-col items-center gap-5">
           <div className="relative h-30 w-30 overflow-hidden rounded-full">
             <Image
+              onDragStart={(e) => e.preventDefault()}
               className="object-cover"
               alt="작성자 프로필"
               src={profileImage}
