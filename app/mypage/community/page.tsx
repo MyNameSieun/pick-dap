@@ -1,5 +1,4 @@
 'use client';
-import AiRoomCard from '@/features/mypage/components/AiRoomCard';
 import CommunityCard from '@/features/mypage/components/CommunityCard';
 import ListSelectionHeader from '@/features/mypage/components/ListSelectionHeader';
 import { Users } from 'lucide-react';
