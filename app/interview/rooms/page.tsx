@@ -1,4 +1,4 @@
-import InterviewRooms from '@/features/interview/components/InterViewRooms';
+import InterviewRooms from '@/features/interview/components/InterviewRooms';
 
 export const metadata = {
   title: '지난 면접 불러오기',
