@@ -1,9 +1,10 @@
 import Line from '@/components/common/Line';
 import TagSearchBar from '@/components/TagSearchBar';
-import { Bookmark, Bot, FolderOpen, Settings, Users } from 'lucide-react';
+import { Settings } from 'lucide-react';
 
 import profileImage from '@/public/profile.jpg';
 import Image from 'next/image';
+import SideMenuBar from '@/features/mypage/components/SideMenuBar';
 
 const MypageQuestionsPage = () => {
   return (
@@ -25,9 +26,10 @@ const MypageQuestionsPage = () => {
           </div>
         </article>
         <Line />
+        <h6>마이페이지</h6>
 
         <article>
-          <h6>마이페이지</h6>
+          <SideMenuBar />
         </article>
 
         <Line />

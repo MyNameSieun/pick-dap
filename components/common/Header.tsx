@@ -2,12 +2,13 @@
 
 import { Button } from '@/components/ui/button/Button';
 import SideMenuBar from '@/features/mypage/components/SideMenuBar';
-import { Bell } from 'lucide-react';
+import { Bell, Settings } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import Line from './Line';
 
 const NAV_LIST = [
   {
@@ -42,9 +43,15 @@ const Header = () => {
         <header className="b2 bg-bg-light flex h-17.5 items-center border-b border-b-gray-300 px-10">
           <div className="relative aspect-[3/2] h-full">
             <Link href="/">
-              <Image src="/logo.png" fill className="object-fill" alt="로고" />
+              <Image
+                src="/logo/logo.png"
+                fill
+                className="object-fill"
+                alt="로고"
+              />
             </Link>
           </div>
+
           <div className="flex-1"></div>
           <div className="text-gray-1000 flex items-center justify-center gap-10">
             {NAV_LIST.map((nav) => (
@@ -58,21 +65,62 @@ const Header = () => {
             ))}
           </div>
           <div className="flex-1"></div>
+
           <div className="flex w-1/6 min-w-40 flex-none justify-center">
             {isLogin ? (
               <div className="flex items-center gap-8">
                 <Bell className="text-icon-default hover:text-gray-1000 cursor-pointer" />
-                <div
-                  onClick={() => setVisible(!isVisible)}
-                  className="relative h-12 w-12 cursor-pointer overflow-hidden rounded-full"
-                >
-                  <Image
-                    className="object-cover"
-                    src="/profile.jpg"
-                    fill
-                    alt="프로필"
-                    priority
-                  />
+
+                <div className="relative">
+                  <div
+                    onClick={() => setVisible(!isVisible)}
+                    className="relative h-12 w-12 cursor-pointer overflow-hidden rounded-full"
+                  >
+                    <Image
+                      className="object-cover"
+                      src="/profile.jpg"
+                      fill
+                      alt="프로필"
+                      priority
+                    />
+                  </div>
+
+                  {isVisible && (
+                    <article className="absolute top-20 right-0 z-50 w-55 rounded-xl border border-gray-300 bg-white p-5 shadow-md">
+                      <div className="ditems-center flex h-8 justify-between">
+                        <p className="b1 font-bold text-gray-800">
+                          <Link href={'/mypage'}>마이페이지</Link>
+                        </p>
+
+                        <Settings
+                          className="text-icon-default hover:text-gray-1000 cursor-pointer"
+                          height={20}
+                          width={20}
+                        />
+                      </div>
+
+                      <Line my={1} />
+
+                      <SideMenuBar />
+                      <div className="-mx-4 -mb-4">
+                        <Button
+                          onClick={() => {
+                            setLogin(!isLogin);
+                            setVisible(false);
+                            router.push('/');
+                          }}
+                          className={twMerge(
+                            'h-11 w-full bg-gray-100 font-medium text-gray-800',
+                            'border-0',
+                          )}
+                          variant="none"
+                          size="sm"
+                        >
+                          로그아웃
+                        </Button>
+                      </div>
+                    </article>
+                  )}
                 </div>
               </div>
             ) : (
@@ -99,28 +147,6 @@ const Header = () => {
             )}
           </div>
         </header>
-        {isVisible && (
-          <div className="absolute top-21 right-10 z-50 h-fit w-fit rounded-xl border border-gray-300 bg-white p-4 shadow-md">
-            <SideMenuBar />
-            <div className="-mx-4 -mb-4">
-              <Button
-                onClick={() => {
-                  setLogin(!isLogin);
-                  setVisible(false);
-                  router.push('/');
-                }}
-                className={twMerge(
-                  'h-11 w-full bg-gray-100 font-medium text-gray-800',
-                  'border-0',
-                )}
-                variant="none"
-                size="sm"
-              >
-                로그아웃
-              </Button>
-            </div>
-          </div>
-        )}
       </div>
     </>
   );
