@@ -1,7 +1,7 @@
 'use client';
 
 import Tags from '@/components/common/Tags/Tags';
-import { Dot, Heart, MessageSquare } from 'lucide-react';
+import { Heart, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import profileImage from '@/public/profile.jpg';
 import Image from 'next/image';
