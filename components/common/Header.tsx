@@ -29,7 +29,7 @@ const NAV_LIST = [
     name: '커뮤니티',
     link: '/community',
   },
-];
+] as const;
 
 const Header = () => {
   const pathname = usePathname();
@@ -101,7 +101,7 @@ const Header = () => {
 
                       <Line my={1} />
 
-                      <SideMenuBar />
+                      <SideMenuBar isHeader={true} />
                       <div className="-mx-4 -mb-4">
                         <Button
                           onClick={() => {
