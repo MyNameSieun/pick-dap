@@ -1,34 +1,16 @@
 import { Button } from '@/components/ui/button/Button';
-import { Input } from '@/components/ui/input/Input';
-import logo from '@/public/logo/logo.png';
-import Image from 'next/image';
 
-import googleLogo from '@/public/logo/goggle-logo.png';
-import kakaoLogo from '@/public/logo/kakao-logo.png';
-import githubLogo from '@/public/logo/github-logo.png';
 import Link from 'next/link';
+import SocialSignupButton from '@/features/auth/SocialSignupButton';
+import AuthHeader from '@/features/auth/AuthHeader';
+import SignupInput from '@/features/auth/SignupInput';
 
 const SignupPage = () => {
   return (
     <div className="mx-auto w-200">
-      <div className="flex flex-col items-center">
-        <Image width={230} src={logo} alt="logo" />
-        <h3 className="text-main-400 mb-9">AI로 완성하는 면접 준비, 픽답</h3>
-      </div>
+      <AuthHeader />
 
-      <div className="flex flex-col gap-3">
-        <Input type="email" placeholder="아이디 (이메일)" className="b1 py-7" />
-        <Input
-          type="password"
-          placeholder="비밀번호  (영문, 숫자, 특수문자를 포함한 8~20자)"
-          className="b1 py-7"
-        />
-        <Input
-          type="password"
-          placeholder="비밀번호 확인"
-          className="b1 py-7"
-        />
-      </div>
+      <SignupInput />
 
       <div className="mt-5 mb-12 flex justify-between">
         <div className="flex items-center gap-2 text-gray-600">
@@ -58,19 +40,7 @@ const SignupPage = () => {
         <div className="h-px flex-1 bg-gray-300" />
       </div>
 
-      <div className="flex justify-center gap-6">
-        <button className="bg-bg-light cursor-pointer rounded-full p-4.5 shadow-md">
-          <Image width="40" height="40" src={googleLogo} alt="google-logo" />
-        </button>
-
-        <button className="cursor-pointer rounded-full bg-[#FEE500] p-4.5 shadow-md">
-          <Image width="40" height="40" src={kakaoLogo} alt="kakao-logo" />
-        </button>
-
-        <button className="cursor-pointer rounded-full bg-[#010101] p-4.5 shadow-md">
-          <Image width="40" height="40" src={githubLogo} alt="github-logo" />
-        </button>
-      </div>
+      <SocialSignupButton />
     </div>
   );
 };
