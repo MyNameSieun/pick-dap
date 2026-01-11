@@ -6,40 +6,40 @@ body {
 
 @layer base {
   h1 {
-    @apply text-[32px] font-bold;
+    @apply text-[32px] leading-[1.5] font-bold;
   }
 
   h2 {
-    @apply text-[28px] font-bold;
+    @apply text-[28px] leading-[1.5] font-bold;
   }
 
   h3 {
-    @apply text-[24px] font-bold;
+    @apply text-[24px] leading-[1.5] font-bold;
   }
   h4 {
-    @apply text-[20px] font-bold;
+    @apply text-[20px] leading-[1.5] font-bold;
   }
   h5 {
-    @apply text-[18px] font-bold;
+    @apply text-[18px] leading-[1.5] font-bold;
   }
   h6 {
-    @apply text-[16px] font-bold;
+    @apply text-[16px] leading-[1.5] font-bold;
   }
 }
 
 @layer components {
   /* body */
   .b1 {
-    @apply text-base font-normal;
+    @apply text-base leading-[1.5] font-normal;
   }
 
   .b2 {
-    @apply text-sm font-normal;
+    @apply text-sm leading-[1.5] font-normal;
   }
 
   /* caption */
   .c1 {
-    @apply text-xs font-normal;
+    @apply text-xs leading-[1.5] font-normal;
   }
   .c2 {
     @apply text-[10px] leading-[1.5] font-normal;
