@@ -1,7 +1,7 @@
 import { Bookmark, Bot, FolderOpen, Settings, Users } from 'lucide-react';
 import Link from 'next/link';
 
-const menuList = [
+const SIDE_MENU_ITEMS = [
   {
     link: '/mypage/question',
     name: '저장된 질문',
@@ -39,7 +39,7 @@ const SideMenuBar = () => {
       </div>
 
       <nav className="flex h-fit w-full cursor-pointer flex-col gap-2 py-4">
-        {menuList.map((menu) => (
+        {SIDE_MENU_ITEMS.map((menu) => (
           <Link href={menu.link} key={menu.link}>
             <div className="flex h-7 w-full items-center gap-5 rounded-sm px-2.5 py-1.5 hover:bg-gray-100">
               <menu.icon className="text-icon-default" width={20} height={20} />

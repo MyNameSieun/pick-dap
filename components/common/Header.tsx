@@ -1,13 +1,34 @@
-"use client";
+'use client';
 
-import { Button } from "@/components/ui/button/Button";
-import SideMenuBar from "@/features/mypage/components/SideMenuBar";
-import { Bell } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
-import { twMerge } from "tailwind-merge";
+import { Button } from '@/components/ui/button/Button';
+import SideMenuBar from '@/features/mypage/components/SideMenuBar';
+import { Bell } from 'lucide-react';
+import Image from 'next/image';
+import Link from 'next/link';
+import { usePathname, useRouter } from 'next/navigation';
+import { useState } from 'react';
+import { twMerge } from 'tailwind-merge';
+
+const NAV_LIST = [
+  {
+    name: '면접 질문',
+    link: '/question',
+  },
+  {
+    name: '면접 연습',
+    link: '/interview',
+  },
+
+  {
+    name: '면접 후기',
+    link: '/review',
+  },
+
+  {
+    name: '커뮤니티',
+    link: '/community',
+  },
+];
 
 const Header = () => {
   const pathname = usePathname();
@@ -26,30 +47,15 @@ const Header = () => {
           </div>
           <div className="flex-1"></div>
           <div className="text-gray-1000 flex items-center justify-center gap-10">
-            <Link
-              className={`${pathname.startsWith("/question") ? "font-bold" : "font-normal"}`}
-              href={`/question`}
-            >
-              면접 질문
-            </Link>
-            <Link
-              className={`${pathname.startsWith("/interview") ? "font-bold" : "font-normal"}`}
-              href={`/interview`}
-            >
-              면접 연습
-            </Link>
-            <Link
-              className={`${pathname.startsWith("/review") ? "font-bold" : "font-normal"}`}
-              href={`/review`}
-            >
-              면접 후기
-            </Link>
-            <Link
-              className={`${pathname.startsWith("/community") ? "font-bold" : "font-normal"}`}
-              href={`/community`}
-            >
-              커뮤니티
-            </Link>
+            {NAV_LIST.map((nav) => (
+              <Link
+                key={nav.name}
+                className={`${pathname.startsWith(nav.link) ? 'font-bold' : 'font-normal'}`}
+                href={nav.link}
+              >
+                {nav.name}
+              </Link>
+            ))}
           </div>
           <div className="flex-1"></div>
           <div className="flex w-1/6 min-w-40 flex-none justify-center">
@@ -77,7 +83,7 @@ const Header = () => {
                   size="sm"
                   onClick={() => {
                     setLogin(!isLogin);
-                    router.push("/login");
+                    router.push('/login');
                   }}
                 >
                   로그인
@@ -85,7 +91,7 @@ const Header = () => {
                 <Button
                   className="px-6"
                   size="sm"
-                  onClick={() => router.push("/signup")}
+                  onClick={() => router.push('/signup')}
                 >
                   회원가입
                 </Button>
@@ -101,11 +107,11 @@ const Header = () => {
                 onClick={() => {
                   setLogin(!isLogin);
                   setVisible(false);
-                  router.push("/");
+                  router.push('/');
                 }}
                 className={twMerge(
-                  "h-11 w-full bg-gray-100 font-medium text-gray-800",
-                  "border-0",
+                  'h-11 w-full bg-gray-100 font-medium text-gray-800',
+                  'border-0',
                 )}
                 variant="none"
                 size="sm"
