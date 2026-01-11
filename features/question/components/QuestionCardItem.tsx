@@ -1,7 +1,7 @@
-import Link from "next/link";
-import { Question } from "../types/question.types";
-import Tags from "@/components/common/Tags/Tags";
-import { Bookmark, Crown, Eye } from "lucide-react";
+import Link from 'next/link';
+import { Question } from '../types/question.types';
+import Tags from '@/components/common/Tags/Tags';
+import { Bookmark, Crown, Eye } from 'lucide-react';
 
 interface QuestionCardItemProps {
   question: Question;
@@ -14,16 +14,18 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
     <li>
       <Link href={`question/${id}`}>
         <article className="hover:text-highlight-deep rounded-[6px] border border-gray-300 p-3">
-          {tags.map((tag) => (
-            <Tags
-              className="mr-2"
-              key={tag.label}
-              color={"blue"}
-              size={"small"}
-            >
-              {tag.label}
-            </Tags>
-          ))}
+          <div className="felx-wrap flex">
+            {tags.map((tag) => (
+              <Tags
+                className="mr-2"
+                key={tag.label}
+                color={'blue'}
+                size={'small'}
+              >
+                {tag.label}
+              </Tags>
+            ))}
+          </div>
 
           <p className="b2 my-3 line-clamp-2 font-bold transition-colors duration-200 ease-out">
             {title}

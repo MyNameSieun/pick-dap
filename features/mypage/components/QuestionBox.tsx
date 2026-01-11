@@ -17,7 +17,7 @@ const QuestionBox = () => {
   return (
     <Link href={'/question/3'}>
       <article className="flex flex-1 cursor-pointer flex-col gap-5.5 rounded-[7] border border-gray-400 p-3">
-        <div>
+        <div className="flex flex-wrap">
           <Tags className="mr-1" color="green" size="big">
             답변 완료
           </Tags>

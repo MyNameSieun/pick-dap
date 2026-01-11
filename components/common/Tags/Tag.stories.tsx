@@ -1,24 +1,24 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import Tags from "./Tags";
-import { TAG_VARIANTS, TagColor } from "@/constants/Tag.style";
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
+import Tags from './Tags';
+import { TAG_VARIANTS, TagColor } from '@/constants/Tag.style';
 
 const meta: Meta<typeof Tags> = {
-  title: "Components/Common/Tags",
+  title: 'Components/Common/Tags',
   component: Tags,
   parameters: {
-    layout: "centered",
+    layout: 'centered',
   },
-  tags: ["autodocs"],
+  tags: ['autodocs'],
   argTypes: {
     color: {
-      control: "select",
+      control: 'select',
       options: Object.keys(TAG_VARIANTS) as TagColor[],
-      description: "태그의 색상 변형",
+      description: '태그의 색상 변형',
     },
     size: {
-      control: "radio",
-      options: ["small", "big"],
-      description: "태그의 크기",
+      control: 'radio',
+      options: ['small', 'big'],
+      description: '태그의 크기',
     },
   },
 };
@@ -28,17 +28,17 @@ type Story = StoryObj<typeof Tags>;
 
 export const Small: Story = {
   args: {
-    size: "small",
+    size: 'small',
     color: Object.keys(TAG_VARIANTS)[0] as TagColor,
-    children: "Small Tag",
+    children: 'Tag',
   },
 };
 
 export const Big: Story = {
   args: {
-    size: "big",
+    size: 'big',
     color: Object.keys(TAG_VARIANTS)[0] as TagColor,
-    children: "Big Tag",
+    children: 'Tag',
   },
 };
 
