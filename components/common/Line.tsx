@@ -1,6 +1,7 @@
-export type LineSpacing = 4 | 6 | 8 | 12;
+export type LineSpacing = 1 | 4 | 6 | 8 | 12;
 
 export const LINE_MY_CLASS: Record<LineSpacing, string> = {
+  1: 'my-1',
   4: 'my-4',
   6: 'my-6',
   8: 'my-8',
