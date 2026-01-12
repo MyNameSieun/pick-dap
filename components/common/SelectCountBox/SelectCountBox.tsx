@@ -1,47 +1,47 @@
 'use client';
 
 import { Button } from '@/components/ui/button/Button';
-import { twMerge } from 'tailwind-merge';
+import clsx from 'clsx';
 
+type state = 'save' | 'delete';
+
+interface SelectCountBoxProps {
+  count: number;
+  name?: string;
+  onClick?: () => void;
+  state: state;
+}
 const SelectCountBox = ({
   count,
   name,
-  buttonName,
   onClick,
-  red = false,
-}: {
-  count: number;
-  name?: string;
-  buttonName?: string;
-  onClick?: () => void;
-  red?: boolean;
-}) => {
+  state,
+}: SelectCountBoxProps) => {
   const defaultOnClick = () => {
     alert('질문이 저장되었습니다.');
   };
   return (
     <>
       <div
-        className={twMerge(
+        className={clsx(
           'flex h-15 w-full min-w-128 items-center justify-between rounded-[6px] px-4',
-          red ? 'bg-tag-bg-red' : 'bg-main-100',
+          state === 'save' ? 'bg-main-100' : 'bg-tag-bg-red',
         )}
       >
         <p
-          className={twMerge('b2', red ? 'text-tag-text-red' : 'text-main-500')}
+          className={clsx(
+            'b2',
+            state === 'save' ? 'text-main-500' : 'text-tag-text-red',
+          )}
         >
           {count || 0}개 {name || '질문'} 선택됨
         </p>
         <Button
-          className={twMerge(
-            'h-7.5',
-            red
-              ? 'bg-tag-text-red hover:bg-tag-text-red/60 active:border-tag-text-red active:text-tag-text-red'
-              : '',
-          )}
+          variant={state === 'save' ? 'default' : 'red'}
+          className="h-7.5"
           onClick={onClick || defaultOnClick}
         >
-          {buttonName || '선택한 질문 저장'}
+          {state === 'save' ? '선택한 질문 저장' : '선택한 질문 삭제'}
         </Button>
       </div>
     </>

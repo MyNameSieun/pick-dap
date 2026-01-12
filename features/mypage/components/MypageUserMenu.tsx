@@ -9,7 +9,7 @@ import SideMenuBar from '@/features/mypage/components/SideMenuBar';
 
 const MypageUserMenu = () => {
   return (
-    <nav className="sticky top-0 flex gap-4">
+    <nav className="sticky top-5 flex gap-4">
       <section className="w-[238] rounded-md border border-gray-300 bg-white p-6 shadow-md">
         <article className="flex flex-col items-center gap-5">
           <div className="relative h-30 w-30 overflow-hidden rounded-full">

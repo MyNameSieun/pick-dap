@@ -1,9 +1,11 @@
-@import "tailwindcss";
-@import "tw-animate-css";
-@import "./button.css";
-@import "./color.css";
-@import "./font.css";
-@import "./shadow.css";
+@import 'tailwindcss';
+@import 'tw-animate-css';
+
+@import './font.css';
+@import './button.css';
+@import './color.css';
+@import './shadow.css';
+@import './custom.css';
 
 @custom-variant dark (&:is(.dark *));
 

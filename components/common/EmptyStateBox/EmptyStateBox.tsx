@@ -23,7 +23,7 @@ const EmptyStateBox = ({
   };
 
   return (
-    <div className="flex h-70 w-200 flex-col items-center justify-center gap-5 border border-dashed border-gray-400 bg-white">
+    <div className="flex h-70 flex-col items-center justify-center gap-5 border border-dashed border-gray-400 bg-white">
       <div className="h-16 w-16 items-center justify-center">
         <Icon className="text-icon-default fill-gray-300" size={64} />
       </div>

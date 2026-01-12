@@ -3,8 +3,8 @@ import { Input } from './ui/input/Input';
 
 const TagSearchBar = () => {
   return (
-    <section className="flex flex-col gap-6.5 rounded-[14px] bg-white py-10 shadow-sm">
-      <article className="mx-9 flex flex-col gap-3">
+    <section className="container-col gap-6.5">
+      <article className="flex flex-col gap-3">
         <h5>카테고리</h5>
 
         <div className="c1 flex gap-3">
@@ -20,7 +20,7 @@ const TagSearchBar = () => {
         </div>
       </article>
 
-      <article className="mx-9 flex flex-col gap-3">
+      <article className="flex flex-col gap-3">
         <h5>보유 기술</h5>
         <Input
           className="c1 text-gray-1000 h-10"
@@ -29,7 +29,7 @@ const TagSearchBar = () => {
         />
       </article>
 
-      <article className="mx-9 flex flex-col gap-3">
+      <article className="flex flex-col gap-3">
         <h5>정렬</h5>
         <div className="text-button-sm flex gap-7.5">
           <Button
