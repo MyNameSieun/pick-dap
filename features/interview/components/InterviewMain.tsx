@@ -15,7 +15,7 @@ const InterviewMain = () => {
         alt="면접 연습 메인 이미지"
         src="/pickbot.png"
       />
-      <h1 className="text-black">면접 연습</h1>
+      <h1 className="h1 text-black">면접 연습</h1>
       <p className="mb-12 text-xl text-gray-800">
         <b className="text-main-500">픽봇</b>과 함께 면접을 연습하고 자신감을
         키워보세요!

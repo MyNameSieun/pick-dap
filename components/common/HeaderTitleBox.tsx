@@ -25,7 +25,7 @@ const HeaderTitleBox = ({
         <Icon className={`${iconColor}`} />
       </div>
       <div className="flex flex-col justify-around">
-        <h4 className={`text-[20px] font-bold ${titleColor}`}>{title}</h4>
+        <div className={`text-[20px] font-bold ${titleColor}`}>{title}</div>
         <div className={`c1 ${subColor}`}>{content}</div>
       </div>
     </div>

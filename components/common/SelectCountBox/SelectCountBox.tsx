@@ -11,13 +11,19 @@ interface SelectCountBoxProps {
   name?: string;
   onClick?: () => void;
   state: State;
+  className?: string;
 }
 
-const SelectCountBox = ({ count, name, state }: SelectCountBoxProps) => {
+const SelectCountBox = ({
+  count,
+  name,
+  state,
+  className,
+}: SelectCountBoxProps) => {
   const isSave = state === 'save';
 
   const onClickSaveButtonHandler = () => {
-    toast.success('마이페이지에 저장되었습니다!', { position: 'top-center' });
+    toast.success('저장되었습니다!', { position: 'top-center' });
   };
 
   const onClickDeleteButtonHandler = () => {
@@ -27,8 +33,9 @@ const SelectCountBox = ({ count, name, state }: SelectCountBoxProps) => {
     <>
       <div
         className={cn(
-          'flex h-15 w-full min-w-128 items-center justify-between rounded-[6px] px-4',
+          'flex h-15 w-full max-w-128 items-center justify-between rounded-[6px] px-4',
           isSave ? 'bg-main-100' : 'bg-tag-bg-red',
+          className,
         )}
       >
         <p className={cn('b2', isSave ? 'text-main-500' : 'text-tag-text-red')}>

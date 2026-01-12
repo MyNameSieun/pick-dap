@@ -1,5 +1,15 @@
+import InterviewAiMain from '@/features/interview/components/InterviewAiMain';
+
+export const metadata = {
+  title: '프로젝트 면접 질문 생성',
+};
+
 const InterviewAiPage = () => {
-  return <div>InterviewAiPage</div>;
+  return (
+    <div className="mx-auto w-full max-w-285">
+      <InterviewAiMain />
+    </div>
+  );
 };
 
 export default InterviewAiPage;

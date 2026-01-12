@@ -2,11 +2,19 @@ import { Input } from '@/components/ui/input/Input';
 import { Send } from 'lucide-react';
 import messageData from '@/data/interviewMessageData.json';
 import InterviewMessage from './InterviewMessage/InterviewMessage';
+import BackButton from '@/components/common/BackButton';
 
 const InterviewRoom = () => {
   const data = messageData as Message[];
   return (
     <>
+      <BackButton
+        label={
+          <p>
+            <b>지난 면접 불러오기</b>로..
+          </p>
+        }
+      />
       <div className="flex flex-col gap-6 overflow-auto">
         {data.map((v) => (
           <InterviewMessage key={v.id} target={v.target} message={v.message} />
