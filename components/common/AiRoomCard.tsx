@@ -12,6 +12,10 @@ const AiRoomCard = () => {
           <Tags className="mr-1" color="green" size="big">
             답변 완료
           </Tags>
+
+          <Tags className="mr-1" color="blue" size="big">
+            FrontEnd
+          </Tags>
         </div>
 
         <h6>JVM의 구조와 Java의 실행방식을 설명해주세요.</h6>
