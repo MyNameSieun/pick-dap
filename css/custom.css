@@ -10,10 +10,10 @@
   }
 
   .card-col {
-    @apply flex flex-1 cursor-pointer flex-col gap-5.5 rounded-[7px] border border-gray-300 p-3 shadow-sm;
+    @apply flex flex-1 cursor-pointer flex-col gap-5.5 rounded-[7px] border border-gray-300 bg-white p-3 shadow-sm;
   }
 
   .card-row {
-    @apply flex flex-1 cursor-pointer flex-col gap-5.5 rounded-[7px] border border-gray-300 p-3 shadow-sm;
+    @apply flex flex-1 cursor-pointer flex-col gap-5.5 rounded-[7px] border border-gray-300 bg-white p-3 shadow-sm;
   }
 }
