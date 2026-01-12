@@ -20,7 +20,7 @@ const InterviewButton = ({
         <div className="bg-icon-light flex h-12 w-12 items-center justify-center rounded-[12px]">
           <Icon className="text-icon-deep size-6" />
         </div>
-        <h6 className="text-black">{children}</h6>
+        <h6 className="b1 font-bold text-black">{children}</h6>
       </Button>
     </>
   );
