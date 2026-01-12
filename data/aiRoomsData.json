@@ -1,6 +1,6 @@
 [
   {
-    "id": "1",
+    "id": 1,
     "tags": [{ "label": "답변 완료" }, { "label": "FrontEnd" }],
     "title": "JVM의 구조와 Java의 실행방식을 설명해주세요.",
     "createdAt": "2026-01-04",
@@ -8,7 +8,7 @@
     "roomId": 1
   },
   {
-    "id": "2",
+    "id": 2,
     "tags": [
       { "label": "미완료" },
       { "label": "FrontEnd" },
