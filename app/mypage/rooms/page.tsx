@@ -1,6 +1,6 @@
 'use client';
 import ListSelectionHeader from '@/features/mypage/components/ListSelectionHeader';
-import AiRoomCard from '@/features/mypage/components/AiRoomCard';
+import AiRoomCard from '@/components/common/AiRoomCard';
 import { FolderOpen } from 'lucide-react';
 
 const MypageRoomsPage = () => {
