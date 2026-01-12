@@ -2,6 +2,7 @@ import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import { Button } from '@/components/ui/button/Button';
 import { FolderClock } from 'lucide-react';
 import InterviewRoomsList from '@/features/interview/components/InterviewRoomsList';
+import Tags from '@/components/common/Tags/Tags';
 
 export const metadata = {
   title: '지난 면접 불러오기',
@@ -21,6 +22,23 @@ const InterviewRoomsPage = () => {
       </article>
 
       <InterviewRoomsList />
+
+      <div className="flex gap-4">
+        {/* Green */}
+        <Tags size="big">답변 완료</Tags>
+        <Tags size="big">합격</Tags>
+
+        {/* Red */}
+        <Tags size="big">미완료</Tags>
+        <Tags size="big">불합격</Tags>
+
+        {/* Yello */}
+        <Tags size="big">진행중</Tags>
+        <Tags size="big">답변 대기</Tags>
+
+        {/* Purple */}
+        <Tags size="big">기타태그</Tags>
+      </div>
     </main>
   );
 };
