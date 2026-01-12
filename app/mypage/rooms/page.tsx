@@ -19,12 +19,6 @@ const MypageRoomsPage = () => {
       />
       <div className="container-col gap-2.5">
         <AiRoomCard />
-        <AiRoomCard />
-        <AiRoomCard />
-        <AiRoomCard />
-        <AiRoomCard />
-        <AiRoomCard />
-        <AiRoomCard />
       </div>
     </div>
   );

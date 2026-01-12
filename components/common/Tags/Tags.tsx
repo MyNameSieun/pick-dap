@@ -1,8 +1,20 @@
 import { TAG_VARIANTS } from '@/constants/Tag.style';
 import { Tag } from '@/types/tag.types';
 import { twMerge } from 'tailwind-merge';
+import categories from '@/data/categories.json';
 
 const Tags = ({ size = 'small', color, children, className }: Tag) => {
+  let resultColor = color;
+  if (children === '답변 완료' || children === '합격') resultColor = 'green';
+  else if (children === '미완료' || children === '불합격') resultColor = 'red';
+  else if (children === '진행중' || children === '답변 대기')
+    resultColor = 'yellow';
+  else resultColor = 'purple';
+
+  categories.map((category) => {
+    if (category === children) resultColor = 'blue';
+  });
+
   const baseStyle =
     'flex flex-row c2 rounded-3xl text-center items-center justify-center';
   return (
@@ -12,7 +24,7 @@ const Tags = ({ size = 'small', color, children, className }: Tag) => {
           className={twMerge(
             baseStyle,
             'h-5 px-3',
-            TAG_VARIANTS[color],
+            TAG_VARIANTS[resultColor],
             className,
           )}
         >
@@ -24,7 +36,7 @@ const Tags = ({ size = 'small', color, children, className }: Tag) => {
           className={twMerge(
             baseStyle,
             'h-6 min-w-16 px-4',
-            TAG_VARIANTS[color],
+            TAG_VARIANTS[resultColor],
             className,
           )}
         >

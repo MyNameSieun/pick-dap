@@ -9,8 +9,6 @@ const InterviewRoomsList = () => {
       </article>
       <article className="flex flex-col gap-3">
         <AiRoomCard />
-        <AiRoomCard />
-        <AiRoomCard />
       </article>
     </>
   );
