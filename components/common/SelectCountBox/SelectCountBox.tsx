@@ -23,11 +23,6 @@ const SelectCountBox = ({
   state,
   setIsEditMode,
   setSelectedIds,
-}: SelectCountBoxProps) => {
-const SelectCountBox = ({
-  count,
-  name,
-  state,
   className,
 }: SelectCountBoxProps) => {
   const isSave = state === 'save';
@@ -69,4 +64,5 @@ const SelectCountBox = ({
     </>
   );
 };
+
 export default SelectCountBox;
