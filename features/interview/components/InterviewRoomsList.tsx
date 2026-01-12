@@ -1,14 +1,19 @@
 import AiRoomCard from '@/components/common/AiRoomCard';
-import SelectCountBox from '@/components/common/SelectCountBox/SelectCountBox';
+import { SetStateAction } from 'react';
 
-const InterviewRoomsList = () => {
+interface interviewRoomListProps {
+  isEditMode: boolean;
+  setIsEditMode: React.Dispatch<SetStateAction<boolean>>;
+}
+
+const InterviewRoomsList = ({
+  isEditMode,
+  setIsEditMode,
+}: interviewRoomListProps) => {
   return (
     <>
-      <article>
-        <SelectCountBox state="delete" count={2} />
-      </article>
       <article className="flex flex-col gap-3">
-        <AiRoomCard />
+        <AiRoomCard isEditMode={isEditMode} setIsEditMode={setIsEditMode} />
       </article>
     </>
   );
