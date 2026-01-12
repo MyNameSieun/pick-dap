@@ -1,49 +1,73 @@
+'use client';
+import { useState } from 'react';
 import { Button } from './ui/button/Button';
 import { Input } from './ui/input/Input';
+import categories from '@/data/categories.json';
+import { cn } from '@/lib/utils';
+import { Search } from 'lucide-react';
 
 const TagSearchBar = () => {
+  const [selectedCategory, setSelectedCategory] = useState('전체');
+  const [selectedSort, setSelectedSort] = useState('추천순');
+
+  const sortOptions = ['추천순', '최신순'];
+
   return (
     <section className="container-col gap-6.5">
+      {/* 카테고리 섹션 */}
       <article className="flex flex-col gap-3">
-        <h5>카테고리</h5>
+        <h5 className="h6 text-gray-1000">카테고리</h5>
 
         <div className="c1 flex gap-3">
-          <Button variant={'none'} className="h-8.5">
-            Front
-          </Button>
-          <Button variant={'none'} className="h-8.5">
-            Front
-          </Button>
-          <Button variant={'none'} className="h-8.5">
-            Front
-          </Button>
+          {categories.map((category) => (
+            <Button
+              key={category}
+              onClick={() => setSelectedCategory(category)}
+              variant={'none'}
+              className={cn(
+                'h-8.5 transition-colors',
+                selectedCategory === category
+                  ? 'bg-main-500 border-main-500 hover:bg-main-500 text-white'
+                  : 'border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-100/80 hover:text-gray-700',
+              )}
+            >
+              {category}
+            </Button>
+          ))}
         </div>
       </article>
 
+      {/* 보유 기술 섹션 */}
       <article className="flex flex-col gap-3">
-        <h5>보유 기술</h5>
-        <Input
-          className="c1 text-gray-1000 h-10"
-          type="text"
-          placeholder="기술 스택을 입력해주세요 "
-        />
+        <h5 className="h6 text-gray-1000">보유 기술</h5>
+        <div className="relative">
+          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
+          <Input
+            className="c1 text-gray-1000 focus:ring-main-500 border-gray-200 pl-10"
+            type="text"
+            placeholder="기술 스택을 입력해주세요 "
+          />
+        </div>
       </article>
 
+      {/* 정렬 섹션 */}
       <article className="flex flex-col gap-3">
-        <h5>정렬</h5>
-        <div className="text-button-sm flex gap-7.5">
-          <Button
-            variant={'white'}
-            className="hover:border-main-400 hover:text-main-400 h-9 flex-1 border-2"
-          >
-            추천순
-          </Button>
-          <Button
-            variant={'white'}
-            className="hover:border-main-400 hover:text-main-400 h-9 flex-1 border-2"
-          >
-            최신순
-          </Button>
+        <h5 className="h6 text-gray-1000 mb-3">정렬</h5>
+        <div className="bg-bg-default flex w-full rounded-lg border border-gray-200 p-1">
+          {sortOptions.map((option) => (
+            <button
+              key={option}
+              onClick={() => setSelectedSort(option)}
+              className={cn(
+                'flex-1 cursor-pointer rounded-md py-2 text-sm font-bold transition-all',
+                selectedSort === option
+                  ? 'text-main-600 text-gray-1000 bg-white shadow-md'
+                  : 'text-gray-500 hover:text-gray-700',
+              )}
+            >
+              {option}
+            </button>
+          ))}
         </div>
       </article>
     </section>
