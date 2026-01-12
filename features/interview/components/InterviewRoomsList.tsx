@@ -6,6 +6,7 @@ const InterviewRoomsList = () => {
     <>
       <article>
         <SelectCountBox state="delete" count={2} />
+        <SelectCountBox state="save" count={2} />
       </article>
       <article className="flex flex-col gap-3">
         <AiRoomCard />

@@ -38,7 +38,7 @@ const SelectCountBox = ({
           {count || 0}개 {name || '질문'} 선택됨
         </p>
         <Button
-          variant={'red'}
+          variant={state === 'save' ? 'default' : 'red'}
           className="h-7.5"
           onClick={onClick || defaultOnClick}
         >
