@@ -17,8 +17,16 @@ interface ListSelectionHeaderProps {
 }
 
 const buttonTextMap = {
-  '내 리스트에 추가': { active: '선택 취소', inactive: '기록 선택' },
-  '선택한 항목 삭제': { active: '선택 취소', inactive: '게시글 선택' },
+  '내 리스트에 추가': {
+    active: '선택 취소',
+    inactive: '기록 선택',
+    state: 'save',
+  },
+  '선택한 항목 삭제': {
+    active: '선택 취소',
+    inactive: '게시글 선택',
+    state: 'delete',
+  },
 };
 
 const ListSelectionHeader = ({
@@ -48,11 +56,12 @@ const ListSelectionHeader = ({
       </div>
 
       {isActive ? (
-        <div className="mb-4.5">
+        <div className="mb-4">
           <SelectCountBox
             count={selectedCount}
-            buttonName={actionButtonName}
             onClick={onAction}
+            state={buttonTextMap[actionButtonName].state as 'save' | 'delete'}
+            className="min-w-full"
           />
         </div>
       ) : null}

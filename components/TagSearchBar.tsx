@@ -41,12 +41,12 @@ const TagSearchBar = () => {
       <article className="flex flex-col gap-3">
         <h5 className="h6 text-gray-1000">보유 기술</h5>
         <div className="relative">
-          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
           <Input
             className="c1 text-gray-1000 focus:ring-main-500 border-gray-200 pl-10"
             type="text"
             placeholder="기술 스택을 입력해주세요 "
           />
+          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
         </div>
       </article>
       {/* 정렬 섹션 */}

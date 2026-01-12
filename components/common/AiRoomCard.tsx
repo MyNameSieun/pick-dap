@@ -30,6 +30,7 @@ const AiRoomCard = ({ isEditMode, setIsEditMode }: AiRoomCardProps) => {
           setSelectedIds={setSelectedIds}
           state="delete"
           count={selectedIds.length}
+          className="min-w-full"
         />
       )}
 

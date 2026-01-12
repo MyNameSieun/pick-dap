@@ -14,6 +14,7 @@ interface SelectCountBoxProps {
   state: State;
   setIsEditMode: React.Dispatch<SetStateAction<boolean>>;
   setSelectedIds: React.Dispatch<SetStateAction<number[]>>;
+  className?: string;
 }
 
 const SelectCountBox = ({
@@ -22,6 +23,7 @@ const SelectCountBox = ({
   state,
   setIsEditMode,
   setSelectedIds,
+  className,
 }: SelectCountBoxProps) => {
   const isSave = state === 'save';
 
@@ -29,6 +31,7 @@ const SelectCountBox = ({
     toast.success('마이페이지에 저장되었습니다!', { position: 'top-center' });
     setIsEditMode(false);
     setSelectedIds([]);
+    toast.success('저장되었습니다!', { position: 'top-center' });
   };
 
   const onClickDeleteButtonHandler = () => {
@@ -40,8 +43,9 @@ const SelectCountBox = ({
     <>
       <div
         className={cn(
-          'flex h-15 w-full min-w-128 items-center justify-between rounded-[6px] px-4',
+          'flex h-15 w-full max-w-128 items-center justify-between rounded-[6px] px-4',
           isSave ? 'bg-main-100' : 'bg-tag-bg-red',
+          className,
         )}
       >
         <p className={cn('b2', isSave ? 'text-main-500' : 'text-tag-text-red')}>
@@ -60,4 +64,5 @@ const SelectCountBox = ({
     </>
   );
 };
+
 export default SelectCountBox;
