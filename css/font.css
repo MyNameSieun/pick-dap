@@ -28,6 +28,26 @@ body {
 }
 
 @layer components {
+  /* header */
+  .h1 {
+    @apply text-[32px] leading-[1.5] font-bold;
+  }
+  .h2 {
+    @apply text-[28px] leading-[1.5] font-bold;
+  }
+  .h3 {
+    @apply text-[24px] leading-[1.5] font-bold;
+  }
+  .h4 {
+    @apply text-[20px] leading-[1.5] font-bold;
+  }
+  .h5 {
+    @apply text-[18px] leading-[1.5] font-bold;
+  }
+  .h6 {
+    @apply text-[16px] leading-[1.5] font-bold;
+  }
+
   /* body */
   .b1 {
     @apply text-base leading-[1.5] font-normal;
