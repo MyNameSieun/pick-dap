@@ -15,7 +15,7 @@ const AiPrevSection = () => {
   return (
     <>
       <div className={twMerge('container-col', 'w-2/5 gap-8 p-8')}>
-        <h6 className="h6 text-black">질문 생성 옵션</h6>
+        <h5 className="h5 text-black">질문 생성 옵션</h5>
         <article className="flex flex-col gap-3">
           <p className="b2 text-gray-1000">
             카테고리 <span className="text-point-star">*</span>

@@ -1,7 +1,7 @@
 import InterviewAiMain from '@/features/interview/components/InterviewAiMain';
 
 export const metadata = {
-  title: '프로젝트 면접 질문 생성',
+  title: 'AI 면접 질문 생성',
 };
 
 const InterviewAiPage = () => {
