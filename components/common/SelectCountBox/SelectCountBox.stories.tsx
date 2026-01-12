@@ -5,7 +5,7 @@ const meta: Meta<typeof SelectCountBox> = {
   title: 'Components/Common/SelectCountBox',
   component: SelectCountBox,
   parameters: {
-    layout: 'centered', // 컴포넌트 확인을 위해 중앙 배치
+    layout: 'centered',
   },
   tags: ['autodocs'],
   argTypes: {
@@ -33,9 +33,6 @@ export default meta;
 
 type Story = StoryObj<typeof SelectCountBox>;
 
-/**
- * 기본 상태 (저장 모드)
- */
 export const SaveState: Story = {
   args: {
     state: 'save',
@@ -44,9 +41,6 @@ export const SaveState: Story = {
   },
 };
 
-/**
- * 삭제 상태 (RedVariant)
- */
 export const DeleteState: Story = {
   args: {
     state: 'delete',
@@ -55,9 +49,6 @@ export const DeleteState: Story = {
   },
 };
 
-/**
- * 선택된 항목이 0개일 때
- */
 export const Empty: Story = {
   args: {
     state: 'save',
@@ -66,9 +57,6 @@ export const Empty: Story = {
   },
 };
 
-/**
- * 숫자가 클 때 레이아웃 확인용
- */
 export const LargeCount: Story = {
   args: {
     state: 'save',

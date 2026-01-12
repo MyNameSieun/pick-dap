@@ -12,7 +12,7 @@ export const generateMetadata = async ({
 
 const InterviewRoomsDetailPage = () => {
   return (
-    <div className="mx-auto flex w-full max-w-200 flex-col items-center">
+    <div className="mx-auto w-full max-w-200">
       <InterviewRoom />
     </div>
   );
