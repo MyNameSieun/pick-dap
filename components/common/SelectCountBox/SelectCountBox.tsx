@@ -1,15 +1,15 @@
 'use client';
 
 import { Button } from '@/components/ui/button/Button';
-import clsx from 'clsx';
+import { cn } from '@/lib/utils';
 
-type state = 'save' | 'delete';
+type State = 'save' | 'delete';
 
 interface SelectCountBoxProps {
   count: number;
   name?: string;
   onClick?: () => void;
-  state: state;
+  state: State;
 }
 
 const SelectCountBox = ({
@@ -24,13 +24,13 @@ const SelectCountBox = ({
   return (
     <>
       <div
-        className={clsx(
+        className={cn(
           'flex h-15 w-full min-w-128 items-center justify-between rounded-[6px] px-4',
           state === 'save' ? 'bg-main-100' : 'bg-tag-bg-red',
         )}
       >
         <p
-          className={clsx(
+          className={cn(
             'b2',
             state === 'save' ? 'text-main-500' : 'text-tag-text-red',
           )}
