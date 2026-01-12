@@ -41,7 +41,7 @@ const SelectCountBox = ({ count, name, state }: SelectCountBoxProps) => {
             isSave ? onClickSaveButtonHandler : onClickDeleteButtonHandler
           }
         >
-          {isSave ? <p>선택한 질문 저장</p> : <p>선택한 질문 삭제</p>}
+          {isSave ? '선택한 질문 저장' : '선택한 질문 삭제'}
         </Button>
       </div>
     </>
