@@ -19,7 +19,7 @@ const CommunityMain = () => {
         />
       </div>
       <div className="flex w-full gap-4">
-        <Input placeholder="검색어를 입력하세요" Icon={Search} />
+        <Input placeholder="검색어를 입력하세요" rightIcon={Search} />
         <Button className="h-10.5">
           <SquarePen />
           글쓰기

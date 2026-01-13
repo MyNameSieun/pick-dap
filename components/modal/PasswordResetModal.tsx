@@ -1,4 +1,4 @@
-import { KeyRound, X } from 'lucide-react';
+import { KeyRound } from 'lucide-react';
 import HeaderTitleBox from '../common/HeaderTitleBox';
 import { Input } from '../ui/input/Input';
 import { Button } from '../ui/button/Button';
