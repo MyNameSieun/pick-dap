@@ -1,6 +1,7 @@
+'use client';
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
-import { useRouter } from 'next/navigation';
 import { FolderOpen } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 const ReviewMainHeader = () => {
   const router = useRouter();
