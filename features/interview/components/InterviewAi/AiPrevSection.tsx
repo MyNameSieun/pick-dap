@@ -10,7 +10,7 @@ import { jobCategories } from '@/constants/jobCategories';
 
 const AiPrevSection = () => {
   const [selectedCategory, setSelectedCategory] = useState('FrontEnd');
-  const categories = jobCategories.filter((v) => v != '전체');
+  const jobCategory = jobCategories.filter((v) => v != '전체');
 
   return (
     <>
@@ -21,7 +21,7 @@ const AiPrevSection = () => {
             카테고리 <span className="text-point-star">*</span>
           </p>
           <div className="c1 grid grid-cols-2 gap-2.5">
-            {categories.map((v, i) => (
+            {jobCategory.map((v, i) => (
               <Button
                 key={i}
                 onClick={() => setSelectedCategory(v)}
