@@ -24,14 +24,14 @@ const Tags = ({
   if (category === true) resultColor = color;
 
   const baseStyle =
-    'flex flex-row c2 rounded-3xl text-center items-center justify-center';
+    'flex flex-row rounded-3xl text-center items-center justify-center';
   return (
     <>
       {size === 'small' && (
         <div
           className={twMerge(
             baseStyle,
-            'h-5 px-3',
+            'c2 h-5 px-3',
             TAG_VARIANTS[resultColor || 'purple'],
             className,
           )}
@@ -43,7 +43,7 @@ const Tags = ({
         <div
           className={twMerge(
             baseStyle,
-            'h-6 min-w-16 px-4',
+            'c1 h-6 min-w-16 px-4',
             TAG_VARIANTS[resultColor || 'purple'],
             className,
           )}
