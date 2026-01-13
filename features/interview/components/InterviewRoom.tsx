@@ -23,7 +23,7 @@ const InterviewRoom = () => {
         <Input
           inputSize="lg"
           className="text-gray-1000"
-          Icon={Send}
+          rightIcon={Send}
           placeholder="답변을 입력하세요..."
         />
       </div>

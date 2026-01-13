@@ -3,7 +3,13 @@ import { Tag } from '@/types/tag.types';
 import { twMerge } from 'tailwind-merge';
 import { jobCategories } from '@/constants/jobCategories';
 
-const Tags = ({ size = 'small', color, children, className }: Tag) => {
+const Tags = ({
+  size = 'small',
+  color,
+  children,
+  className,
+  category,
+}: Tag) => {
   let resultColor = color;
   if (children === '답변 완료' || children === '합격') resultColor = 'green';
   else if (children === '미완료' || children === '불합격') resultColor = 'red';
@@ -15,16 +21,18 @@ const Tags = ({ size = 'small', color, children, className }: Tag) => {
     if (jobCategory === children) resultColor = 'blue';
   });
 
+  if (category === true) resultColor = color;
+
   const baseStyle =
-    'flex flex-row c2 rounded-3xl text-center items-center justify-center';
+    'flex flex-row rounded-3xl text-center items-center justify-center';
   return (
     <>
       {size === 'small' && (
         <div
           className={twMerge(
             baseStyle,
-            'h-5 px-3',
-            TAG_VARIANTS[resultColor],
+            'c2 h-5 px-3',
+            TAG_VARIANTS[resultColor || 'purple'],
             className,
           )}
         >
@@ -35,8 +43,8 @@ const Tags = ({ size = 'small', color, children, className }: Tag) => {
         <div
           className={twMerge(
             baseStyle,
-            'h-6 min-w-16 px-4',
-            TAG_VARIANTS[resultColor],
+            'c1 h-6 min-w-16 px-4',
+            TAG_VARIANTS[resultColor || 'purple'],
             className,
           )}
         >
