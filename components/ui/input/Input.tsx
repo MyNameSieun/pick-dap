@@ -42,7 +42,6 @@ function Input({
 }: InputProps) {
   return (
     <div className="relative w-full">
-      {/* 1. 왼쪽 아이콘  */}
       {LeftIcon && (
         <div
           className={cn(
@@ -65,7 +64,6 @@ function Input({
         {...props}
       />
 
-      {/* 3. 오른쪽 아이콘  */}
       {RightIcon && (
         <div
           className={cn(
