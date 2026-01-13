@@ -19,7 +19,7 @@ export interface InterviewEvaluation {
   };
   difficulty: '쉬움' | '보통' | '어려움';
   interviewSteps: string[];
-  intervieweeCount: string[];
+  intervieweeCount: string;
 }
 
 export interface SpecificQuestion {
@@ -38,7 +38,6 @@ export interface ResultInfo {
   resultWaitingPeriod: string;
   finalStatus: '합격' | '불합격' | '진행중';
 }
-
 export interface InterviewReview {
   id: string;
   basicInfo: BasicInfo;
@@ -46,6 +45,10 @@ export interface InterviewReview {
   reviewContent: ReviewContent;
   resultInfo: ResultInfo;
   evidenceUrl?: string;
+  stats: {
+    viewCount: number;
+    likeCount: number;
+  };
 }
 
 export type InterviewReviews = InterviewReview[];

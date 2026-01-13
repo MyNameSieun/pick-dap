@@ -26,9 +26,7 @@ const ReviewPage = () => {
         <FormSelect options={PASS_STATUS_OPTIONS} placeholder="합격여부" />
         <FormSelect options={INTERVIEW_PERIOD_OPTIONS} placeholder="면접시기" />
         <FormSelect options={JOB_CATEGORY_OPTIONS} placeholder="직무" />
-
         <FormSelect options={EMPLOYMENT_TYPE_OPTIONS} placeholder="고용유형" />
-
         <FormSelect options={INTERVIEW_TYPE_OPTIONS} placeholder="면접전형" />
       </div>
 

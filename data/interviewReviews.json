@@ -4,7 +4,7 @@
 
     "basicInfo": {
       "companyName": "네이버",
-      "jobCategory": "프론트엔드",
+      "jobCategory": "FrontEnd",
       "interviewDate": "2026 상반기",
       "employmentType": "신입"
     },
@@ -15,10 +15,10 @@
       },
       "difficulty": "보통",
       "interviewSteps": ["인적성", "코딩테스트", "역량 / 실무진"],
-      "intervieweeCount": ["1:1 면접"]
+      "intervieweeCount": "1:1 면접"
     },
     "reviewContent": {
-      "overallReview": "",
+      "overallReview": "1차는 역령 면접으로 1:1로 진행되었습니다. 실제 경험을 확인하기 위한 꼬리질문이 많았으며, 자기소개서 위주로 질문이 들어왔습니다. 2차는 임원 면접이었고 5:3으로 진행되었습니다. 이력서 위주의 질문으로 평이한 수준이었습니다. ",
       "questionTypes": ["자기소개", "지원동기", "직무 지식"],
       "specificQuestions": [
         {
@@ -39,6 +39,10 @@
     "evidence": {
       "fileName": "proof_shot.png",
       "fileUrl": ""
+    },
+    "stats": {
+      "viewCount": 45,
+      "likeCount": 123
     }
   },
   {
@@ -46,21 +50,21 @@
 
     "basicInfo": {
       "companyName": "카카오",
-      "jobCategory": "백엔드",
+      "jobCategory": "BackEnd",
       "interviewDate": "2025 하반기",
       "employmentType": "신입"
     },
     "evaluation": {
       "atmosphere": {
         "type": "편안",
-        "score": 4
+        "score": 2
       },
       "difficulty": "보통",
-      "interviewSteps": ["인적성", "코딩테스트", "역량 / 실무진"],
-      "intervieweeCount": ["1:1 면접"]
+      "interviewSteps": [],
+      "intervieweeCount": "1:1 면접"
     },
     "reviewContent": {
-      "overallReview": "",
+      "overallReview": "1차는 역령 면접으로 1:1로 진행되었습니다. 실제 경험을 확인하기 위한 꼬리질문sdf ",
       "questionTypes": ["자기소개", "지원동기", "직무 지식"],
       "specificQuestions": [
         {
@@ -77,6 +81,10 @@
     "evidence": {
       "fileName": "proof_shot.png",
       "fileUrl": ""
+    },
+    "stats": {
+      "viewCount": 3,
+      "likeCount": 26
     }
   }
 ]
