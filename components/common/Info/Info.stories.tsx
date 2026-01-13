@@ -38,9 +38,10 @@ export const Text1: StoryObj<typeof InfoText1> = {
   args: {
     image: defaultArgs.image,
     author: defaultArgs.author,
+    createdAt: defaultArgs.createdAt,
     bookmarkCount: defaultArgs.bookmarkCount,
     likeCount: defaultArgs.likeCount,
-    viewCount: defaultArgs.viewCount,
+    commentCount: defaultArgs.commentCount,
   },
 };
 
@@ -87,9 +88,10 @@ export const AllVariants: StoryObj<AllVariantsProps> = {
         <InfoText1
           image={args.image}
           author={args.author}
+          createdAt={args.createdAt}
           bookmarkCount={args.bookmarkCount}
           likeCount={args.likeCount}
-          viewCount={args.viewCount}
+          commentCount={args.commentCount}
         />
       </div>
       <div>

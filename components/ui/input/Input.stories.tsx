@@ -12,7 +12,7 @@ const meta: Meta<typeof Input> = {
       options: ['default', 'gray', 'ghost'],
       description: '입력창의 옵션',
     },
-    Icon: {
+    rightIcon: {
       control: 'select',
       options: ['None', 'Search', 'Mail', 'Lock', 'User', 'Eye'],
       mapping: {
@@ -78,7 +78,7 @@ export const AllVariants: Story = {
 export const WithIcon: Story = {
   args: {
     className: 'w-100',
-    Icon: Search,
+    rightIcon: Search,
     placeholder: '검색어를 입력하세요',
   },
 };
