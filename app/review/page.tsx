@@ -1,6 +1,8 @@
 'use client';
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
-import { FolderOpen } from 'lucide-react';
+import Line from '@/components/common/Line';
+import { Input } from '@/components/ui/input/Input';
+import { FolderOpen, Search } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const ReviewPage = () => {
@@ -18,6 +20,10 @@ const ReviewPage = () => {
           },
         }}
       />
+
+      <Line color="gray300" my={6} />
+
+      <Input rightIcon={Search} />
     </div>
   );
 };
