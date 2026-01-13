@@ -5,4 +5,5 @@ export interface Tag {
   color?: TagColor;
   children: string;
   className?: string;
+  category?: boolean;
 }
