@@ -1,7 +1,7 @@
 import { TAG_VARIANTS } from '@/constants/Tag.style';
 import { Tag } from '@/types/tag.types';
 import { twMerge } from 'tailwind-merge';
-import categories from '@/data/categories.json';
+import { jobCategories } from '@/constants/jobCategories';
 
 const Tags = ({ size = 'small', color, children, className }: Tag) => {
   let resultColor = color;
@@ -11,8 +11,8 @@ const Tags = ({ size = 'small', color, children, className }: Tag) => {
     resultColor = 'yellow';
   else resultColor = 'purple';
 
-  categories.map((category) => {
-    if (category === children) resultColor = 'blue';
+  jobCategories.map((jobCategory) => {
+    if (jobCategory === children) resultColor = 'blue';
   });
 
   const baseStyle =

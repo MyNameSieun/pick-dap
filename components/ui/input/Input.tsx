@@ -27,7 +27,8 @@ const inputVariants = cva(
 
 export interface InputProps
   extends React.ComponentProps<'input'>, VariantProps<typeof inputVariants> {
-  Icon?: LucideIcon;
+  leftIcon?: LucideIcon;
+  rightIcon?: LucideIcon;
 }
 
 function Input({
@@ -35,29 +36,42 @@ function Input({
   variant,
   inputSize,
   type,
-  Icon,
+  leftIcon: LeftIcon,
+  rightIcon: RightIcon,
   ...props
 }: InputProps) {
   return (
     <div className="relative w-full">
+      {LeftIcon && (
+        <div
+          className={cn(
+            'text-icon-default pointer-events-none absolute top-1/2 -translate-y-1/2',
+            inputSize === 'lg' ? 'left-6' : 'left-4', // 사이즈별 좌측 간격
+          )}
+        >
+          <LeftIcon size={inputSize === 'lg' ? 24 : 20} />
+        </div>
+      )}
+
       <input
         type={type}
-        data-slot="input"
         className={cn(
           inputVariants({ variant, inputSize }),
-          inputSize === 'lg' ? 'pr-14' : 'pr-11',
+          LeftIcon && (inputSize === 'lg' ? 'pl-14' : 'pl-11'),
+          RightIcon && (inputSize === 'lg' ? 'pr-14' : 'pr-11'),
           className,
         )}
         {...props}
       />
-      {Icon && (
+
+      {RightIcon && (
         <div
           className={cn(
             'text-icon-default pointer-events-none absolute top-1/2 -translate-y-1/2',
-            inputSize === 'lg' ? 'right-6' : 'right-4',
+            inputSize === 'lg' ? 'right-6' : 'right-4', // 사이즈별 우측 간격
           )}
         >
-          <Icon size={inputSize === 'lg' ? 20 : 16} />
+          <RightIcon size={inputSize === 'lg' ? 24 : 20} />
         </div>
       )}
     </div>

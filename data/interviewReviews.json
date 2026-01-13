@@ -1,0 +1,82 @@
+[
+  {
+    "id": "1",
+
+    "basicInfo": {
+      "companyName": "네이버",
+      "jobCategory": "프론트엔드",
+      "interviewDate": "2026 상반기",
+      "employmentType": "신입"
+    },
+    "evaluation": {
+      "atmosphere": {
+        "type": "편안",
+        "score": 3
+      },
+      "difficulty": "보통",
+      "interviewSteps": ["인적성", "코딩테스트", "역량 / 실무진"],
+      "intervieweeCount": ["1:1 면접"]
+    },
+    "reviewContent": {
+      "overallReview": "",
+      "questionTypes": ["자기소개", "지원동기", "직무 지식"],
+      "specificQuestions": [
+        {
+          "id": 1,
+          "question": "프로젝트에서 중요했던 기능 위주로 무엇을 구현했는지 작성해 주세요"
+        },
+        {
+          "id": 2,
+          "question": "협업 과정에서 어떤 갈등을 느끼셨나요?"
+        }
+      ],
+      "interviewTip": "회사 직무에 대한 이해가 중요합니다. 직무 관련 경험, 지식을 많이 보는 것 같고 프로젝트나 인턴 경험이 있으시다면 구체적으로 어떤 활동을 했는지 어필하는 것이 좋을듯 합니다. "
+    },
+    "resultInfo": {
+      "resultWaitingPeriod": "1주",
+      "finalStatus": "합격"
+    },
+    "evidence": {
+      "fileName": "proof_shot.png",
+      "fileUrl": ""
+    }
+  },
+  {
+    "id": "2",
+
+    "basicInfo": {
+      "companyName": "카카오",
+      "jobCategory": "백엔드",
+      "interviewDate": "2025 하반기",
+      "employmentType": "신입"
+    },
+    "evaluation": {
+      "atmosphere": {
+        "type": "편안",
+        "score": 4
+      },
+      "difficulty": "보통",
+      "interviewSteps": ["인적성", "코딩테스트", "역량 / 실무진"],
+      "intervieweeCount": ["1:1 면접"]
+    },
+    "reviewContent": {
+      "overallReview": "",
+      "questionTypes": ["자기소개", "지원동기", "직무 지식"],
+      "specificQuestions": [
+        {
+          "id": 1,
+          "question": "프로젝트에서 중요했던 기능 위주로 무엇을 구현했는지 작성해 주세요"
+        }
+      ],
+      "interviewTip": "회사 직무에 대한 이해가 중요합니다. 직무 관련 경험, 지식을 많이 보는 것 같고 프로젝트나 인턴 경험이 있으시다면 구체적으로 어떤 활동을 했는지 어필하는 것이 좋을듯 합니다. "
+    },
+    "resultInfo": {
+      "resultWaitingPeriod": "3일",
+      "finalStatus": "불합격"
+    },
+    "evidence": {
+      "fileName": "proof_shot.png",
+      "fileUrl": ""
+    }
+  }
+]
