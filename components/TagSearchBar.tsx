@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Button } from './ui/button/Button';
 import { Input } from './ui/input/Input';
-import categories from '@/data/categories.json';
+import { jobCategories } from '@/constants/jobCategories';
 import { cn } from '@/lib/utils';
 import { Search } from 'lucide-react';
 
@@ -19,19 +19,19 @@ const TagSearchBar = () => {
         <h5 className="h6 text-gray-1000">카테고리</h5>
 
         <div className="c1 flex gap-3">
-          {categories.map((category) => (
+          {jobCategories.map((jobCategory) => (
             <Button
-              key={category}
-              onClick={() => setSelectedCategory(category)}
+              key={jobCategory}
+              onClick={() => setSelectedCategory(jobCategory)}
               variant={'none'}
               className={cn(
                 'h-8.5 transition-colors',
-                selectedCategory === category
+                selectedCategory === jobCategory
                   ? 'bg-main-500 border-main-500 hover:bg-main-500 text-white'
                   : 'border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-100/80 hover:text-gray-700',
               )}
             >
-              {category}
+              {jobCategory}
             </Button>
           ))}
         </div>
