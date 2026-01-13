@@ -13,7 +13,7 @@ const CommunitySub = ({ categoryId }: { categoryId: string }) => {
   return (
     <>
       <div
-        className={twMerge('container-row', 'w-full rounded-[6px] p-4 px-16')}
+        className={twMerge('container-row', 'w-full rounded-[6px] px-16 py-4')}
       >
         <Tabs
           tabs={communityMenuData}

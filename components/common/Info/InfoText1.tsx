@@ -7,43 +7,59 @@ import Image from 'next/image';
 const InfoText1 = ({
   image,
   author,
+  createdAt,
   bookmarkCount,
   likeCount,
-  viewCount,
+  commentCount,
 }: {
   image: string;
   author: string;
-  bookmarkCount: number;
-  likeCount: number;
-  viewCount: number;
+  createdAt?: string;
+  bookmarkCount?: number;
+  likeCount?: number;
+  commentCount?: number;
 }) => {
   return (
     <>
-      <div className="text-icon-default c1 flex h-fit w-fit gap-3">
+      <div className="text-icon-default c1 flex h-fit w-fit gap-2">
         <div className="flex items-center gap-1">
           <div className="relative h-5 w-5 overflow-hidden rounded-full">
             <Image
               className="object-cover"
               alt="작성자 프로필"
-              src={`${image ?? infoData.author.profileImage}`}
+              src={`${image && (image || infoData.author.profileImage)}`}
               fill
               priority
             />
           </div>
-          {author ?? infoData.author.username}
+          {author && (author || infoData.author.username)}
         </div>
-        <div className="flex items-center gap-0.5">
-          <Bookmark size={16} />
-          {bookmarkCount ?? infoData.stats.bookmarkCount}
+        <div className="mx-2 flex items-center">
+          <p className="text-gray-700">·</p>
         </div>
-        <div className="flex items-center gap-1">
-          <Heart size={16} className="fill-point-heart text-point-heart" />
-          {likeCount ?? infoData.stats.likeCount}
-        </div>
-        <div className="flex items-center gap-1">
-          <MessageSquare size={16} />
-          {viewCount ?? infoData.stats.viewCount}
-        </div>
+        {createdAt && (
+          <div className="flex items-center gap-0.5">
+            <p className="text-gray-700">{createdAt || infoData.createdAt}</p>
+          </div>
+        )}
+        {bookmarkCount && (
+          <div className="flex items-center gap-0.5">
+            <Bookmark size={16} />
+            {bookmarkCount || infoData.stats.bookmarkCount}
+          </div>
+        )}
+        {likeCount && (
+          <div className="flex items-center gap-1">
+            <Heart size={16} className="fill-point-heart text-point-heart" />
+            {likeCount || infoData.stats.likeCount}
+          </div>
+        )}
+        {commentCount && (
+          <div className="flex items-center gap-1">
+            <MessageSquare size={16} />
+            {commentCount || infoData.stats.commentCount}
+          </div>
+        )}
       </div>
     </>
   );

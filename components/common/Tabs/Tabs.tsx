@@ -15,9 +15,10 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
   }
 
   const handleTabClick = (id: string) => {
-    setMenu(id);
     if (onTabChange) {
       onTabChange(id);
+    } else {
+      setMenu(id);
     }
   };
 
@@ -47,7 +48,7 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
           </button>
         ))}
       </div>
-      <div className="my-4 overflow-hidden">
+      <div className="my-6 overflow-hidden">
         <motion.div
           key={isMenu}
           initial={{ opacity: 0, x: 30 }} // 처음에는 x가 30인 값(오른쪽)에서

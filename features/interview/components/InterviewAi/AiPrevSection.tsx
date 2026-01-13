@@ -1,16 +1,16 @@
 'use client';
 
-import categoriesData from '@/data/categories.json';
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input/Input';
 import { Button } from '@/components/ui/button/Button';
 import { Search } from 'lucide-react';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
+import { jobCategories } from '@/constants/jobCategories';
 
 const AiPrevSection = () => {
   const [selectedCategory, setSelectedCategory] = useState('FrontEnd');
-  const categories = categoriesData.filter((v) => v != '전체');
+  const categories = jobCategories.filter((v) => v != '전체');
 
   return (
     <>

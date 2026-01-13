@@ -1,16 +1,16 @@
-import type { Meta } from '@storybook/nextjs-vite';
+import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 import Tabs from './Tabs';
+import { useState } from 'react';
 
 const meta: Meta<typeof Tabs> = {
   title: 'Components/Common/Tabs',
   component: Tabs,
   tags: ['autodocs'],
-  argTypes: {
-    onTabChange: { action: 'tab changed' },
-  },
 };
 
 export default meta;
+
+type Story = StoryObj<typeof Tabs>;
 
 const mockTabs = [
   {
@@ -32,19 +32,33 @@ const mockTabs = [
   },
 ];
 
-export const Default = {
+export const Interactive: Story = {
   args: {
     tabs: mockTabs,
+    setId: '1',
+  },
+  render: (args) => {
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const [currentId, setCurrentId] = useState(args.setId);
+
+    return (
+      <Tabs
+        {...args}
+        setId={currentId}
+        onTabChange={(id) => {
+          setCurrentId(id as string);
+        }}
+      />
+    );
   },
 };
 
-export const ExternalControl = {
+export const FixedTab: Story = {
   args: {
     tabs: mockTabs,
     setId: '2',
   },
 };
-
 export const ComplexContent = {
   args: {
     tabs: [
