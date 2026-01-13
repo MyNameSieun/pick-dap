@@ -3,7 +3,13 @@ import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import Line from '@/components/common/Line';
 import { Input } from '@/components/ui/input/Input';
 
-import { FolderOpen, Search } from 'lucide-react';
+import {
+  ArrowRightIcon,
+  ChevronRight,
+  FolderOpen,
+  Minus,
+  Search,
+} from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 import FormSelect from '@/components/common/FormSelect';
@@ -16,7 +22,10 @@ import {
   JOB_CATEGORY_OPTIONS,
   PASS_STATUS_OPTIONS,
 } from '@/constants/selectOptions';
-import { base } from 'framer-motion/client';
+import Tags from '@/components/common/Tags/Tags';
+import Link from 'next/link';
+import { Pagination } from '@/components/ui/Pagination';
+import PaginationCustom from '@/components/common/PaginationCustom';
 
 const ReviewPage = () => {
   const router = useRouter();
@@ -34,9 +43,7 @@ const ReviewPage = () => {
           },
         }}
       />
-
       <Line color="gray300" my={6} />
-
       <div className="flex gap-3">
         <Input placeholder="기업명" rightIcon={Search} />
         <FormSelect options={PASS_STATUS_OPTIONS} placeholder="합격여부" />
@@ -48,35 +55,52 @@ const ReviewPage = () => {
         <FormSelect options={INTERVIEW_TYPE_OPTIONS} placeholder="면접전형" />
       </div>
 
-      {interviewReviews.map(
-        ({
-          basicInfo,
-          evaluation,
-          evidence,
-          resultInfo,
-          reviewContent,
-          userId,
-        }) => (
-          <div key={userId}>
-            <div className="flex gap-2">
-              <p>{basicInfo.companyName}</p>
-              <div className="flex gap-3">
-                <p>{basicInfo.jobCategory}</p>
-                <p>{basicInfo.interviewDate}</p>
-                <p>{basicInfo.employmentType}</p>
-              </div>
-            </div>
+      <section className="mt-9 rounded-[12px] border border-gray-300 bg-white p-10 pb-0 shadow-sm">
+        {interviewReviews.map(
+          ({
+            basicInfo,
 
+            resultInfo,
+            reviewContent,
+            id,
+          }) => (
+            <Link key={id} href={`review/${id}`}>
+              <article className="text-gray-1000 relative mb-5 flex items-center gap-5">
+                <h3 className="h3">{basicInfo.companyName}</h3>
 
-            <div className="flex flex-col gap-1">
-              <div className="flex gap-1">
-                <p className="text-main-400 font-bold">Q. </p>
-                <p>React의 Virtual DOM에 대해 설명해주세요.</p>
-              </div>
-            </div>
-          </div>
-        ),
-      )}
+                <div className="flex gap-1">
+                  <p>{basicInfo.jobCategory}</p>
+                  <Minus className="rotate-90 text-gray-300" />
+                  <p>{basicInfo.interviewDate}</p>
+                  <Minus className="rotate-90 text-gray-300" />
+                  <p>{basicInfo.employmentType}</p>
+                </div>
+                <Tags size="big" className="absolute right-0">
+                  {resultInfo.finalStatus}
+                </Tags>
+              </article>
+
+              <article className="flex flex-col gap-1">
+                {reviewContent.specificQuestions.map((q) => (
+                  <div key={q.id} className="b1 flex gap-1">
+                    <p className="text-main-400 font-bold">Q. </p>
+                    <p className="text-gray-1000"> {q.question} </p>
+                  </div>
+                ))}
+              </article>
+              <p className="c1 flex items-center justify-end text-gray-700">
+                후기 자세히보기
+                <ChevronRight size={15} className="text-icon-default" />
+              </p>
+
+              <Line color="gray300" />
+            </Link>
+          ),
+        )}
+        <article className="mb-5">
+          <PaginationCustom />
+        </article>
+      </section>
     </div>
   );
 };

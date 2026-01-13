@@ -1,3 +1,5 @@
+import { JobCategory } from '@/types/jobCategory';
+
 export interface SelectOption {
   label: string;
   value: string;
@@ -5,7 +7,7 @@ export interface SelectOption {
 
 export interface BasicInfo {
   companyName: string;
-  jobCategory: string;
+  jobCategory: JobCategory;
   interviewDate: string;
   employmentType: '신입' | '경력' | '인턴' | '계약직';
 }
