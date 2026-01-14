@@ -1,4 +1,3 @@
-// @/constants/selectOptions.ts
 import { jobCategories } from '@/constants/jobCategories';
 
 export const PASS_STATUS_OPTIONS = [
@@ -41,3 +40,27 @@ export const INTERVIEW_TYPE_OPTIONS = [
 
 // 면접 난이도
 export const INTERVIEW_LEVEL = ['쉬움', '보통', '어려움'];
+
+// 질문 유형
+export const INTERVIEW_QUESTION_TYPE = [
+  '자기소개',
+  '지원동기',
+  '상황 대처',
+  '회사 지식',
+  '직무 지식',
+  '사회이슈',
+  '입사 후 포부',
+  '마지막 질문',
+];
+
+export const INTERVIEW_PERSONNEL = ['1:1 면접', '면접관 다수', '어려움'];
+
+export const INTERVIEW_TIME = [
+  '1일',
+  '2~3일',
+  '4~5일',
+  '1주',
+  '2~3주',
+  '한 달 이상',
+  '결과 대기중',
+];
