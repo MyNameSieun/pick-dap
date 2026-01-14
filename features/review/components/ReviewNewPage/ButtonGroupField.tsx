@@ -6,7 +6,6 @@ interface Option {
 }
 
 interface ButtonGroupFieldProps {
-  // string 배열일 수도 있고, Option 객체 배열일 수도 있음
   options: string[] | Option[];
 }
 
@@ -14,7 +13,6 @@ const ButtonGroupField = ({ options }: ButtonGroupFieldProps) => {
   return (
     <div className="flex gap-1">
       {options.map((option) => {
-        // 데이터 형태에 따라 값을 추출
         const isObject = typeof option !== 'string';
 
         const displayLabel = isObject ? option.value : option;

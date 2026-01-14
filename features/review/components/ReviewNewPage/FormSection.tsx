@@ -1,17 +1,19 @@
 import Line from '@/components/common/Line';
+import { ContentId } from '../../types/content';
 
 interface FormSectionProps {
   title: string;
   children?: React.ReactNode;
+  id: ContentId;
 }
-const FormSection = ({ title, children }: FormSectionProps) => {
+const FormSection = ({ title, children, id }: FormSectionProps) => {
   return (
     <>
-      <section className="flex flex-col gap-5">
+      <section id={id} className="flex flex-col gap-5">
         <h3 className="h3 mb-3">{title}</h3>
         {children}
       </section>
-      <Line my={12} />
+      {id !== 'proof' && <Line my={12} />}
     </>
   );
 };
