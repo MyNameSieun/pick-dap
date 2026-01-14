@@ -58,3 +58,86 @@ export const communityData: PostType[] = [
     },
   },
 ];
+
+export const commentData: CommentType[] = [
+  {
+    id: '1',
+    content: '와 이건 생각 못했는데... 감사합니다!',
+    postId: '1',
+    author: {
+      id: '2',
+      username: 'j_gun2',
+      profileImage: '/profile_white.jpg',
+    },
+    createdAt: '2026.01.26',
+  },
+  {
+    id: '2',
+    content:
+      '아 이렇게 말했어야 했는데, 다시 생각해보게 되네요 글쓴이님 정말 감사드립니다!!',
+    postId: '1',
+    author: {
+      id: '3',
+      username: '미친고양이',
+      profileImage: '/example3.gif',
+    },
+    createdAt: '2026.01.26',
+  },
+  {
+    id: '3',
+    content:
+      '프로세스와 스레드는 사실 같이 비교할 대상이 아닌, 포함되는 관계입니다.\n프로세스는 운영체제 할당되는 작업의 단위를 의마하며,\n스레드는 프로세스 내에서 실행되는 작업의 단위를 뜻합니다.',
+    postId: '1',
+    author: {
+      id: '4',
+      username: '상처받은원숭이',
+      profileImage: '/logo/logo.png',
+    },
+    createdAt: '2026.01.26',
+  },
+  {
+    id: '4',
+    content: '와 이건 생각 못했는데... 감사합니다!',
+    postId: '2',
+    author: {
+      id: '2',
+      username: 'j_gun2',
+      profileImage: '/profile_white.jpg',
+    },
+    createdAt: '2026.01.03',
+  },
+  {
+    id: '5',
+    content:
+      '아 이렇게 말했어야 했는데, 다시 생각해보게 되네요 글쓴이님 정말 감사드립니다!!',
+    postId: '2',
+    author: {
+      id: '3',
+      username: '미친고양이',
+      profileImage: '/example3.gif',
+    },
+    createdAt: '2026.01.03',
+  },
+  {
+    id: '6',
+    content: '새해 준비합시다! 감사해요 :)',
+    postId: '3',
+    author: {
+      id: '2',
+      username: 'j_gun2',
+      profileImage: '/profile_white.jpg',
+    },
+    createdAt: '2026.12.31',
+  },
+  {
+    id: '7',
+    content: '아 이렇게 말했어야 했는데, 정말 감사드립니다!!',
+    postId: '3',
+    author: {
+      id: '3',
+      username: '미친고양이',
+      profileImage: '/example3.gif',
+    },
+    createdAt: '2026.12.31',
+  },
+];

@@ -6,12 +6,13 @@ import InfoComment from '@/components/common/Comments/InfoComment';
 import InfoAuthor from '@/components/common/Info/InfoAuthor';
 import Line from '@/components/common/Line';
 import { Button } from '@/components/ui/button/Button';
-import { communityData } from '@/data/communityData';
+import { commentData, communityData } from '@/data/communityData';
 import { EllipsisVertical, Heart } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
+import CommunityManageButton from './CommunityManageButton';
 
 const CommunityDetail = ({
   categoryId,
@@ -24,6 +25,8 @@ const CommunityDetail = ({
     (v) => v.id === postId && v.categoryId === categoryId,
   );
   const [isHeart, setHeart] = useState(false);
+  const [isManage, setManage] = useState(false);
+
   const heartHandler = () => {
     setHeart(!isHeart);
     if (isHeart)
@@ -54,13 +57,21 @@ const CommunityDetail = ({
               />
               {post?.stats.likeCount || 0}
             </Button>
-            <Button
-              size="icon"
-              variant="white"
-              className="text-icon-default h-10.5 w-10.5 rounded-[12px]"
-            >
-              <EllipsisVertical />
-            </Button>
+            <div className="relative">
+              <Button
+                onClick={() => setManage(!isManage)}
+                size="icon"
+                variant="white"
+                className="text-icon-default h-10.5 w-10.5 rounded-[12px]"
+              >
+                <EllipsisVertical />
+              </Button>
+              {isManage && (
+                <div className="absolute top-12 right-0">
+                  <CommunityManageButton />
+                </div>
+              )}
+            </div>
           </div>
         </div>
         <div className="flex">
@@ -85,18 +96,11 @@ const CommunityDetail = ({
           )}
         </div>
         <Line my={1} />
-        <InfoComment
-          profile="/profile.jpg"
-          author="건재2"
-          createdAt="2026.01.03"
-          content="와 이건 생각 못했는데.. 감사합니다!"
-        />
-        <InfoComment
-          profile="/profile.jpg"
-          author="건재2"
-          createdAt="2026.01.03"
-          content="와 이건 생각 못했는데.. 감사합니다!"
-        />
+        {commentData
+          .filter((v) => v.postId === post?.id)
+          .map((v) => (
+            <InfoComment key={v.id} commentId={v.id} postId={v.postId} />
+          ))}
         <div className="mt-2">
           <CommentEditor />
         </div>
