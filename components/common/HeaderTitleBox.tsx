@@ -17,6 +17,7 @@ interface HeaderTitleBoxProps {
     text: string;
     action?: () => void;
     variant?: 'default' | 'white';
+    icon?: LucideIcon;
   };
 }
 
@@ -24,17 +25,20 @@ const HeaderTitleBox = ({
   title,
   content,
   icon: Icon,
-  colorOption: {
+  colorOption = {},
+
+  buttonOption,
+}: HeaderTitleBoxProps) => {
+  const {
     bgColor = 'bg-blue-100',
     iconColor = 'text-blue-400',
     titleColor = 'text-gray-1000',
     subColor = 'text-gray-700',
-  } = {},
+  } = colorOption;
+  const ButtonIcon = buttonOption?.icon;
 
-  buttonOption,
-}: HeaderTitleBoxProps) => {
   return (
-    <div className="flex justify-between">
+    <div className="flex items-center justify-between">
       <div className="flex gap-4">
         <div className={`rounded-[5px] ${bgColor} p-4.5 shadow-sm`}>
           <Icon className={`${iconColor}`} />
@@ -50,6 +54,7 @@ const HeaderTitleBox = ({
           onClick={buttonOption.action}
           variant={buttonOption.variant || 'default'}
         >
+          {ButtonIcon && <ButtonIcon className="mr-1 h-4 w-4" />}
           {buttonOption.text}
         </Button>
       )}
