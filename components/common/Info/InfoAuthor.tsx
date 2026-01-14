@@ -19,16 +19,18 @@ const InfoAuthor = ({
           <Image
             className="object-cover"
             alt="작성자 프로필"
-            src={`${image ?? infoData.author.profileImage}`}
+            src={`${image ?? (image || infoData.author.profileImage)}`}
             fill
             priority
           />
         </div>
         <div className="flex h-12 flex-col justify-between">
-          <p className="text-sm font-semibold text-black">
-            {author ?? infoData.author.username}
+          <p className="b1 font-semibold text-black">
+            {author ?? (author || infoData.author.username)}
           </p>
-          <p className="c2 text-gray-700">{createdAt ?? infoData.createdAt}</p>
+          <p className="c1 text-gray-700">
+            {createdAt ?? (createdAt || infoData.createdAt)}
+          </p>
         </div>
       </div>
     </>
