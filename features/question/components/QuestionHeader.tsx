@@ -4,7 +4,7 @@ import Tags from '@/components/common/Tags/Tags';
 import { Bookmark, Send } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
 import questionData from '@/data/questionData.json';
-import { Textarea } from '@/components/ui/Textarea';
+import { Textarea } from '@/components/ui/textarea/Textarea';
 import Line from '@/components/common/Line';
 import { Button } from '@/components/ui/button/Button';
 import { toast } from 'sonner';

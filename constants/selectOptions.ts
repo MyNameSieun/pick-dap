@@ -20,6 +20,7 @@ export const JOB_CATEGORY_OPTIONS = jobCategories.map((jobCategory) => ({
   value: jobCategory,
 }));
 
+// 지원 유형
 export const EMPLOYMENT_TYPE_OPTIONS = [
   { label: '신입', value: '신입' },
   { label: '경력', value: '경력' },
@@ -37,3 +38,6 @@ export const INTERVIEW_TYPE_OPTIONS = [
   { label: '임원 / 최종', value: '임원 / 최종' },
   { label: 'AI면접', value: 'AI면접' },
 ];
+
+// 면접 난이도
+export const INTERVIEW_LEVEL = ['쉬움', '보통', '어려움'];
