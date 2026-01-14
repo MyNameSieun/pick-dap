@@ -1,10 +1,14 @@
+'use client';
+
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
 import { Activity, Search, SquarePen } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { twMerge } from 'tailwind-merge';
 
 const CommunityMain = () => {
+  const router = useRouter();
   return (
     <>
       <div className={twMerge('container-row', 'w-full p-4')}>
@@ -20,7 +24,10 @@ const CommunityMain = () => {
       </div>
       <div className="flex w-full items-center gap-4">
         <Input placeholder="검색어를 입력하세요" rightIcon={Search} />
-        <Button className="h-10.5">
+        <Button
+          className="h-10.5"
+          onClick={() => router.push('/community/post/new')}
+        >
           <SquarePen />
           글쓰기
         </Button>
