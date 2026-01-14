@@ -12,7 +12,7 @@ const SideMenuBar = ({ isHeader }: SideMenuBarProps) => {
   const pathname = usePathname();
 
   return (
-    <nav className="b1 ab flex cursor-pointer flex-col gap-2 py-4">
+    <nav className="b1 flex cursor-pointer flex-col gap-2 py-4">
       {MYPAGE_MENUS_ITEMS.map((menu) => {
         const isActive = !isHeader && pathname === menu.link;
         return (
