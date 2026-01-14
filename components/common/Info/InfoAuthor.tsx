@@ -25,10 +25,10 @@ const InfoAuthor = ({
           />
         </div>
         <div className="flex h-12 flex-col justify-between">
-          <p className="text-sm font-semibold text-black">
+          <p className="b1 font-semibold text-black">
             {author ?? (author || infoData.author.username)}
           </p>
-          <p className="c2 text-gray-700">
+          <p className="c1 text-gray-700">
             {createdAt ?? (createdAt || infoData.createdAt)}
           </p>
         </div>

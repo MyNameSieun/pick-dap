@@ -6,13 +6,23 @@ import InfoComment from '@/components/common/Comments/InfoComment';
 import InfoAuthor from '@/components/common/Info/InfoAuthor';
 import Line from '@/components/common/Line';
 import { Button } from '@/components/ui/button/Button';
+import { communityData } from '@/data/communityData';
 import { EllipsisVertical, Heart } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 
-const CommunityDetail = () => {
+const CommunityDetail = ({
+  categoryId,
+  postId,
+}: {
+  categoryId: string;
+  postId: string;
+}) => {
+  const post = communityData.find(
+    (v) => v.id === postId && v.categoryId === categoryId,
+  );
   const [isHeart, setHeart] = useState(false);
   const heartHandler = () => {
     setHeart(!isHeart);
@@ -28,7 +38,7 @@ const CommunityDetail = () => {
       <BackButton label={<p className="font-bold">뒤로가기</p>} />
       <div className="flex w-full flex-col gap-6 rounded-[12px] border border-gray-300 p-8">
         <div className="flex items-center justify-between">
-          <h2 className="h2 text-black">아니 님들 이게 맞음?!</h2>
+          <h2 className="h2 text-black">{post?.title || ''}</h2>
           <div className="flex-1" />
           <div className="flex items-center gap-4">
             <Button
@@ -42,7 +52,7 @@ const CommunityDetail = () => {
                   isHeart ? 'fill-point-heart' : '',
                 )}
               />
-              123
+              {post?.stats.likeCount || 0}
             </Button>
             <Button
               size="icon"
@@ -55,22 +65,24 @@ const CommunityDetail = () => {
         </div>
         <div className="flex">
           <InfoAuthor
-            image="/profile.jpg"
-            author="미야아옹"
-            createdAt="2026.01.03"
+            image={post?.author.profileImage || '/profile.jpg'}
+            author={post?.author.username || ''}
+            createdAt={post?.createdAt || ''}
           />
         </div>
         <Line my={1} />
         <div className="flex flex-col gap-2">
-          <p className="b1 text-black">
-            이 사람 누군지 알아보겠음? 난 모르겠는데 엌ㅋㅋ
+          <p className="b1 whitespace-pre-wrap text-black">
+            {post?.content || ''}
           </p>
-          <Image
-            src="/pickbot.png"
-            alt="게시글 이미지"
-            height={180}
-            width={200}
-          />
+          {post?.stats.postImage && (
+            <Image
+              src={post?.stats.postImage || '/example1.jpg'}
+              alt="게시글 이미지"
+              height={180}
+              width={200}
+            />
+          )}
         </div>
         <Line my={1} />
         <InfoComment

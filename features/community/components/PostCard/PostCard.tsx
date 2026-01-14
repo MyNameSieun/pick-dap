@@ -4,7 +4,7 @@ import { COMMUNITY_CATEGORY, COMMUNITY_TAG } from '@/constants/community';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const PostCard = ({ post }: { post: PostData }) => {
+const PostCard = ({ post }: { post: PostType }) => {
   const categoryKey = (post.categoryId ||
     '2') as keyof typeof COMMUNITY_CATEGORY;
   const categoryName = COMMUNITY_CATEGORY[categoryKey];
