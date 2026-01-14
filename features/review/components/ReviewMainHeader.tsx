@@ -14,7 +14,7 @@ const ReviewMainHeader = () => {
       buttonOption={{
         text: '후기 등록',
         action: () => {
-          router.push('/');
+          router.push('/review/new');
         },
       }}
     />

@@ -35,7 +35,6 @@ const ReviewDetailPage = async ({ params }: ReveiwDetailPageProps) => {
     <div className="mx-auto max-w-5xl p-6 break-keep">
       <BackButton label="목록으로 돌아가기" />
 
-      {/* 헤더 섹션 */}
       <ReviewHeader
         basicInfo={basicInfo}
         resultInfo={resultInfo}
