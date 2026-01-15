@@ -18,5 +18,4 @@ export const PROJECT_CONTENTS: ContentItem[] = [
   { label: '프로젝트 성과', id: 'achievements' },
   { label: '개선점 / 회고', id: 'retrospective' },
   { label: '결과물', id: 'deliverables' },
-  { label: '추가 정보', id: 'extra-info' },
 ] as const;
