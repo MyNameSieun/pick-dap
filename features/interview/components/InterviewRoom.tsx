@@ -11,7 +11,7 @@ const InterviewRoom = () => {
       <BackButton
         label={
           <p>
-            <b>지난 면접 불러오기</b>로..
+            <b>지난 면접 불러오기</b>로 이동하기
           </p>
         }
       />

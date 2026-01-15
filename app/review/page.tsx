@@ -18,7 +18,7 @@ import ReviewMainHeader from '@/features/review/components/ReviewMainHeader';
 
 const ReviewPage = () => {
   return (
-    <div className="flex flex-col gap-15">
+    <div className="flex flex-col gap-10">
       <ReviewMainHeader />
       <div>
         <div className="flex gap-3">

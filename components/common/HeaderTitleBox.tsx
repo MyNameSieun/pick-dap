@@ -4,7 +4,7 @@ import { Button } from '../ui/button/Button';
 interface HeaderTitleBoxProps {
   title?: React.ReactNode;
   content?: React.ReactNode;
-  icon: LucideIcon;
+  icon?: LucideIcon;
 
   colorOption?: {
     bgColor?: string;
@@ -38,11 +38,14 @@ const HeaderTitleBox = ({
   const ButtonIcon = buttonOption?.icon;
 
   return (
-    <div className="flex items-center justify-between">
+    <div className="mb-10 flex items-center justify-between">
       <div className="flex gap-4">
-        <div className={`rounded-[5px] ${bgColor} p-4.5 shadow-sm`}>
-          <Icon className={`${iconColor}`} />
-        </div>
+        {Icon && (
+          <div className={`rounded-[5px] ${bgColor} p-4.5 shadow-sm`}>
+            <Icon className={`${iconColor}`} />
+          </div>
+        )}
+
         <div className="flex flex-col justify-around">
           <div className={`text-[20px] font-bold ${titleColor}`}>{title}</div>
           <div className={`c1 ${subColor}`}>{content}</div>

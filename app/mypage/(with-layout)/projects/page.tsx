@@ -42,26 +42,29 @@ const MypageProjectsPage = () => {
           icon={FolderOpen}
         />
 
-        <div className="flex gap-3">
+        <div className="flex items-center gap-3">
           <Button variant={'white'} className="h-10 rounded-full">
             <Pen />
             수정
           </Button>
-          <Button className="h-10 rounded-full">
+          <Button
+            className="h-10 rounded-full"
+            onClick={() => router.push('/mypage/project/new')}
+          >
             <Plus />
             프로젝트 추가
           </Button>
         </div>
       </div>
 
-      <section className="mt-10">
+      <section className="mt-5">
         {projectData.length === 0 ? (
           <EmptyStateBox
             title="프로젝트를 추가해보세요"
             description="프로젝트 정보를 등록하면 AI가 더 정확한 면접 질문을 생성해드립니다"
             Icon={FolderOpen}
             buttonName="프로젝트 추가하기"
-            onClick={() => router.push('/mypage/projects/new')}
+            onClick={() => router.push('/mypage/project/new')}
           />
         ) : (
           <div className="grid grid-cols-2 gap-4">

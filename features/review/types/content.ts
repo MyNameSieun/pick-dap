@@ -1,4 +1,4 @@
-import { CONTENTS } from '../constants/contents';
+import { CONTENTS } from '../../../constants/contents';
 
 export type ContentItem = (typeof CONTENTS)[number];
 

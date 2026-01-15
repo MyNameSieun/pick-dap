@@ -1,9 +1,9 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { CONTENTS } from '../../constants/contents';
+import { ContentsType } from '@/constants/contents';
 
-const Contents = () => {
+const Contents = ({ contents }: { contents: ContentsType }) => {
   const [activeId, setActiveId] = useState('');
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const Contents = () => {
       observerOptions,
     );
 
-    CONTENTS.forEach((content) => {
+    contents.forEach((content) => {
       const element = document.getElementById(content.id);
       if (element) observer.observe(element);
     });
@@ -39,7 +39,7 @@ const Contents = () => {
       <div className="sticky top-20">
         <h5 className="h5 mb-4">목차</h5>
         <ol className="text-gray-1000 b2 flex flex-col gap-1">
-          {CONTENTS.map((content, index) => {
+          {contents.map((content, index) => {
             const isActive = activeId === content.id;
             return (
               <li

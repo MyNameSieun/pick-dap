@@ -12,8 +12,8 @@ interface SelectCountBoxProps {
   name?: string;
   onClick?: () => void;
   state: State;
-  setIsEditMode: React.Dispatch<SetStateAction<boolean>>;
-  setSelectedIds: React.Dispatch<SetStateAction<number[]>>;
+  setIsEditMode?: React.Dispatch<SetStateAction<boolean>>;
+  setSelectedIds?: React.Dispatch<SetStateAction<number[]>>;
   className?: string;
 }
 

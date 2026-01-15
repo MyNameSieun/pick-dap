@@ -23,12 +23,12 @@ const MypageUserMenu = () => {
             />
           </div>
           <div className="flex gap-3">
-            <h6 className="text-gray-800">사용자2</h6>
+            <h6 className="h6 text-gray-800">사용자2</h6>
             <Settings className="text-icon-default" />
           </div>
         </article>
         <Line />
-        <h6>마이페이지</h6>
+        <h6 className="h6">마이페이지</h6>
 
         <article>
           <SideMenuBar isHeader={false} />

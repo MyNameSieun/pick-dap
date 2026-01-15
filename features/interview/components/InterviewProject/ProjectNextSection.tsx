@@ -25,7 +25,7 @@ const ProjectNextSection = () => {
           </Button>
         </div>
         <div className="flex flex-col gap-3">
-          <AiRoomCard isEditMode={isEditMode} setIsEditMode={setIsEditMode} />
+          <AiRoomCard />
         </div>
       </div>
     </>
