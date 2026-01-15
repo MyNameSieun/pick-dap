@@ -13,14 +13,14 @@ const InterviewAiMain = () => {
       <BackButton
         label={
           <p>
-            <b>면접 연습 메인</b>으로..
+            <b>면접 연습 메인</b>으로 돌아가기
           </p>
         }
       />
-      <div className={twMerge('container-col mb-4', 'p-5')}>
+      <div>
         <HeaderTitleBox
-          title={<h2>AI 면접 질문 생성하기</h2>}
-          content={<p className="b1">AI를 통해 랜덤으로 면접 질문 생성</p>}
+          title={'AI 면접 질문 생성하기'}
+          content={'AI를 통해 랜덤으로 면접 질문 생성'}
           icon={Sparkles}
         />
       </div>

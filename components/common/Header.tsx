@@ -39,9 +39,12 @@ const Header = () => {
   const [isVisible, setVisible] = useState(false);
 
   return (
-    <>
-      <div className="relative w-full" onDragStart={(e) => e.preventDefault()}>
-        <header className="b2 bg-bg-light flex h-17.5 items-center border-b border-b-gray-300 px-10">
+    <div
+      className="w-full border-b border-gray-200 bg-white"
+      onDragStart={(e) => e.preventDefault()}
+    >
+      <div className="relative mx-auto max-w-7xl">
+        <header className="b2 flex h-17.5 items-center px-10">
           <div className="relative aspect-[3/2] h-full">
             <Link href="/">
               <Image
@@ -58,7 +61,7 @@ const Header = () => {
             {NAV_LIST.map((nav) => (
               <Link
                 key={nav.name}
-                className={`${pathname.startsWith(nav.link) ? 'font-bold' : 'font-normal'}`}
+                className={`${pathname.startsWith(nav.link) ? 'text-gray-1000 font-bold' : 'font-normal text-gray-800'}`}
                 href={nav.link}
               >
                 {nav.name}
@@ -149,7 +152,7 @@ const Header = () => {
           </div>
         </header>
       </div>
-    </>
+    </div>
   );
 };
 

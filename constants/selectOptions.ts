@@ -7,11 +7,11 @@ export const PASS_STATUS_OPTIONS = [
 ];
 
 export const INTERVIEW_PERIOD_OPTIONS = [
-  { label: '2024 상반기', value: '2024 상반기' },
-  { label: '2024 하반기', value: '2024 하반기' },
-  { label: '2025 상반기', value: '2025 상반기' },
-  { label: '2025 하반기', value: '2025 하반기' },
   { label: '2026 상반기', value: '2026 상반기' },
+  { label: '2025 하반기', value: '2025 하반기' },
+  { label: '2025 상반기', value: '2025 상반기' },
+  { label: '2024 하반기', value: '2024 하반기' },
+  { label: '2024 상반기', value: '2024 상반기' },
 ];
 
 export const JOB_CATEGORY_OPTIONS = jobCategories.map((jobCategory) => ({

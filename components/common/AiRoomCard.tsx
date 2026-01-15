@@ -4,16 +4,10 @@ import Tags from '@/components/common/Tags/Tags';
 import { Dot } from 'lucide-react';
 import Link from 'next/link';
 import aiRoomsData from '@/data/aiRoomsData.json';
-import { SetStateAction, useState } from 'react';
-import { cn } from '@/lib/utils';
-import SelectCountBox from './SelectCountBox/SelectCountBox';
+import { useState } from 'react';
+import Line from './Line';
 
-interface AiRoomCardProps {
-  isEditMode: boolean;
-  setIsEditMode: React.Dispatch<SetStateAction<boolean>>;
-}
-
-const AiRoomCard = ({ isEditMode, setIsEditMode }: AiRoomCardProps) => {
+const AiRoomCard = () => {
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const toggleSelect = (id: number) => {
     setSelectedIds((prev) =>
@@ -24,39 +18,13 @@ const AiRoomCard = ({ isEditMode, setIsEditMode }: AiRoomCardProps) => {
   };
   return (
     <>
-      {isEditMode === false ? null : (
-        <SelectCountBox
-          setIsEditMode={setIsEditMode}
-          setSelectedIds={setSelectedIds}
-          state="delete"
-          count={selectedIds.length}
-          className="min-w-full"
-        />
-      )}
-
       {aiRoomsData.map(
         ({ id, title, createdAt, questionCnt, tags, roomId }) => {
           const isCurrentSelected = selectedIds.includes(id);
 
           return (
-            <Link
-              key={id}
-              href={`/interview/rooms/${roomId}`}
-              onClick={(e) => {
-                if (isEditMode) {
-                  e.preventDefault();
-                  toggleSelect(id);
-                }
-              }}
-            >
-              <article
-                className={cn(
-                  'card-col',
-                  isEditMode && isCurrentSelected
-                    ? 'border-tag-text-red/30 bg-tag-bg-red/30'
-                    : '',
-                )}
-              >
+            <Link key={id} href={`/interview/rooms/${roomId}`}>
+              <article className="card-col-no-border">
                 <div className="flex flex-wrap">
                   {tags.map(({ label }) => (
                     <Tags key={label} className="mr-1" color="green" size="big">
@@ -75,6 +43,7 @@ const AiRoomCard = ({ isEditMode, setIsEditMode }: AiRoomCardProps) => {
                   </div>
                 </div>
               </article>
+              <Line />
             </Link>
           );
         },

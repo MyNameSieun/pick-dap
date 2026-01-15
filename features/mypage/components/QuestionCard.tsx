@@ -1,4 +1,5 @@
 'use client';
+import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
 import { Bookmark, Dot, Eye, MessageSquare } from 'lucide-react';
@@ -16,17 +17,16 @@ const QuestionCard = () => {
 
   return (
     <Link href={'/question/3'}>
-      <article className="card-col">
+      <article className="card-col-no-border">
         <div className="flex flex-wrap">
-          <Tags className="mr-1" color="green" size="big">
-            답변 완료
-          </Tags>
           <Tags className="mr-1" color="green" size="big">
             답변 완료
           </Tags>
         </div>
 
-        <h6>JVM의 구조와 Java의 실행방식을 설명해주세요.</h6>
+        <h6 className="h6 text-gray-1000">
+          JVM의 구조와 Java의 실행방식을 설명해주세요.
+        </h6>
 
         <div className="text-icon-default c2 flex items-center justify-between">
           <div className="flex gap-2">
@@ -62,6 +62,7 @@ const QuestionCard = () => {
           </div>
         </div>
       </article>
+      <Line />
     </Link>
   );
 };

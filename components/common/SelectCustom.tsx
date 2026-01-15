@@ -22,7 +22,7 @@ interface FormSelectProps {
   required?: boolean;
   onValueChange?: (value: string) => void;
 }
-const FormSelect = ({
+const SelectCustom = ({
   options,
   defaultValue,
   placeholder,
@@ -56,4 +56,4 @@ const FormSelect = ({
   );
 };
 
-export default FormSelect;
+export default SelectCustom;

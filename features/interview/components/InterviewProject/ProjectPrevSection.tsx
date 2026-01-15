@@ -7,31 +7,35 @@ const ProjectPrevSection = () => {
   return (
     <>
       <div className={twMerge('container-col', 'w-2/5 gap-6 p-8')}>
-        <div className="flex flex-col gap-2">
-          <h5 className="h5 text-black">프로젝트 선택</h5>
-          <p className="c1 text-gray-1000">
-            질문 생성에 사용할 프로젝트를 선택하세요
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 rounded-[6px] border border-gray-500 p-4">
-          <div className="mb-2 flex items-start justify-between">
-            <HeaderTitleBox
-              title={<h6 className="h6">프로젝트</h6>}
-              content={<p className="c1">2개의 프로젝트</p>}
-              icon={FolderOpen}
-              bgColor="bg-highlight-light"
-              iconColor="text-highlight-deep"
-            />
+        <div className="flex flex-col">
+          <div className="flex justify-between">
+            <h5 className="h5 text-black">프로젝트 선택</h5>
             <Button variant="link" size="xs">
               + 추가하기
             </Button>
           </div>
-          <div className="card-col">
-            <p>프로젝트 이름</p>
-          </div>
-          <div className="card-col">
-            <p>프로젝트 이름</p>
-          </div>
+
+          <p className="c1 text-gray-800">
+            질문 생성에 사용할 프로젝트를 선택하세요
+          </p>
+        </div>
+        <div className="flex flex-col gap-4 rounded-[6px] border border-gray-200 p-4">
+          <article className="card-row h-fit items-center">
+            <div
+              className={`bg-main-100 text-main-400 rounded-[5px] p-4.5 shadow-sm`}
+            >
+              <FolderOpen />
+            </div>
+            <p className="">프로젝트 이름1</p>
+          </article>
+          <article className="card-row h-fit items-center">
+            <div
+              className={`bg-main-100 text-main-400 rounded-[5px] p-4.5 shadow-sm`}
+            >
+              <FolderOpen />
+            </div>
+            <p className="">프로젝트 이름2</p>
+          </article>
         </div>
 
         <Button size="lg" className="font-bold">

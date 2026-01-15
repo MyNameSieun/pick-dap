@@ -2,7 +2,7 @@ import Line from '@/components/common/Line';
 import { Input } from '@/components/ui/input/Input';
 import { Search } from 'lucide-react';
 
-import FormSelect from '@/components/common/FormSelect';
+import FormSelect from '@/components/common/SelectCustom';
 
 import {
   EMPLOYMENT_TYPE_OPTIONS,
@@ -18,24 +18,31 @@ import ReviewMainHeader from '@/features/review/components/ReviewMainHeader';
 
 const ReviewPage = () => {
   return (
-    <div>
+    <div className="flex flex-col gap-10">
       <ReviewMainHeader />
-      <Line color="gray300" my={6} />
-      <div className="flex gap-3">
-        <Input placeholder="기업명" rightIcon={Search} />
-        <FormSelect options={PASS_STATUS_OPTIONS} placeholder="합격여부" />
-        <FormSelect options={INTERVIEW_PERIOD_OPTIONS} placeholder="면접시기" />
-        <FormSelect options={JOB_CATEGORY_OPTIONS} placeholder="직무" />
-        <FormSelect options={EMPLOYMENT_TYPE_OPTIONS} placeholder="고용유형" />
-        <FormSelect options={INTERVIEW_TYPE_OPTIONS} placeholder="면접전형" />
-      </div>
+      <div>
+        <div className="flex gap-3">
+          <Input placeholder="기업명" rightIcon={Search} />
+          <FormSelect options={PASS_STATUS_OPTIONS} placeholder="합격여부" />
+          <FormSelect
+            options={INTERVIEW_PERIOD_OPTIONS}
+            placeholder="면접시기"
+          />
+          <FormSelect options={JOB_CATEGORY_OPTIONS} placeholder="직무" />
+          <FormSelect
+            options={EMPLOYMENT_TYPE_OPTIONS}
+            placeholder="고용유형"
+          />
+          <FormSelect options={INTERVIEW_TYPE_OPTIONS} placeholder="면접전형" />
+        </div>
 
-      <section className="mt-9 rounded-[12px] border border-gray-300 bg-white p-10 pb-0 shadow-sm">
-        <ReviewList />
-        <article className="mb-5">
-          <PaginationCustom />
-        </article>
-      </section>
+        <section className="mt-4 rounded-[12px] border border-gray-300 bg-white p-10 pb-0 shadow-sm">
+          <ReviewList />
+          <article className="mb-5">
+            <PaginationCustom />
+          </article>
+        </section>
+      </div>
     </div>
   );
 };
