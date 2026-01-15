@@ -1,7 +1,7 @@
 import { Slider } from '@/components/ui/Slider';
-import ButtonGroupField from './ButtonGroupField';
-import FormItemLayout from './FormItemLayout';
-import FormSection from './FormSection';
+import ButtonGroupField from '../../../../components/common/CreateForm/ButtonGroupField';
+import FormItemLayout from '../../../../components/common/CreateForm/FormItemLayout';
+import FormSection from '../../../../components/common/CreateForm/FormSection';
 import {
   INTERVIEW_LEVEL,
   INTERVIEW_PERSONNEL,

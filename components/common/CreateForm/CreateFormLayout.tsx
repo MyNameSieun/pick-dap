@@ -1,4 +1,4 @@
-import Contents from '@/features/review/components/ReviewNewPage/Contents';
+import Contents from '@/components/common/CreateForm/Contents';
 import BackButton from '../BackButton';
 import Line from '../Line';
 import { LucideIcon } from 'lucide-react';
@@ -34,7 +34,7 @@ const CreateFormLayout = ({
       </header>
       <div className="mt-10 flex gap-10">
         <Contents contents={contents} />
-        <div>{children}</div>
+        <div className="flex flex-1 flex-col">{children}</div>
       </div>
 
       <footer>

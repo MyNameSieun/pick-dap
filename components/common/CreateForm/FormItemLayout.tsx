@@ -14,7 +14,7 @@ const FormItemLayout = ({
   className,
 }: FormItemLayoutProps) => (
   <article className="flex flex-col gap-1">
-    <label className={`b2 text-gray-700 ${className}`}>
+    <label className={`b2 text-gray-900 ${className}`}>
       {label} {isRequired && <RequiredMark />}
     </label>
     {children}

@@ -2,7 +2,7 @@ import Line from '@/components/common/Line';
 import { Input } from '@/components/ui/input/Input';
 import { Search } from 'lucide-react';
 
-import FormSelect from '@/components/common/FormSelect';
+import FormSelect from '@/components/common/SelectCustom';
 
 import {
   EMPLOYMENT_TYPE_OPTIONS,

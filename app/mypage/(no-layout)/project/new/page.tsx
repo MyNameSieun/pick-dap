@@ -1,4 +1,13 @@
 import CreateFormLayout from '@/components/common/CreateForm/CreateFormLayout';
+import Achievements from '@/features/mypage/components/ProjectNewPage/Achievements';
+import Deliverables from '@/features/mypage/components/ProjectNewPage/Deliverables';
+import ExtraInfo from '@/features/mypage/components/ProjectNewPage/ExtraInfo';
+import Features from '@/features/mypage/components/ProjectNewPage/Features';
+import Overview from '@/features/mypage/components/ProjectNewPage/Overview';
+import Retrospective from '@/features/mypage/components/ProjectNewPage/Retrospective';
+import Role from '@/features/mypage/components/ProjectNewPage/Role';
+import TechStack from '@/features/mypage/components/ProjectNewPage/TechStack';
+import Troubleshooting from '@/features/mypage/components/ProjectNewPage/Troubleshooting';
 import { PROJECT_CONTENTS } from '@/types/contents';
 import { FolderPlus } from 'lucide-react';
 
@@ -13,7 +22,15 @@ const MypageProjectNewPage = () => {
       }}
       contents={PROJECT_CONTENTS}
     >
-      d
+      <Overview />
+      <TechStack />
+      <Features />
+      <Role />
+      <Troubleshooting />
+      <Achievements />
+      <Retrospective />
+      <Deliverables />
+      <ExtraInfo />
     </CreateFormLayout>
   );
 };
