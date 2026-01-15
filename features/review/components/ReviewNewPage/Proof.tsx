@@ -1,5 +1,5 @@
 import { Upload } from 'lucide-react';
-import FormSection from './FormSection';
+import FormSection from '../../../../components/common/CreateForm/FormSection';
 
 const Proof = () => {
   return (

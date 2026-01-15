@@ -30,8 +30,10 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
             key={v.id}
             onClick={() => handleTabClick(v.id)}
             className={cn(
-              'b1 relative cursor-pointer px-6 py-3 text-black transition-colors outline-none',
-              isMenu === v.id ? 'font-bold' : 'font-normal',
+              'b1 text-gray-1000 relative cursor-pointer px-6 py-3 transition-colors outline-none',
+              isMenu === v.id
+                ? 'text-gray-1000 font-bold'
+                : 'hover:text-gray-1000 font-normal text-gray-800',
             )}
           >
             {v.label}

@@ -1,19 +1,10 @@
 import AiRoomCard from '@/components/common/AiRoomCard';
-import { SetStateAction } from 'react';
 
-interface interviewRoomListProps {
-  isEditMode: boolean;
-  setIsEditMode: React.Dispatch<SetStateAction<boolean>>;
-}
-
-const InterviewRoomsList = ({
-  isEditMode,
-  setIsEditMode,
-}: interviewRoomListProps) => {
+const InterviewRoomsList = () => {
   return (
     <>
-      <article className="flex flex-col gap-3">
-        <AiRoomCard isEditMode={isEditMode} setIsEditMode={setIsEditMode} />
+      <article className="container-col flex flex-col gap-3">
+        <AiRoomCard />
       </article>
     </>
   );

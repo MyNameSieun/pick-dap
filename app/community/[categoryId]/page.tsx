@@ -15,7 +15,7 @@ export const generateMetadata = async ({ params }: Props) => {
 export default async function CommunityCategoryDetailPage({ params }: Props) {
   const { categoryId } = await params;
   return (
-    <div className="mx-auto mt-8 flex w-full max-w-214 flex-col items-start gap-7.5">
+    <div className="flex flex-col gap-7.5">
       <CommunityMain />
       <CommunitySub categoryId={categoryId} />
     </div>

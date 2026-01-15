@@ -13,7 +13,7 @@ const TagSearchBar = () => {
   const sortOptions = ['추천순', '최신순'];
 
   return (
-    <section className="container-col gap-6.5">
+    <section className="container-col gap-8">
       {/* 카테고리 섹션 */}
       <article className="flex flex-col gap-3">
         <h5 className="h6 text-gray-1000">카테고리</h5>
@@ -27,7 +27,7 @@ const TagSearchBar = () => {
               className={cn(
                 'h-8.5 transition-colors',
                 selectedCategory === jobCategory
-                  ? 'bg-main-500 border-main-500 hover:bg-main-500 text-white'
+                  ? 'bg-main-400 border-main-400 hover:bg-main-500400 text-white'
                   : 'border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-100/80 hover:text-gray-700',
               )}
             >
@@ -42,7 +42,7 @@ const TagSearchBar = () => {
         <h5 className="h6 text-gray-1000">보유 기술</h5>
         <div className="relative">
           <Input
-            className="c1 text-gray-1000 focus:ring-main-500 border-gray-200 pl-10"
+            className="c1 text-gray-1000 focus:ring-main-400 border-gray-200 bg-gray-100 pl-10"
             type="text"
             placeholder="기술 스택을 입력해주세요 "
           />
@@ -52,7 +52,7 @@ const TagSearchBar = () => {
       {/* 정렬 섹션 */}
       <article className="flex flex-col gap-3">
         <h5 className="h6 text-gray-1000 mb-3">정렬</h5>
-        <div className="bg-bg-default flex w-full rounded-lg border border-gray-200 p-1">
+        <div className="flex w-full rounded-lg border border-gray-200 bg-gray-100 p-1">
           {sortOptions.map((option) => (
             <button
               key={option}

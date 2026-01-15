@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button/Button';
 import { FolderClock } from 'lucide-react';
 import InterviewRoomsList from '@/features/interview/components/InterviewRoomsList';
 import { useState } from 'react';
+import BackButton from '@/components/common/BackButton';
 
 const InterviewManagementContainer = () => {
   const [isEditMode, setIsEditMode] = useState(false);
@@ -15,11 +16,20 @@ const InterviewManagementContainer = () => {
   return (
     <>
       <article className="flex justify-between">
-        <HeaderTitleBox
-          title={'지난 면접 불러오기'}
-          content={'이전에 진행했던 면접을 다시 진행해보세요'}
-          icon={FolderClock}
-        />
+        <div className="flex flex-col">
+          <BackButton
+            label={
+              <p>
+                <b>면접 연습 메인</b>으로 돌아가기
+              </p>
+            }
+          />
+          <HeaderTitleBox
+            title={'지난 면접 불러오기'}
+            content={'이전에 진행했던 면접을 다시 진행해보세요'}
+            icon={FolderClock}
+          />
+        </div>
 
         <Button variant={'default'} onClick={handleDeleteButton}>
           {isEditMode ? <p>삭제 취소</p> : <p>삭제하기</p>}
