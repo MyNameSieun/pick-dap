@@ -1,7 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { cn } from '@/lib/utils';
-import { ContentsType } from '@/constants/contents';
+import { ContentsType } from '@/types/contents';
 
 const Contents = ({ contents }: { contents: ContentsType }) => {
   const [activeId, setActiveId] = useState('');

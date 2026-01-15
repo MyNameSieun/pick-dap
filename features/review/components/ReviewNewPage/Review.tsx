@@ -3,9 +3,7 @@ import ButtonGroupField from '../../../../components/common/CreateForm/ButtonGro
 import FormItemLayout from '../../../../components/common/CreateForm/FormItemLayout';
 import FormSection from '../../../../components/common/CreateForm/FormSection';
 import { INTERVIEW_QUESTION_TYPE } from '@/constants/selectOptions';
-import { Plus } from 'lucide-react';
 import TextareaField from '@/components/common/CreateForm/TextareaField';
-import { useDynamicFieldList } from '@/hooks/useDynamicFieldList';
 import DynamicFieldList from '@/components/common/CreateForm/DynamicFieldList';
 
 const Review = () => {
@@ -28,7 +26,7 @@ const Review = () => {
       </FormItemLayout>
 
       <FormItemLayout label="기억에 남는 면접 질문" isRequired>
-        <DynamicFieldList />
+        <DynamicFieldList label="질문" placeholder="질문을 입력해주세요" />
       </FormItemLayout>
     </FormSection>
   );

@@ -18,7 +18,7 @@ const projectOptions = [
 
 const Overview = () => {
   return (
-    <FormSection title="1. 프로젝트 개요" id="basic-info">
+    <FormSection title="1. 프로젝트 개요" id="overview">
       <FormItemLayout label="프로젝트명" isRequired>
         <Input placeholder="프로젝트명" className="w-100" />
       </FormItemLayout>

@@ -4,7 +4,7 @@ import Line from '../Line';
 import { LucideIcon } from 'lucide-react';
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import { Button } from '@/components/ui/button/Button';
-import { ContentsType } from '@/constants/contents';
+import { ContentsType } from '@/types/contents';
 
 interface CreateLayoutProps {
   BackButtonLabel: string;

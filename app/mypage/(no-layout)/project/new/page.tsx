@@ -8,7 +8,7 @@ import Retrospective from '@/features/mypage/components/ProjectNewPage/Retrospec
 import Role from '@/features/mypage/components/ProjectNewPage/Role';
 import TechStack from '@/features/mypage/components/ProjectNewPage/TechStack';
 import Troubleshooting from '@/features/mypage/components/ProjectNewPage/Troubleshooting';
-import { PROJECT_CONTENTS } from '@/types/contents';
+import { PROJECT_CONTENTS } from '@/constants/contents';
 import { FolderPlus } from 'lucide-react';
 
 const MypageProjectNewPage = () => {
@@ -30,7 +30,6 @@ const MypageProjectNewPage = () => {
       <Achievements />
       <Retrospective />
       <Deliverables />
-      <ExtraInfo />
     </CreateFormLayout>
   );
 };

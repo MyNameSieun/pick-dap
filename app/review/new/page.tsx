@@ -5,7 +5,7 @@ import Proof from '@/features/review/components/ReviewNewPage/Proof';
 import Result from '@/features/review/components/ReviewNewPage/Result';
 import Review from '@/features/review/components/ReviewNewPage/Review';
 import Tips from '@/features/review/components/ReviewNewPage/Tips';
-import { REVIEW_CONTENTS } from '@/types/contents';
+import { REVIEW_CONTENTS } from '@/constants/contents';
 import { Pen } from 'lucide-react';
 
 const ReviewNewPage = () => {

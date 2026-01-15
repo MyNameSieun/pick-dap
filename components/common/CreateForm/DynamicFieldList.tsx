@@ -1,8 +1,15 @@
+'use client';
+
 import TextareaField from './TextareaField';
 import { Plus } from 'lucide-react';
 import { useDynamicFieldList } from '@/hooks/useDynamicFieldList';
 
-const DynamicFieldList = () => {
+interface DynamicFieldListProps {
+  label: string;
+  placeholder: string;
+}
+
+const DynamicFieldList = ({ label, placeholder }: DynamicFieldListProps) => {
   const { fields, addField, removeField } = useDynamicFieldList();
 
   return (
@@ -14,7 +21,7 @@ const DynamicFieldList = () => {
         >
           <div className="mb-3 flex items-center justify-between">
             <span className="b1 font-semibold text-gray-800">
-              질문 {index + 1}
+              {label} {index + 1}
             </span>
             <button
               onClick={() => removeField(id)}
@@ -24,10 +31,7 @@ const DynamicFieldList = () => {
             </button>
           </div>
 
-          <TextareaField
-            placeholder="질문을 입력해주세요"
-            className="bg-gray-50"
-          />
+          <TextareaField placeholder={placeholder} className="bg-gray-50" />
         </div>
       ))}
 
@@ -37,7 +41,7 @@ const DynamicFieldList = () => {
         className="flex cursor-pointer items-center justify-center gap-2 rounded-md border border-dashed border-gray-300 bg-gray-50 py-4 text-gray-700 hover:bg-gray-100"
       >
         <Plus size={16} />
-        질문 추가
+        {label} 추가
       </button>
     </div>
   );

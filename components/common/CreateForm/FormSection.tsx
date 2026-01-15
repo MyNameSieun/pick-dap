@@ -1,10 +1,9 @@
 import Line from '@/components/common/Line';
-import { ContentId } from '../../../features/review/types/content';
 
 interface FormSectionProps {
   title: string;
   children?: React.ReactNode;
-  id: ContentId;
+  id: string;
 }
 const FormSection = ({ title, children, id }: FormSectionProps) => {
   return (
