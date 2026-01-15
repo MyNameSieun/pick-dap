@@ -1,14 +1,69 @@
+'use client';
 import { Input } from '@/components/ui/input/Input';
-import React from 'react';
 import LoginOptions from './LoginOptions';
+import { useForm } from 'react-hook-form';
+import { LoginFormData, loginSchema } from '@/types/schema';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button/Button';
 
 const LoginInput = () => {
+  const {
+    handleSubmit,
+    register,
+    formState: { isSubmitting, isSubmitted, errors },
+  } = useForm<LoginFormData>({
+    resolver: zodResolver(loginSchema),
+  });
+  const onSubmit = (data: LoginFormData) => {
+    console.log('로그인 시도 데이터:', data);
+  };
   return (
     <>
-      <div className="flex flex-col gap-3">
-        <Input type="email" placeholder="아이디 (이메일)" className="b1 py-7" />
-        <Input type="password" placeholder="비밀번호" className="b1 py-7" />
-      </div>
+      <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
+        <div>
+          <Input
+            type="email"
+            placeholder="아이디 (이메일)"
+            className="b1 py-7"
+            {...register('email')}
+            aria-invalid={
+              isSubmitted ? (errors.email ? 'true' : 'false') : undefined
+            }
+          />
+          {errors.email && (
+            <p className="c1 text-red-600" role="alert">
+              {errors.email.message}
+            </p>
+          )}
+        </div>
+        <div>
+          <Input
+            {...register('password')}
+            aria-invalid={
+              isSubmitted ? (errors.password ? 'true' : 'false') : undefined
+            }
+            type="password"
+            placeholder="비밀번호"
+            className="b1 py-7"
+          />
+          {errors.password && (
+            <p className="c1 text-red-600" role="alert">
+              {errors.password.message}
+            </p>
+          )}
+        </div>
+
+        <div className="mb-4.5 flex flex-col">
+          <Button
+            disabled={isSubmitting}
+            type="submit"
+            variant={'default'}
+            className="py-7"
+          >
+            <h6> {isSubmitting ? '로그인 중...' : '로그인'}</h6>
+          </Button>
+        </div>
+      </form>
       <div className="mt-5 mb-12 flex justify-between">
         <div className="flex items-center gap-2 text-gray-600">
           <div className="h-4.5 w-4.5 rounded-full border border-gray-600 bg-white" />
