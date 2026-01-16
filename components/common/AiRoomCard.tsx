@@ -1,36 +1,59 @@
-'use client';
-
 import Tags from '@/components/common/Tags/Tags';
 import { Dot } from 'lucide-react';
 import Link from 'next/link';
 import aiRoomsData from '@/data/aiRoomsData.json';
-import { useState } from 'react';
 import Line from './Line';
+import {
+  useEditActions,
+  useIsEditMode,
+  useSelectedIds,
+} from '@/store/useEditStore';
 
 const AiRoomCard = () => {
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
-  const toggleSelect = (id: number) => {
-    setSelectedIds((prev) =>
-      prev.includes(id)
-        ? prev.filter((itemId) => itemId !== id)
-        : [...prev, id],
-    );
+  const isEditMode = useIsEditMode();
+  const selectedIds = useSelectedIds();
+  const { toggleSelectedId } = useEditActions();
+
+  const hanldeClickBox = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    id: number,
+  ) => {
+    if (isEditMode) {
+      e.preventDefault();
+      toggleSelectedId(id);
+    }
   };
   return (
     <>
       {aiRoomsData.map(
         ({ id, title, createdAt, questionCnt, tags, roomId }) => {
-          const isCurrentSelected = selectedIds.includes(id);
+          const isSelected = selectedIds.includes(id);
 
           return (
-            <Link key={id} href={`/interview/rooms/${roomId}`}>
+            <Link
+              key={id}
+              href={isEditMode ? '#' : `/interview/rooms/${roomId}`}
+              onClick={(e) => hanldeClickBox(e, id)}
+            >
               <article className="card-col-no-border">
-                <div className="flex flex-wrap">
-                  {tags.map(({ label }) => (
-                    <Tags key={label} className="mr-1" color="green" size="big">
-                      {label}
-                    </Tags>
-                  ))}
+                <div className="flex justify-between">
+                  <div className="flex flex-wrap">
+                    {tags.map(({ label }) => (
+                      <Tags
+                        key={label}
+                        className="mr-1"
+                        color="green"
+                        size="big"
+                      >
+                        {label}
+                      </Tags>
+                    ))}
+                  </div>
+                  {isEditMode && (
+                    <div
+                      className={`h-5 w-5 rounded-full border ${isSelected ? 'bg-main-500 border-main-500' : 'border-gray-300'}`}
+                    />
+                  )}
                 </div>
 
                 <h6 className="h6">{title}</h6>
