@@ -2,7 +2,8 @@
 
 import { Button } from '@/components/ui/button/Button';
 import { cn } from '@/lib/utils';
-import { SetStateAction } from 'react';
+import { useEditActions } from '@/store/useEditStore';
+import { SetStateAction, useActionState } from 'react';
 import { toast } from 'sonner';
 
 type State = 'save' | 'delete';
@@ -12,8 +13,7 @@ interface SelectCountBoxProps {
   name?: string;
   onClick?: () => void;
   state: State;
-  setIsEditMode: React.Dispatch<SetStateAction<boolean>>;
-  setSelectedIds: React.Dispatch<SetStateAction<number[]>>;
+
   className?: string;
 }
 
@@ -22,24 +22,20 @@ const SelectCountBox = ({
   name,
   state,
 
-  setIsEditMode,
-  setSelectedIds,
-
   className,
 }: SelectCountBoxProps) => {
+  const { setEditMode } = useEditActions();
+
   const isSave = state === 'save';
 
   const onClickSaveButtonHandler = () => {
     toast.success('마이페이지에 저장되었습니다!', { position: 'top-center' });
-    setIsEditMode(false);
-    setSelectedIds([]);
-    toast.success('저장되었습니다!', { position: 'top-center' });
+    setEditMode(false);
   };
 
   const onClickDeleteButtonHandler = () => {
     toast.success('삭제되었습니다.', { position: 'top-center' });
-    setIsEditMode(false);
-    setSelectedIds([]);
+    setEditMode(false);
   };
   return (
     <>

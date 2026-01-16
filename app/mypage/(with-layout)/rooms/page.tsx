@@ -2,12 +2,17 @@
 import AiRoomCard from '@/components/common/AiRoomCard';
 import { FolderOpen } from 'lucide-react';
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
-import { useState } from 'react';
 import SelectCountBox from '@/components/common/SelectCountBox/SelectCountBox';
+import {
+  useEditActions,
+  useIsEditMode,
+  useSelectedIds,
+} from '@/store/useEditStore';
 
 const MypageRoomsPage = () => {
-  const [isEditMode, setIsEditMode] = useState(false);
-  const [selectedIds, setSelectedIds] = useState<number[]>([]);
+  const isEditMode = useIsEditMode();
+  const selectedIds = useSelectedIds();
+  const { setEditMode } = useEditActions();
 
   return (
     <div>
@@ -17,26 +22,14 @@ const MypageRoomsPage = () => {
         content="AI 면접관과의 대화 기록을 확인하고 복습하세요"
         buttonOption={{
           text: '기록 선택',
-          action: () => {
-            setIsEditMode(!isEditMode);
-            setSelectedIds([]);
-          },
+          action: () => setEditMode(!isEditMode),
         }}
       />
       {isEditMode && (
-        <SelectCountBox
-          count={3}
-          state="delete"
-          setIsEditMode={setIsEditMode}
-          setSelectedIds={setSelectedIds}
-        />
+        <SelectCountBox count={selectedIds.length} state="delete" />
       )}
       <div className="container-col gap-2.5">
-        <AiRoomCard
-          isEditMode={isEditMode}
-          selectedIds={selectedIds}
-          setSelectedIds={setSelectedIds}
-        />
+        <AiRoomCard />
       </div>
     </div>
   );

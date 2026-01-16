@@ -2,42 +2,38 @@ import Tags from '@/components/common/Tags/Tags';
 import { Dot } from 'lucide-react';
 import Link from 'next/link';
 import aiRoomsData from '@/data/aiRoomsData.json';
-import { SetStateAction } from 'react';
 import Line from './Line';
+import {
+  useEditActions,
+  useIsEditMode,
+  useSelectedIds,
+} from '@/store/useEditStore';
 
-interface AiRoomCardProps {
-  isEditMode: boolean;
-  selectedIds: number[];
-  setSelectedIds: React.Dispatch<SetStateAction<number[]>>;
-}
+const AiRoomCard = () => {
+  const isEditMode = useIsEditMode();
+  const selectedIds = useSelectedIds();
+  const { toggleSelectedId } = useEditActions();
 
-const AiRoomCard = ({
-  isEditMode,
-  selectedIds,
-  setSelectedIds,
-}: AiRoomCardProps) => {
-  const toggleSelect = (e: React.MouseEvent, id: number) => {
-    e.preventDefault();
-
-    // TODO: 클릭한 id가 selectedIds 배열에 이미 있으면? =>  필터링
-    // TODO: 없으면? => 추가
-    setSelectedIds((prev) =>
-      prev.includes(id)
-        ? prev.filter((itemId) => itemId !== id)
-        : [...prev, id],
-    );
+  const hanldeClickBox = (
+    e: React.MouseEvent<HTMLAnchorElement, MouseEvent>,
+    id: number,
+  ) => {
+    if (isEditMode) {
+      e.preventDefault();
+      toggleSelectedId(id);
+    }
   };
   return (
     <>
       {aiRoomsData.map(
         ({ id, title, createdAt, questionCnt, tags, roomId }) => {
-          const isCurrentSelected = selectedIds.includes(id);
+          const isSelected = selectedIds.includes(id);
 
           return (
             <Link
               key={id}
               href={isEditMode ? '#' : `/interview/rooms/${roomId}`}
-              onClick={(e) => isEditMode && toggleSelect(e, id)}
+              onClick={(e) => hanldeClickBox(e, id)}
             >
               <article className="card-col-no-border">
                 <div className="flex justify-between">
@@ -55,7 +51,7 @@ const AiRoomCard = ({
                   </div>
                   {isEditMode && (
                     <div
-                      className={`h-5 w-5 rounded-full border ${isCurrentSelected ? 'bg-main-500 border-main-500' : 'border-gray-300'}`}
+                      className={`h-5 w-5 rounded-full border ${isSelected ? 'bg-main-500 border-main-500' : 'border-gray-300'}`}
                     />
                   )}
                 </div>
