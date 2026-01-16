@@ -12,8 +12,8 @@ interface SelectCountBoxProps {
   name?: string;
   onClick?: () => void;
   state: State;
-  setIsEditMode?: React.Dispatch<SetStateAction<boolean>>;
-  setSelectedIds?: React.Dispatch<SetStateAction<number[]>>;
+  setIsEditMode: React.Dispatch<SetStateAction<boolean>>;
+  setSelectedIds: React.Dispatch<SetStateAction<number[]>>;
   className?: string;
 }
 
@@ -21,8 +21,10 @@ const SelectCountBox = ({
   count,
   name,
   state,
+
   setIsEditMode,
   setSelectedIds,
+
   className,
 }: SelectCountBoxProps) => {
   const isSave = state === 'save';
@@ -43,7 +45,7 @@ const SelectCountBox = ({
     <>
       <div
         className={cn(
-          'flex h-15 w-full max-w-128 items-center justify-between rounded-[6px] px-4',
+          'mb-3 flex h-15 w-full items-center justify-between rounded-[6px] px-4',
           isSave ? 'bg-main-100' : 'bg-tag-bg-red',
           className,
         )}
