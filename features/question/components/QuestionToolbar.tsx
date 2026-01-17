@@ -1,19 +1,34 @@
 'use client';
 
+import Filter from '@/components/common/Filter';
 import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
+import { useFilter } from '@/hooks/useFilter';
 import clsx from 'clsx';
-import { Filter, Plus, Search } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { useState } from 'react';
+
+type FilterType = 'all' | 'unanswered' | 'answered';
+const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
+  { value: 'all', label: '전체' },
+  { value: 'unanswered', label: '미답변' },
+  { value: 'answered', label: '답변완료' },
+];
 
 const QuestionToolbar = () => {
   const [isActive, setIsActive] = useState(false);
+  const {
+    filterRef,
+    handleFilterClick,
+    handleFilterSelect,
+    isFilterOpen,
+    filterType,
+  } = useFilter<FilterType>('all');
 
   return (
     <article className="mx-9">
       <section className="flex items-center justify-between border-gray-200">
         <div className="text-button-md relative flex h-12 gap-6 rounded-[12] border border-gray-200 bg-gray-100 p-2 font-bold">
-          {/* 움직이는 뒷배경 */}
           <div
             className={clsx(
               'absolute top-2 left-1 h-[calc(100%-12px)] w-[calc(50%-12px)] rounded-full bg-white shadow-sm transition-transform duration-300 ease-out',
@@ -46,8 +61,20 @@ const QuestionToolbar = () => {
           </button>
         </div>
 
-        <div className="text-button-sm flex items-center gap-2">
-          <Filter className="text-icon-default" />
+        <div
+          className="text-button-sm relative flex items-center gap-2"
+          ref={filterRef}
+        >
+          <Filter
+            options={FILTER_OPTIONS}
+            handleFilterClick={handleFilterClick}
+            handleFilterSelect={(value) =>
+              handleFilterSelect(value as FilterType)
+            }
+            isFilterOpen={isFilterOpen}
+            filterType={filterType}
+          />
+
           <Button variant={'none'} className="h-9.5 px-6">
             질문 담기
           </Button>
