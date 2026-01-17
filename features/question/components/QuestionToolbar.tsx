@@ -69,7 +69,7 @@ const QuestionToolbar = () => {
             options={FILTER_OPTIONS}
             handleFilterClick={handleFilterClick}
             handleFilterSelect={(value) =>
-              handleFilterSelect(value as FilterType)
+              handleFilterSelect(value as   FilterType)
             }
             isFilterOpen={isFilterOpen}
             filterType={filterType}

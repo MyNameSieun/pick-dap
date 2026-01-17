@@ -2,11 +2,26 @@
 import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
+import { saveQuestion } from '@/data/saveQuestion';
+import { useFilter } from '@/store/useFilterStore';
 import { Bookmark, Dot, Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 const QuestionCard = () => {
+  const { filterType } = useFilter();
+
+  const filteredQuestions = saveQuestion.filter((q) => {
+    if (filterType === 'ALL') return true;
+
+    const filterMap: Record<string, string> = {
+      PENDING: '답변 대기',
+      COMPLETED: '답변 완료',
+    };
+
+    return q.tags.some((tag) => tag.label === filterMap[filterType]);
+  });
+
   const router = useRouter();
 
   const handleButtonClick = (e: React.MouseEvent, path: string) => {
@@ -16,54 +31,61 @@ const QuestionCard = () => {
   };
 
   return (
-    <Link href={'/question/3'}>
-      <article className="card-col-no-border">
-        <div className="flex flex-wrap">
-          <Tags className="mr-1" color="green" size="big">
-            답변 완료
-          </Tags>
-        </div>
+    <section>
+      {filteredQuestions.map((q) => (
+        <Link key={q.id} href={'/question/3'}>
+          <article className="card-col-no-border">
+            <div className="flex flex-wrap">
+              {q.tags.map((tag) => (
+                <Tags key={tag.label} className="mr-1" size="big">
+                  {tag.label}
+                </Tags>
+              ))}
+            </div>
 
-        <h6 className="h6 text-gray-1000">
-          JVM의 구조와 Java의 실행방식을 설명해주세요.
-        </h6>
+            <h6 className="h6 text-gray-1000">{q.title}</h6>
 
-        <div className="text-icon-default c2 flex items-center justify-between">
-          <div className="flex gap-2">
-            <time className="">답변일: 2026-01-04</time>
-            <Dot size={15} />
-            <div className="flex gap-3">
-              <div className="flex items-center gap-0.5">
-                <Eye size={12} />
-                <p>45</p>
+            <div className="text-icon-default c1 flex items-center justify-between">
+              <div className="flex gap-2">
+                <time className="">답변일: {q.createdAt}</time>
+                <Dot size={15} />
+                <div className="flex gap-3">
+                  <div className="flex items-center gap-0.5">
+                    <Eye size={12} />
+                    <p>{q.stats.views}</p>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    <Bookmark size={12} />
+                    <p>{q.stats.bookmarks}</p>
+                  </div>
+                  <div className="flex items-center gap-0.5">
+                    <MessageSquare size={12} />
+                    <p>{q.stats.comments}</p>
+                  </div>
+                </div>
               </div>
-              <div className="flex items-center gap-0.5">
-                <Bookmark size={12} />
-                <p>8</p>
-              </div>
-              <div className="flex items-center gap-0.5">
-                <MessageSquare size={12} />
-                <p>42</p>
+
+              <div className="flex justify-end gap-1 font-bold">
+                <Button
+                  className="h-10"
+                  onClick={(e) => handleButtonClick(e, '/')}
+                >
+                  답변하기
+                </Button>
+                <Button
+                  variant={'white'}
+                  className="h-10"
+                  onClick={(e) => handleButtonClick(e, '/interview')}
+                >
+                  면접 연습
+                </Button>
               </div>
             </div>
-          </div>
-
-          <div className="flex justify-end gap-1 font-bold">
-            <Button className="h-10" onClick={(e) => handleButtonClick(e, '/')}>
-              답변하기
-            </Button>
-            <Button
-              variant={'white'}
-              className="h-10"
-              onClick={(e) => handleButtonClick(e, '/interview')}
-            >
-              면접 연습
-            </Button>
-          </div>
-        </div>
-      </article>
-      <Line />
-    </Link>
+          </article>
+          <Line />
+        </Link>
+      ))}
+    </section>
   );
 };
 
