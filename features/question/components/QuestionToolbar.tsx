@@ -3,26 +3,28 @@
 import Filter from '@/components/common/Filter';
 import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
-import useFilter from '@/hooks/useFilter';
 import clsx from 'clsx';
 import { Plus, Search } from 'lucide-react';
 import { useState } from 'react';
+import { FilterType } from '../../../types/FilterType';
 
-type FilterType = 'all' | 'unanswered' | 'answered';
 const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
-  { value: 'all', label: '전체' },
-  { value: 'unanswered', label: '미답변' },
-  { value: 'answered', label: '답변완료' },
+  { value: 'ALL', label: '전체' },
+  { value: 'PENDING', label: '미답변' },
+  { value: 'COMPLETED', label: '답변완료' },
 ];
 
-const QuestionToolbar = () => {
+interface QuestionToolbarProps {
+  filterType: FilterType;
+  handleFilterClick: () => void;
+  handleFilterSelect: (value: FilterType) => void;
+  isFilterOpen: boolean;
+}
+
+const QuestionToolbar = ({ filterType, handleFilterClick, handleFilterSelect, isFilterOpen }: QuestionToolbarProps) => {
   const [isActive, setIsActive] = useState(false);
-  const {
-    handleFilterClick,
-    handleFilterSelect,
-    isFilterOpen,
-    filterType,
-  } = useFilter<FilterType>('all');
+
+  
 
   return (
     <article className="mx-9">

@@ -3,16 +3,17 @@ import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
 import { saveQuestion } from '@/data/saveQuestion';
-import { FilterType } from '@/features/question/type/FilterType';
+import { FilterType } from '@/types/FilterType';
 import { Bookmark, Dot, Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 interface QuestionCardProps {
   filterType: FilterType;
+  searchQuery: string;
 }
 
-const QuestionCard = ({ filterType }: QuestionCardProps) => {
+const QuestionCard = ({ filterType, searchQuery }: QuestionCardProps) => {
 
   const filteredQuestions = saveQuestion.filter((q) => {
     if (filterType === 'ALL') return true;
@@ -22,8 +23,22 @@ const QuestionCard = ({ filterType }: QuestionCardProps) => {
       COMPLETED: '답변 완료',
     };
 
-    return q.tags.some((tag) => tag.label === filterMap[filterType]);
+    const searchCondition = q.title.toLowerCase().trim().includes(searchQuery.trim().toLowerCase()) || q.tags.some((tag) => tag.label.toLowerCase().trim().includes(searchQuery.trim().toLowerCase()));
+
+
+    const filterCondition = q.tags.some((tag) => tag.label === filterMap[filterType]);
+
+
+    // 검색어가 있을 때: 검색어와 제목 또는 태그에 포함된 경우 && 필터 타입과 일치하는 경우 조건 만족
+    if (searchQuery !== '') {
+      return searchCondition && filterCondition
+    }
+
+    // 검색어가 없을 때: 필터 타입과 일치하는 경우 조건 만족
+    return filterCondition;
   });
+
+  
 
   const router = useRouter();
 
