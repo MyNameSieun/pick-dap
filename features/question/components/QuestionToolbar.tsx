@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
 import clsx from 'clsx';
 import { Plus, Search } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { SetStateAction, useEffect } from 'react';
 import { FilterType } from '../../../types/FilterType';
 
 const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
@@ -22,6 +22,8 @@ interface QuestionToolbarProps {
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   searchRef: React.RefObject<HTMLInputElement>;
   focusSearch: () => void;
+  category: 'pickdap' | 'user';
+  setCategory: React.Dispatch<SetStateAction<'pickdap' | 'user'>>;
 }
 
 const QuestionToolbar = ({
@@ -32,9 +34,9 @@ const QuestionToolbar = ({
   handleSearch,
   searchRef,
   focusSearch,
+  category,
+  setCategory,
 }: QuestionToolbarProps) => {
-  const [isActive, setIsActive] = useState(false);
-
   useEffect(() => {
     focusSearch();
   }, []);
@@ -46,7 +48,7 @@ const QuestionToolbar = ({
           <div
             className={clsx(
               'absolute top-2 left-1 h-[calc(100%-12px)] w-[calc(50%-12px)] rounded-full bg-white shadow-sm transition-transform duration-300 ease-out',
-              isActive
+              category === 'pickdap'
                 ? 'translate-x-0 text-blue-400'
                 : 'text-gray-1000 translate-x-full',
             )}
@@ -55,21 +57,25 @@ const QuestionToolbar = ({
           {/* 버튼 */}
           <button
             type="button"
-            onClick={() => setIsActive(true)}
             className={clsx(
               'z-1 mr-2 flex-1 cursor-pointer px-6.5 py-1.5 transition',
-              isActive ? 'text-blue-400' : 'text-gray-1000',
+              category === 'pickdap' ? 'text-blue-400' : 'text-gray-1000',
             )}
+            onClick={() => {
+              setCategory('pickdap');
+            }}
           >
             픽답 추천 질문
           </button>
           <button
             type="button"
-            onClick={() => setIsActive(false)}
             className={clsx(
               'z-1 mr-6 flex-1 cursor-pointer px-6.5 py-1.5 transition',
-              isActive ? 'text-gray-1000' : 'text-blue-400',
+              category === 'user' ? 'text-blue-400' : 'text-gray-1000',
             )}
+            onClick={() => {
+              setCategory('user');
+            }}
           >
             유저 등록 질문
           </button>

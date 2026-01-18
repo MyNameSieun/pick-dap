@@ -5,12 +5,14 @@ import QuestionCardItem from './QuestionCardItem';
 import QuestionToolbar from './QuestionToolbar';
 import questionData from '@/data/questionData.json';
 import useSearch from '@/hooks/useSearch';
+import { useState } from 'react';
 
 const QuestionCardList = () => {
   const { filterType, handleFilterClick, handleFilterSelect, isFilterOpen } =
     useFilter<FilterType>('ALL');
 
   const { searchQuery, focusSearch, handleSearch, searchRef } = useSearch();
+  const [category, setCategory] = useState<'pickdap' | 'user'>('pickdap');
 
   const filteredQuestions = questionData.filter((q) => {
     // 상태 필터
@@ -27,7 +29,10 @@ const QuestionCardList = () => {
       .trim()
       .includes(searchQuery.toLowerCase().trim());
 
-    return matchesStatus && matchesSearch;
+    // 카테고리(픽답 추천 / 유저) 필터
+    const matchesCategory = q.category === category;
+
+    return matchesStatus && matchesSearch && matchesCategory;
   });
 
   return (
@@ -40,6 +45,8 @@ const QuestionCardList = () => {
         handleSearch={handleSearch}
         searchRef={searchRef as React.RefObject<HTMLInputElement>}
         focusSearch={focusSearch}
+        category={category}
+        setCategory={setCategory}
       />
 
       <ul className="mx-9 grid grid-cols-3 gap-5">

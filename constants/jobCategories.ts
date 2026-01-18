@@ -11,3 +11,4 @@ export const jobCategories: JobCategory[] = [
   'Android',
   'iOS',
 ];
+

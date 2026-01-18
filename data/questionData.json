@@ -1,68 +1,102 @@
 [
   {
-    "id": "1",
+    "id": "pt-01",
     "status": "미답변",
-    "tags": [{ "label": "Infra" }, { "label": "인기" }],
-    "title": "React의 렌더링 최적화 방법을 설명해주세요.",
-    "content": "프로세스는 운영체제 내의 작업의 한 단위이고, 스레드는 그것보다 더 작은 단위입니다.",
-    "createdAt": "12시간 전",
-    "stats": {
-      "views": 45,
-      "comments": 8,
-      "bookmarks": 8
-    }
+    "category": "pickdap",
+    "tags": [{ "label": "FrontEnd" }, { "label": "인기" }],
+    "title": "React의 Virtual DOM 작동 원리를 설명해주세요.",
+    "content": "실제 DOM과 동기화하는 재조정(Reconciliation) 과정에 대해 설명합니다.",
+    "createdAt": "2시간 전",
+    "stats": { "views": 150, "comments": 12, "bookmarks": 45 }
   },
   {
-    "id": "2",
+    "id": "pt-02",
     "status": "답변 완료",
-    "tags": [{ "label": "Infra" }, { "label": "인기" }],
-    "title": "React의 렌더링 최적화 방법을 설명해주세요.",
-    "content": "프로세스는 운영체제 내의 작업의 한 단위이고, 스레드는 그것보다 더 작은 단위입니다.",
-    "createdAt": "12시간 전",
-    "stats": {
-      "views": 45,
-      "comments": 8,
-      "bookmarks": 8
-    }
+    "category": "pickdap",
+    "tags": [{ "label": "BackEnd" }],
+    "title": "Spring의 DI(Dependency Injection)란 무엇인가요?",
+    "content": "객체 간의 의존 관계를 외부에서 주입하여 결합도를 낮추는 핵심 개념입니다.",
+    "createdAt": "5시간 전",
+    "stats": { "views": 98, "comments": 3, "bookmarks": 12 }
   },
   {
-    "id": "3",
+    "id": "pt-03",
     "status": "미답변",
-    "tags": [
-      {
-        "label": "Infra"
-      },
-      {
-        "label": "인기"
-      }
-    ],
-    "title": "React의 렌ㄴㅁㅇㄴㅁㅇㅇ주세요.",
-    "content": "프로세스는 운영체제 내의 작업의 한 단위이고, 스레드는 그것보다 더 작은 단위입니다.",
-    "createdAt": "12시간 전",
-    "stats": {
-      "views": 45,
-      "comments": 8,
-      "bookmarks": 8
-    }
+    "category": "pickdap",
+    "tags": [{ "label": "CS" }, { "label": "중요" }],
+    "title": "데드락(Deadlock)의 발생 조건 4가지를 설명해주세요.",
+    "content": "상호 배제, 점유 대기, 비선점, 순환 대기 조건에 대해 알아봅니다.",
+    "createdAt": "10시간 전",
+    "stats": { "views": 210, "comments": 0, "bookmarks": 30 }
   },
   {
-    "id": "4",
+    "id": "pt-04",
+    "status": "미답변",
+    "category": "pickdap",
+    "tags": [{ "label": "인성면접" }],
+    "title": "협업 중 팀원과 갈등이 발생했을 때 어떻게 해결하시나요?",
+    "content": "커뮤니케이션 능력과 문제 해결 중심의 사고를 평가하는 질문입니다.",
+    "createdAt": "1일 전",
+    "stats": { "views": 320, "comments": 15, "bookmarks": 80 }
+  },
+  {
+    "id": "pt-05",
     "status": "답변 완료",
-    "tags": [
-      {
-        "label": "Infra"
-      },
-      {
-        "label": "인기"
-      }
-    ],
-    "title": "React의 렌더링 최적화 방법을 설명해주세요.",
-    "content": "프로세스는 운영체제 내의 작업의 한 단위이고, 스레드는 그것보다 더 작은 단위입니다.",
+    "category": "user",
+    "tags": [{ "label": "Infra" }, { "label": "Docker" }],
+    "title": "Docker와 가상 머신(VM)의 근본적인 차이는 무엇인가요?",
+    "content": "커널 공유 여부와 리소스 효율성 관점에서 비교하여 설명합니다.",
+    "createdAt": "3시간 전",
+    "stats": { "views": 115, "comments": 2, "bookmarks": 18 }
+  },
+  {
+    "id": "pt-06",
+    "status": "미답변",
+    "category": "user",
+    "tags": [{ "label": "AI" }],
+    "title": "Overfitting(과적합)을 방지하기 위한 방법에는 무엇이 있나요?",
+    "content": "데이터 증강, 규제(Regularization), 드롭아웃 등의 기법을 설명합니다.",
+    "createdAt": "6시간 전",
+    "stats": { "views": 85, "comments": 1, "bookmarks": 9 }
+  },
+  {
+    "id": "pt-07",
+    "status": "답변 완료",
+    "category": "user",
+    "tags": [{ "label": "Android" }],
+    "title": "Activity의 생명주기(Lifecycle)에 대해 설명해주세요.",
+    "content": "onCreate부터 onDestroy까지 각 단계의 특징을 설명합니다.",
     "createdAt": "12시간 전",
-    "stats": {
-      "views": 45,
-      "comments": 8,
-      "bookmarks": 8
-    }
+    "stats": { "views": 60, "comments": 4, "bookmarks": 5 }
+  },
+  {
+    "id": "pt-08",
+    "status": "미답변",
+    "category": "pickdap",
+    "tags": [{ "label": "iOS" }],
+    "title": "Swift의 Optional Chaining이란 무엇인가요?",
+    "content": "nil일 수도 있는 속성이나 메서드에 안전하게 접근하는 방식에 대해 설명합니다.",
+    "createdAt": "15시간 전",
+    "stats": { "views": 42, "comments": 0, "bookmarks": 7 }
+  },
+  {
+    "id": "pt-09",
+    "status": "답변 완료",
+    "category": "pickdap",
+    "tags": [{ "label": "FrontEnd" }, { "label": "Next.js" }],
+    "title": "Next.js의 App Router와 Pages Router의 차이는?",
+    "content": "최신 Next.js 버전의 핵심인 App Router의 특징과 장점을 다룹니다.",
+    "createdAt": "20시간 전",
+    "stats": { "views": 240, "comments": 8, "bookmarks": 55 }
+  },
+  {
+    "id": "pt-10",
+    "status": "미답변",
+    "category": "user",
+    "tags": [{ "label": "CS" }],
+    "title": "HTTP와 HTTPS의 보안상 차이점은 무엇인가요?",
+    "content": "SSL/TLS 인증서를 통한 암호화 과정과 포트 번호의 차이를 설명합니다.",
+    "createdAt": "18시간 전",
+    "stats": { "views": 130, "comments": 6, "bookmarks": 22 }
   }
 ]
