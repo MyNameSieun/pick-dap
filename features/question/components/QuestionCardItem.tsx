@@ -4,7 +4,7 @@ import Tags from '@/components/common/Tags/Tags';
 import { Bookmark, Crown, Eye } from 'lucide-react';
 
 interface QuestionCardItemProps {
-  question: Question;
+  question: Question; 
 }
 
 const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
