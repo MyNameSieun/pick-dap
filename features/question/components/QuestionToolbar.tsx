@@ -1,19 +1,35 @@
 'use client';
 
+import Filter from '@/components/common/Filter';
 import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
 import clsx from 'clsx';
-import { Filter, Plus, Search } from 'lucide-react';
+import { Plus, Search } from 'lucide-react';
 import { useState } from 'react';
+import { FilterType } from '../../../types/FilterType';
 
-const QuestionToolbar = () => {
+const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
+  { value: 'ALL', label: '전체' },
+  { value: 'PENDING', label: '미답변' },
+  { value: 'COMPLETED', label: '답변완료' },
+];
+
+interface QuestionToolbarProps {
+  filterType: FilterType;
+  handleFilterClick: () => void;
+  handleFilterSelect: (value: FilterType) => void;
+  isFilterOpen: boolean;
+}
+
+const QuestionToolbar = ({ filterType, handleFilterClick, handleFilterSelect, isFilterOpen }: QuestionToolbarProps) => {
   const [isActive, setIsActive] = useState(false);
+
+  
 
   return (
     <article className="mx-9">
       <section className="flex items-center justify-between border-gray-200">
         <div className="text-button-md relative flex h-12 gap-6 rounded-[12] border border-gray-200 bg-gray-100 p-2 font-bold">
-          {/* 움직이는 뒷배경 */}
           <div
             className={clsx(
               'absolute top-2 left-1 h-[calc(100%-12px)] w-[calc(50%-12px)] rounded-full bg-white shadow-sm transition-transform duration-300 ease-out',
@@ -46,8 +62,19 @@ const QuestionToolbar = () => {
           </button>
         </div>
 
-        <div className="text-button-sm flex items-center gap-2">
-          <Filter className="text-icon-default" />
+        <div
+          className="text-button-sm relative flex items-center gap-2"
+        >
+          <Filter
+            options={FILTER_OPTIONS}
+            handleFilterClick={handleFilterClick}
+            handleFilterSelect={(value) =>
+              handleFilterSelect(value as   FilterType)
+            }
+            isFilterOpen={isFilterOpen}
+            filterType={filterType}
+          />
+
           <Button variant={'none'} className="h-9.5 px-6">
             질문 담기
           </Button>

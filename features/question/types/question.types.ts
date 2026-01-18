@@ -10,6 +10,7 @@ export interface QuestionStats {
 
 export interface Question {
   id: string;
+  status: string;
   title: string;
   content?: string;
   tags: QuestionTag[];

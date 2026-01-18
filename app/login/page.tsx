@@ -10,11 +10,6 @@ const LoginPage = () => {
     <div className="mx-auto w-200">
       <AuthHeader />
       <LoginInput />
-      <div className="mb-4.5 flex flex-col">
-        <Button variant={'default'} className="py-7">
-          <h6>로그인</h6>
-        </Button>
-      </div>
 
       <div className="flex justify-center gap-2">
         <p className="text-gray-600 select-none">계정이 없으신가요?</p>

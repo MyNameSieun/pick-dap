@@ -4,7 +4,6 @@ import { Button } from './ui/button/Button';
 import { Input } from './ui/input/Input';
 import { jobCategories } from '@/constants/jobCategories';
 import { cn } from '@/lib/utils';
-import { Search } from 'lucide-react';
 
 const TagSearchBar = () => {
   const [selectedCategory, setSelectedCategory] = useState('전체');
@@ -42,11 +41,10 @@ const TagSearchBar = () => {
         <h5 className="h6 text-gray-1000">보유 기술</h5>
         <div className="relative">
           <Input
-            className="c1 text-gray-1000 focus:ring-main-400 border-gray-200 bg-gray-100 pl-10"
+            className="c1 text-gray-1000 focus:ring-main-400 border-gray-200 bg-gray-100"
             type="text"
             placeholder="기술 스택을 입력해주세요 "
           />
-          <Search className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-gray-400" />
         </div>
       </article>
       {/* 정렬 섹션 */}
