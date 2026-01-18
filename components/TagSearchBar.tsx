@@ -47,6 +47,7 @@ const TagSearchBar = () => {
           />
         </div>
       </article>
+
       {/* 정렬 섹션 */}
       <article className="flex flex-col gap-3">
         <h5 className="h6 text-gray-1000 mb-3">정렬</h5>

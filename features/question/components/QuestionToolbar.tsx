@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
 import clsx from 'clsx';
 import { Plus, Search } from 'lucide-react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FilterType } from '../../../types/FilterType';
 
 const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
@@ -19,12 +19,25 @@ interface QuestionToolbarProps {
   handleFilterClick: () => void;
   handleFilterSelect: (value: FilterType) => void;
   isFilterOpen: boolean;
+  handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  searchRef: React.RefObject<HTMLInputElement>;
+  focusSearch: () => void;
 }
 
-const QuestionToolbar = ({ filterType, handleFilterClick, handleFilterSelect, isFilterOpen }: QuestionToolbarProps) => {
+const QuestionToolbar = ({
+  filterType,
+  handleFilterClick,
+  handleFilterSelect,
+  isFilterOpen,
+  handleSearch,
+  searchRef,
+  focusSearch,
+}: QuestionToolbarProps) => {
   const [isActive, setIsActive] = useState(false);
 
-  
+  useEffect(() => {
+    focusSearch();
+  }, []);
 
   return (
     <article className="mx-9">
@@ -62,14 +75,12 @@ const QuestionToolbar = ({ filterType, handleFilterClick, handleFilterSelect, is
           </button>
         </div>
 
-        <div
-          className="text-button-sm relative flex items-center gap-2"
-        >
+        <div className="text-button-sm relative flex items-center gap-2">
           <Filter
             options={FILTER_OPTIONS}
             handleFilterClick={handleFilterClick}
             handleFilterSelect={(value) =>
-              handleFilterSelect(value as   FilterType)
+              handleFilterSelect(value as FilterType)
             }
             isFilterOpen={isFilterOpen}
             filterType={filterType}
@@ -92,6 +103,8 @@ const QuestionToolbar = ({ filterType, handleFilterClick, handleFilterSelect, is
           type="text"
           placeholder="기술 스택을 입력해주세요 "
           leftIcon={Search}
+          onChange={handleSearch}
+          ref={searchRef}
         />
       </section>
     </article>
