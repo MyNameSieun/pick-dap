@@ -16,26 +16,29 @@ interface QuestionCardProps {
 const QuestionCard = ({ filterType, searchQuery }: QuestionCardProps) => {
 
   const filteredQuestions = saveQuestion.filter((q) => {
-    if (filterType === 'ALL') return true;
-
+    // 1. 필터 조건 
     const filterMap: Record<string, string> = {
       PENDING: '답변 대기',
       COMPLETED: '답변 완료',
     };
 
-    const searchCondition = q.title.toLowerCase().trim().includes(searchQuery.trim().toLowerCase()) || q.tags.some((tag) => tag.label.toLowerCase().trim().includes(searchQuery.trim().toLowerCase()));
+    const filterCondition =
+      filterType === 'ALL'
+        ? true
+        : q.tags.some((tag) => tag.label === filterMap[filterType]);
 
+    // 2. 검색 조건 
+    const normalizedQuery = searchQuery.trim().toLowerCase();
+    const searchCondition =
+      normalizedQuery === ''
+        ? true
+        : q.title.toLowerCase().includes(normalizedQuery) ||
+          q.tags.some((tag) =>
+            tag.label.toLowerCase().includes(normalizedQuery),
+          );
 
-    const filterCondition = q.tags.some((tag) => tag.label === filterMap[filterType]);
-
-
-    // 검색어가 있을 때: 검색어와 제목 또는 태그에 포함된 경우 && 필터 타입과 일치하는 경우 조건 만족
-    if (searchQuery !== '') {
-      return searchCondition && filterCondition
-    }
-
-    // 검색어가 없을 때: 필터 타입과 일치하는 경우 조건 만족
-    return filterCondition;
+    // 3. 두 조건 모두 만족해야 함
+    return filterCondition && searchCondition;
   });
 
   
