@@ -3,13 +3,16 @@ import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
 import { saveQuestion } from '@/data/saveQuestion';
-import { useFilter } from '@/store/useFilterStore';
+import { FilterType } from '@/features/question/type/FilterType';
 import { Bookmark, Dot, Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-const QuestionCard = () => {
-  const { filterType } = useFilter();
+interface QuestionCardProps {
+  filterType: FilterType;
+}
+
+const QuestionCard = ({ filterType }: QuestionCardProps) => {
 
   const filteredQuestions = saveQuestion.filter((q) => {
     if (filterType === 'ALL') return true;

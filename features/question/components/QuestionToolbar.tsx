@@ -3,7 +3,7 @@
 import Filter from '@/components/common/Filter';
 import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
-import { useFilter } from '@/hooks/useFilter';
+import useFilter from '@/hooks/useFilter';
 import clsx from 'clsx';
 import { Plus, Search } from 'lucide-react';
 import { useState } from 'react';
@@ -18,7 +18,6 @@ const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
 const QuestionToolbar = () => {
   const [isActive, setIsActive] = useState(false);
   const {
-    filterRef,
     handleFilterClick,
     handleFilterSelect,
     isFilterOpen,
@@ -63,7 +62,6 @@ const QuestionToolbar = () => {
 
         <div
           className="text-button-sm relative flex items-center gap-2"
-          ref={filterRef}
         >
           <Filter
             options={FILTER_OPTIONS}
