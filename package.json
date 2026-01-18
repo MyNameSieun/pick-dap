@@ -19,6 +19,7 @@
     "@radix-ui/react-slot": "^1.2.4",
     "@tanstack/react-query": "^5.90.16",
     "@tanstack/react-query-devtools": "^5.91.2",
+    "@tiptap/extension-bold": "^3.15.3",
     "@tiptap/extension-link": "^3.15.3",
     "@tiptap/pm": "^3.15.3",
     "@tiptap/react": "^3.15.3",
@@ -35,9 +36,9 @@
     "react-hook-form": "^7.71.1",
     "sonner": "^2.0.7",
     "tailwind-merge": "^3.4.0",
+    "tiptap-markdown": "^0.9.0",
     "zod": "^4.3.5",
-    "zustand": "^5.0.10",
-    "tiptap-markdown": "^0.9.0"
+    "zustand": "^5.0.10"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^4.1.3",
