@@ -8,8 +8,7 @@ import useSearch from '@/hooks/useSearch';
 import { useState } from 'react';
 
 const QuestionCardList = () => {
-  const { filterType, handleFilterClick, handleFilterSelect, isFilterOpen } =
-    useFilter<FilterType>('ALL');
+  const { filterType, handleFilterSelect } = useFilter<FilterType>('ALL');
 
   const { searchQuery, focusSearch, handleSearch, searchRef } = useSearch();
   const [category, setCategory] = useState<'pickdap' | 'user'>('pickdap');
@@ -39,9 +38,7 @@ const QuestionCardList = () => {
     <section className="flex flex-col gap-6.5 py-20">
       <QuestionToolbar
         filterType={filterType as FilterType}
-        handleFilterClick={handleFilterClick}
         handleFilterSelect={handleFilterSelect}
-        isFilterOpen={isFilterOpen}
         handleSearch={handleSearch}
         searchRef={searchRef as React.RefObject<HTMLInputElement>}
         focusSearch={focusSearch}

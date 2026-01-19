@@ -7,6 +7,7 @@ import clsx from 'clsx';
 import { Plus, Search } from 'lucide-react';
 import { SetStateAction, useEffect } from 'react';
 import { FilterType } from '../../../types/FilterType';
+import { useDisclosure } from '@/hooks/useClickOutside';
 
 const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
   { value: 'ALL', label: '전체' },
@@ -16,9 +17,7 @@ const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
 
 interface QuestionToolbarProps {
   filterType: FilterType;
-  handleFilterClick: () => void;
   handleFilterSelect: (value: FilterType) => void;
-  isFilterOpen: boolean;
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   searchRef: React.RefObject<HTMLInputElement>;
   focusSearch: () => void;
@@ -28,9 +27,7 @@ interface QuestionToolbarProps {
 
 const QuestionToolbar = ({
   filterType,
-  handleFilterClick,
   handleFilterSelect,
-  isFilterOpen,
   handleSearch,
   searchRef,
   focusSearch,
@@ -40,6 +37,18 @@ const QuestionToolbar = ({
   useEffect(() => {
     focusSearch();
   }, []);
+
+  const {
+    isOpen: isFilterOpen,
+    onToggle: toggleFilter,
+    onClose: closeFilter,
+    containerRef,
+  } = useDisclosure();
+
+  const onSelect = (value: FilterType) => {
+    handleFilterSelect(value);
+    closeFilter();
+  };
 
   return (
     <article className="mx-9">
@@ -82,15 +91,15 @@ const QuestionToolbar = ({
         </div>
 
         <div className="text-button-sm relative flex items-center gap-2">
-          <Filter
-            options={FILTER_OPTIONS}
-            handleFilterClick={handleFilterClick}
-            handleFilterSelect={(value) =>
-              handleFilterSelect(value as FilterType)
-            }
-            isFilterOpen={isFilterOpen}
-            filterType={filterType}
-          />
+          <div ref={containerRef}>
+            <Filter
+              options={FILTER_OPTIONS}
+              handleFilterClick={toggleFilter}
+              handleFilterSelect={(value) => onSelect(value as FilterType)}
+              isFilterOpen={isFilterOpen}
+              filterType={filterType}
+            />
+          </div>
 
           <Button variant={'none'} className="h-9.5 px-6">
             질문 담기
@@ -107,7 +116,7 @@ const QuestionToolbar = ({
         <Input
           className="c1 text-gray-1000 h-10"
           type="text"
-          placeholder="기술 스택을 입력해주세요 "
+          placeholder="제목을 입력해주세요 "
           leftIcon={Search}
           onChange={handleSearch}
           ref={searchRef}
