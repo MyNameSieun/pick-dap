@@ -1,5 +1,3 @@
-import { Button } from '@/components/ui/button/Button';
-
 import Link from 'next/link';
 import SocialSignupButton from '@/features/auth/SocialSignupButton';
 import AuthHeader from '@/features/auth/AuthHeader';
