@@ -1,10 +1,12 @@
+'use client';
+
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
-import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
 import { Activity, Search, SquarePen } from 'lucide-react';
-import { twMerge } from 'tailwind-merge';
+import { useRouter } from 'next/navigation';
 
 const CommunityMain = () => {
+  const router = useRouter();
   return (
     <>
       <div>
@@ -14,6 +16,7 @@ const CommunityMain = () => {
           buttonOption={{
             text: '글쓰기',
             icon: SquarePen,
+            action: () => router.push('/community/post/new'),
           }}
           content={
             <p className="c1 text-gray-600">
