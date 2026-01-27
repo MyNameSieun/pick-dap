@@ -20,6 +20,7 @@ export const loginSchema = z.object({
 // 회원가입 스키마
 export const signupSchema = loginSchema
   .extend({
+    username: z.string().min(1, '닉네임을 입력해주세요.').max(10, '닉네임은 최대 10자 이하여야 합니다.'),
     confirmPassword: z.string().min(1, '비밀번호 확인을 입력해주세요.'),
   })
   .refine((data) => data.password === data.confirmPassword, {

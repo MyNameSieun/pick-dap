@@ -1,22 +1,32 @@
 'use client';
+
 import { Input } from '@/components/ui/input/Input';
 import LoginOptions from './LoginOptions';
 import { useForm } from 'react-hook-form';
 import { LoginFormData, loginSchema } from '@/types/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button/Button';
+import { useSignInWithPassword } from '@/hooks/mutations/useSignInWithPassword';
 
 const LoginInput = () => {
   const {
     handleSubmit,
     register,
-    formState: { isSubmitting, isSubmitted, errors },
+    formState: { isSubmitted, errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
+
+  const {
+    mutate: signInWithPassword,
+    isPending: isSignInWithPassword,
+    error,
+  } = useSignInWithPassword();
+
   const onSubmit = (data: LoginFormData) => {
-    console.log('로그인 시도 데이터:', data);
+    signInWithPassword(data);
   };
+
   return (
     <>
       <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-4">
@@ -53,23 +63,24 @@ const LoginInput = () => {
           )}
         </div>
 
+        {error && <p className="text-sm text-red-500">{error.message}</p>}
         <div className="mb-4.5 flex flex-col">
           <Button
-            disabled={isSubmitting}
+            disabled={isSignInWithPassword}
             type="submit"
             variant={'default'}
             className="py-7"
           >
-            <h6> {isSubmitting ? '로그인 중...' : '로그인'}</h6>
+            <h6> {isSignInWithPassword ? '로그인 중...' : '로그인'}</h6>
           </Button>
         </div>
       </form>
+
       <div className="mt-5 mb-12 flex justify-between">
         <div className="flex items-center gap-2 text-gray-600">
           <div className="h-4.5 w-4.5 rounded-full border border-gray-600 bg-white" />
           <p> 로그인 상태 유지</p>
         </div>
-
         <LoginOptions />
       </div>
     </>

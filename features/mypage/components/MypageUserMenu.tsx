@@ -3,11 +3,20 @@
 import Line from '@/components/common/Line';
 import { Settings } from 'lucide-react';
 
-import profileImage from '@/public/profile.jpg';
 import Image from 'next/image';
 import SideMenuBar from '@/features/mypage/components/SideMenuBar';
+import { useSession } from '@/store/session';
+import defaultProfile from '@/public/defaultProfile.png';
 
 const MypageUserMenu = () => {
+  const session = useSession();
+  const user = session?.user;
+
+  const userProfileImage =
+    user?.user_metadata?.avatar_url ||
+    user?.user_metadata?.picture ||
+    defaultProfile;
+
   return (
     <nav className="sticky top-5 flex gap-4">
       <section className="w-[238] rounded-md border border-gray-300 bg-white p-6 shadow-md">
@@ -17,7 +26,7 @@ const MypageUserMenu = () => {
               onDragStart={(e) => e.preventDefault()}
               className="object-cover"
               alt="작성자 프로필"
-              src={profileImage}
+              src={userProfileImage}
               fill
               priority
             />
