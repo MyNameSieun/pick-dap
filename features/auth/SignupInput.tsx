@@ -17,7 +17,7 @@ const SignupInput = () => {
     mode: 'onChange',
   });
 
-  const { mutate: signUp, isPending } = useSignUp();
+  const { mutate: signUp, isPending, error } = useSignUp();
 
   const onSubmit = (data: SignupFormData) => {
     signUp({
@@ -40,13 +40,14 @@ const SignupInput = () => {
             isSubmitted ? (errors.email ? 'true' : 'false') : undefined
           }
         />
-        {errors.email && (
+        {errors.email ? (
           <p className="c1 text-red-600">{errors.email.message}</p>
-        )}
+        ) : error?.message?.includes('이메일') ? (
+          <p className="c1 text-red-600">{error.message}</p>
+        ) : null}
       </div>
 
       {/* 닉네임 */}
-
       <div>
         <Input
           {...register('username')}
@@ -57,11 +58,13 @@ const SignupInput = () => {
             isSubmitted ? (errors.username ? 'true' : 'false') : undefined
           }
         />
-        {errors.username && (
+        {errors.username ? (
           <p className="c1 text-red-600">{errors.username.message}</p>
-        )}
+        ) : error?.message?.includes('닉네임') ? (
+          <p className="c1 text-red-600">{error.message}</p>
+        ) : null}
       </div>
-      
+
       {/* 비밀번호 */}
       <div>
         <Input
@@ -99,7 +102,11 @@ const SignupInput = () => {
           <p className="c1 text-red-600">{errors.confirmPassword.message}</p>
         )}
       </div>
-
+      {error &&
+        !error.message?.includes('이메일') &&
+        !error.message?.includes('닉네임') && (
+          <p className="text-center text-sm text-red-500">{error.message}</p>
+        )}
       {/* 약관 */}
       <div className="mt-5 mb-12 flex items-center gap-2 text-gray-600">
         <div className="h-4.5 w-4.5 rounded-full border border-gray-600" />

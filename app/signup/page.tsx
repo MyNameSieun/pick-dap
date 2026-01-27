@@ -1,7 +1,7 @@
 import Link from 'next/link';
-import SocialSignupButton from '@/features/auth/SocialSignupButton';
 import AuthHeader from '@/features/auth/AuthHeader';
 import SignupInput from '@/features/auth/SignupInput';
+import SocialButton from '@/features/auth/SocialButton';
 
 const SignupPage = () => {
   return (
@@ -10,7 +10,7 @@ const SignupPage = () => {
 
       <SignupInput />
 
-      <div className="flex justify-center gap-2">
+      <div className="mt-5 flex justify-center gap-2">
         <p className="text-gray-600 select-none">이미 계정이 있으신가요?</p>
         <p className="text-main-400 cursor-pointer font-bold">
           <Link href="/login">
@@ -25,7 +25,7 @@ const SignupPage = () => {
         <div className="h-px flex-1 bg-gray-300" />
       </div>
 
-      <SocialSignupButton />
+      <SocialButton />
     </div>
   );
 };

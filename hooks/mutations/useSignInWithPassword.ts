@@ -1,13 +1,13 @@
-import { signUp } from '@/services/auth';
+import { signInWithPassword } from '@/services/auth';
 import { useMutation } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
-export const useSignUp = () => {
+export const useSignInWithPassword = () => {
   const router = useRouter();
+
   return useMutation({
-    mutationFn: signUp,
+    mutationFn: signInWithPassword,
     onSuccess: () => {
-      alert('회원가입 성공!');
       router.push('/');
     },
   });
