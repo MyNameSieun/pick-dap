@@ -3,9 +3,9 @@
 import Tags from '@/components/common/Tags/Tags';
 import { Heart, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
-import profileImage from '@/public/profile.jpg';
 import Image from 'next/image';
 import Line from '@/components/common/Line';
+import defaultProfile from '@/public/defaultProfile.png';
 
 const CommunityCard = () => {
   return (
@@ -26,7 +26,7 @@ const CommunityCard = () => {
                 onDragStart={(e) => e.preventDefault()}
                 className="object-cover"
                 alt="작성자 프로필"
-                src={profileImage}
+                src={defaultProfile}
                 priority
                 fill
               />

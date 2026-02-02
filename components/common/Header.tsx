@@ -9,7 +9,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Line from './Line';
-import profileImage from '@/public/profile.jpg';
+import { useIsSessionLoaded, useSession, useSetSession } from '@/store/session';
+import defaultProfile from '@/public/defaultProfile.png';
+import { createClient } from '@/lib/supabase/client';
 
 const NAV_LIST = [
   {
@@ -35,8 +37,30 @@ const NAV_LIST = [
 const Header = () => {
   const pathname = usePathname();
   const router = useRouter();
-  const [isLogin, setLogin] = useState(false);
   const [isVisible, setVisible] = useState(false);
+  const session = useSession();
+  const user = session?.user;
+
+  const setSession = useSetSession();
+  const isLoaded = useIsSessionLoaded();
+
+  if (!isLoaded) {
+    return <nav className="h-10" />;
+  }
+  const handleLogout = async () => {
+    const supabase = createClient();
+    await supabase.auth.signOut();
+    setSession(null);
+  };
+
+  const userProfileImage =
+    user?.user_metadata?.avatar_url ||
+    user?.user_metadata?.picture ||
+    defaultProfile;
+  const userName =
+    user?.user_metadata?.user_name ||
+    user?.user_metadata?.full_name ||
+    '사용자';
 
   return (
     <div
@@ -71,7 +95,7 @@ const Header = () => {
           <div className="flex-1"></div>
 
           <div className="flex w-1/6 min-w-40 flex-none justify-center">
-            {isLogin ? (
+            {user ? (
               <div className="flex items-center gap-8">
                 <Bell className="text-icon-default hover:text-gray-1000 cursor-pointer" />
 
@@ -82,9 +106,9 @@ const Header = () => {
                   >
                     <Image
                       className="object-cover"
-                      src={profileImage}
+                      src={userProfileImage}
                       fill
-                      alt="프로필"
+                      alt={`${userName}님의 프로필`}
                       priority
                     />
                   </div>
@@ -108,11 +132,7 @@ const Header = () => {
                       <SideMenuBar isHeader={true} />
                       <div className="-mx-4 -mb-4">
                         <Button
-                          onClick={() => {
-                            setLogin(!isLogin);
-                            setVisible(false);
-                            router.push('/');
-                          }}
+                          onClick={handleLogout}
                           className={twMerge(
                             'h-11 w-full bg-gray-100 font-medium text-gray-800',
                             'border-0',
@@ -134,7 +154,6 @@ const Header = () => {
                   variant="white"
                   size="sm"
                   onClick={() => {
-                    setLogin(!isLogin);
                     router.push('/login');
                   }}
                 >

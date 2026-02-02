@@ -1,9 +1,7 @@
-import { Button } from '@/components/ui/button/Button';
-
 import Link from 'next/link';
-import SocialLoginButton from '@/features/auth/SocialLoginButton';
 import AuthHeader from '@/features/auth/AuthHeader';
 import LoginInput from '@/features/auth/LoginInput';
+import SocialButton from '@/features/auth/SocialButton';
 
 const LoginPage = () => {
   return (
@@ -26,7 +24,7 @@ const LoginPage = () => {
         <div className="h-px flex-1 bg-gray-300" />
       </div>
 
-      <SocialLoginButton />
+      <SocialButton />
     </div>
   );
 };
