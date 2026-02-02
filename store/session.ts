@@ -21,6 +21,7 @@ const useSessionStore = create(
         },
       },
     })),
+    { name: 'sessionStore' },
   ),
 );
 

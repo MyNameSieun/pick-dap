@@ -3,11 +3,11 @@ import googleLogo from '@/public/logo/goggle-logo.png';
 import kakaoLogo from '@/public/logo/kakao-logo.png';
 import githubLogo from '@/public/logo/github-logo.png';
 import Image from 'next/image';
-import { useSIgnInWithOAuth } from '@/hooks/mutations/useSIgnInWithOAuth';
+import { useSignInWithOAuth } from '@/hooks/mutations/useSignInWithOAuth';
 
 const SocialButton = () => {
   const { mutate: signInWithOAuth, isPending: isSignInWithOAuthPending } =
-    useSIgnInWithOAuth();
+    useSignInWithOAuth();
   const isPending = isSignInWithOAuthPending;
 
   const handleOAuthLogin = (provider: 'google' | 'github' | 'kakao') => {
@@ -18,6 +18,7 @@ const SocialButton = () => {
     <div className="flex justify-center gap-6">
       <button
         onClick={() => handleOAuthLogin('google')}
+        disabled={isPending}
         className="bg-bg-light cursor-pointer rounded-full p-4.5 shadow-md"
       >
         <Image width="40" height="40" src={googleLogo} alt="google-logo" />
@@ -25,6 +26,7 @@ const SocialButton = () => {
 
       <button
         onClick={() => handleOAuthLogin('kakao')}
+        disabled={isPending}
         className="cursor-pointer rounded-full bg-[#FEE500] p-4.5 shadow-md"
       >
         <Image width="40" height="40" src={kakaoLogo} alt="kakao-logo" />

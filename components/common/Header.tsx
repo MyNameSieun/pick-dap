@@ -9,9 +9,9 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import Line from './Line';
-import { useIsSessionLoaded, useSession } from '@/store/session';
-import { supabase } from '@/lib/supabase/supabase';
+import { useIsSessionLoaded, useSession, useSetSession } from '@/store/session';
 import defaultProfile from '@/public/defaultProfile.png';
+import { createClient } from '@/lib/supabase/client';
 
 const NAV_LIST = [
   {
@@ -41,13 +41,16 @@ const Header = () => {
   const session = useSession();
   const user = session?.user;
 
+  const setSession = useSetSession();
   const isLoaded = useIsSessionLoaded();
+
   if (!isLoaded) {
     return <nav className="h-10" />;
   }
   const handleLogout = async () => {
+    const supabase = createClient();
     await supabase.auth.signOut();
-    router.push('/');
+    setSession(null);
   };
 
   const userProfileImage =

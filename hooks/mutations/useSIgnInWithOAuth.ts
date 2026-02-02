@@ -1,6 +1,6 @@
-import { signInWithOAuth } from '@/services/auth';
+import { signInWithOAuth } from '@/services/auth.client';
 import { useMutation } from '@tanstack/react-query';
 
-export const useSIgnInWithOAuth = () => {
+export const useSignInWithOAuth = () => {
   return useMutation({ mutationFn: signInWithOAuth });
 };

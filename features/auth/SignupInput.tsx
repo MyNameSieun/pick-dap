@@ -11,19 +11,20 @@ const SignupInput = () => {
   const {
     handleSubmit,
     register,
+    setError,
     formState: { isSubmitting, isSubmitted, errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
   });
 
-  const { mutate: signUp, isPending, error } = useSignUp();
+  const { mutate: signUp, isPending } = useSignUp(setError);
 
   const onSubmit = (data: SignupFormData) => {
     signUp({
       email: data.email,
       password: data.password,
-      username: data.username,
+      nickname: data.nickname,
     });
   };
 
@@ -40,29 +41,25 @@ const SignupInput = () => {
             isSubmitted ? (errors.email ? 'true' : 'false') : undefined
           }
         />
-        {errors.email ? (
+        {errors.email && (
           <p className="c1 text-red-600">{errors.email.message}</p>
-        ) : error?.message?.includes('이메일') ? (
-          <p className="c1 text-red-600">{error.message}</p>
-        ) : null}
+        )}
       </div>
 
       {/* 닉네임 */}
       <div>
         <Input
-          {...register('username')}
+          {...register('nickname')}
           type="text"
           placeholder="닉네임"
           className="b1 py-7"
           aria-invalid={
-            isSubmitted ? (errors.username ? 'true' : 'false') : undefined
+            isSubmitted ? (errors.nickname ? 'true' : 'false') : undefined
           }
         />
-        {errors.username ? (
-          <p className="c1 text-red-600">{errors.username.message}</p>
-        ) : error?.message?.includes('닉네임') ? (
-          <p className="c1 text-red-600">{error.message}</p>
-        ) : null}
+        {errors.nickname && (
+          <p className="c1 text-red-600">{errors.nickname.message}</p>
+        )}
       </div>
 
       {/* 비밀번호 */}
@@ -102,11 +99,6 @@ const SignupInput = () => {
           <p className="c1 text-red-600">{errors.confirmPassword.message}</p>
         )}
       </div>
-      {error &&
-        !error.message?.includes('이메일') &&
-        !error.message?.includes('닉네임') && (
-          <p className="text-center text-sm text-red-500">{error.message}</p>
-        )}
       {/* 약관 */}
       <div className="mt-5 mb-12 flex items-center gap-2 text-gray-600">
         <div className="h-4.5 w-4.5 rounded-full border border-gray-600" />

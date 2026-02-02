@@ -11,7 +11,7 @@
     "build-storybook": "storybook build",
     "format": "prettier --write",
     "prepare": "husky install",
-    "type-gen": "npx supabase gen types typescript --project-id \"rxhhnvgniozvmsvptulf\" --schema public > database.types.ts"
+    "type-gen": "npx supabase gen types typescript --project-id \"roenbakgzndlusicenci\" --schema public > database.types.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -37,8 +37,9 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
+    "slugify": "^1.6.6",
     "sonner": "^2.0.7",
-    "supabase": "^2.72.8",
+    "supabase": "^2.72.9",
     "tailwind-merge": "^3.4.0",
     "tiptap-markdown": "^0.9.0",
     "zod": "^4.3.5",
