@@ -1,4 +1,4 @@
-export const saveQuestion = [
+export const savedQuestions = [
   {
     id: '1',
     tags: [{ label: '답변 완료' }, { label: 'Infra' }, { label: '인기' }],

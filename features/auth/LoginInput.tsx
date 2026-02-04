@@ -7,6 +7,7 @@ import { LoginFormData, loginSchema } from '@/types/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button/Button';
 import { useSignInWithPassword } from '@/hooks/mutations/useSignInWithPassword';
+import { usePasswordResetModal } from '@/store/modal';
 
 const LoginInput = () => {
   const {
@@ -81,6 +82,7 @@ const LoginInput = () => {
           <div className="h-4.5 w-4.5 rounded-full border border-gray-600 bg-white" />
           <p> 로그인 상태 유지</p>
         </div>
+
         <LoginOptions />
       </div>
     </>

@@ -8,6 +8,7 @@ import { Plus, Search } from 'lucide-react';
 import { SetStateAction, useEffect } from 'react';
 import { FilterType } from '../../../types/FilterType';
 import { useDisclosure } from '@/hooks/useClickOutside';
+import { useCreateQuestionModalAction, useCreateQuestionModalState } from '@/store/modal/createQuestionModal';
 
 const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
   { value: 'ALL', label: '전체' },
@@ -49,6 +50,9 @@ const QuestionToolbar = ({
     handleFilterSelect(value);
     closeFilter();
   };
+
+  const isOpen = useCreateQuestionModalState();
+  const { open, close } = useCreateQuestionModalAction();
 
   return (
     <article className="mx-9">
@@ -104,7 +108,7 @@ const QuestionToolbar = ({
           <Button variant={'none'} className="h-9.5 px-6">
             질문 담기
           </Button>
-          <Button variant={'default'} className="h-9.5">
+          <Button variant={'default'} className="h-9.5" onClick={open}>
             <div className="mx-2 flex items-center gap-1">
               <Plus /> 질문 등록
             </div>

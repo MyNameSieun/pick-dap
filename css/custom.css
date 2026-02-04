@@ -18,4 +18,8 @@
   .card-col-no-border {
     @apply flex flex-1 cursor-pointer flex-col gap-5.5 border-gray-300;
   }
+
+  .modal-layout {
+    @apply fixed inset-0 z-100 flex items-center justify-center bg-black/40;
+  }
 }

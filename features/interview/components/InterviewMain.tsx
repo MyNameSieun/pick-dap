@@ -4,9 +4,13 @@ import Image from 'next/image';
 import InterviewButton from './InterviewButton/InterviewButton';
 import { FolderOpen, RotateCcw, Save, Sparkles } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { useSaveQuestionModalAction } from '@/store/modal/saveQuestionModal';
 
 const InterviewMain = () => {
   const router = useRouter();
+
+  const { open } = useSaveQuestionModalAction();
+
   return (
     <>
       <Image
@@ -27,7 +31,7 @@ const InterviewMain = () => {
         >
           지난 면접 기록 불러오기
         </InterviewButton>
-        <InterviewButton Icon={Save} onClick={() => router.push('/')}>
+        <InterviewButton Icon={Save} onClick={open}>
           저장된 질문 불러오기
         </InterviewButton>
         <InterviewButton
