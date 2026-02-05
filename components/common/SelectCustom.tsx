@@ -41,7 +41,7 @@ const SelectCustom = ({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
 
-      <SelectContent position="popper">
+      <SelectContent position="popper" className="z-[110]">
         <SelectGroup>
           {label && <SelectLabel>{label}</SelectLabel>}
 

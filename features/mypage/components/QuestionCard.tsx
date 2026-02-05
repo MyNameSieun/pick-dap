@@ -2,7 +2,7 @@
 import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
-import { saveQuestion } from '@/data/savedQuestions';
+import { savedQuestions } from '@/data/savedQuestions';
 import { FilterType } from '@/types/FilterType';
 import { Bookmark, Dot, Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
@@ -14,7 +14,7 @@ interface QuestionCardProps {
 }
 
 const QuestionCard = ({ filterType, searchQuery }: QuestionCardProps) => {
-  const filteredQuestions = saveQuestion.filter((q) => {
+  const filteredQuestions = savedQuestions.filter((q) => {
     // 1. 필터 조건
     const filterMap: Record<string, string> = {
       PENDING: '답변 대기',

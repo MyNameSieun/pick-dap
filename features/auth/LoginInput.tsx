@@ -7,16 +7,20 @@ import { LoginFormData, loginSchema } from '@/types/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Button } from '@/components/ui/button/Button';
 import { useSignInWithPassword } from '@/hooks/mutations/useSignInWithPassword';
-import { usePasswordResetModal } from '@/store/modal';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const LoginInput = () => {
   const {
     handleSubmit,
     register,
+
     formState: { isSubmitted, errors },
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
   });
+
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
   const {
     mutate: signInWithPassword,
@@ -24,8 +28,15 @@ const LoginInput = () => {
     error,
   } = useSignInWithPassword();
 
+  // useMutation이 반환하는 mutate 함수를 호출할 때 두 번째 인자로 옵션을 넘기면,
+  // 훅 내부에서 굳이 인자로 callbacks를 받지 않아도 자동으로 실행
   const onSubmit = (data: LoginFormData) => {
-    signInWithPassword(data);
+    signInWithPassword(data, {
+      onSuccess: () => {
+        const redirect = searchParams.get('redirect') || '/';
+        router.push(redirect);
+      },
+    });
   };
 
   return (

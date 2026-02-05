@@ -1,9 +1,9 @@
 // middleware.ts
-import { NextResponse, type NextRequest } from "next/server";
-import { createClient } from "@/lib/supabase/middleware";
+import { NextResponse, type NextRequest } from 'next/server';
+import { createClient } from '@/lib/supabase/middleware';
 
-const protectedPaths = ["/mypage"]; // 로그인 필수 경로
-const publicPaths = ["/login", "/signup", "/"]; // 공개 경로
+const protectedPaths = ['/mypage', 'admin']; // 로그인 필수 경로
+const publicPaths = ['/login', '/signup', '/']; // 공개 경로
 
 export async function middleware(request: NextRequest) {
   // supabase 인스턴스와 response 둘 다 반환
@@ -27,8 +27,8 @@ export async function middleware(request: NextRequest) {
 
     if (!user) {
       // 사용자 정보가 없으면 로그인 페이지로 리다이렉트
-      const loginUrl = new URL("/login", request.url);
-      loginUrl.searchParams.set("redirect", pathname);
+      const loginUrl = new URL('/login', request.url);
+      loginUrl.searchParams.set('redirect', pathname);
       return NextResponse.redirect(loginUrl); // 로그인 페이지로 리다이렉트
     }
   }
@@ -39,6 +39,6 @@ export async function middleware(request: NextRequest) {
 // 정적 파일 제외하고 모든 경로에 middleware 적용
 export const config = {
   matcher: [
-    "/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)",
+    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
   ],
 };

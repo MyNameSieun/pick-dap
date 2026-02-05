@@ -3,8 +3,10 @@
 import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
 import { useSignUp } from '@/hooks/mutations/useSignUp';
+import { generateErrorMessage } from '@/lib/auth/error';
 import { SignupFormData, signupSchema } from '@/types/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 const SignupInput = () => {
@@ -12,20 +14,48 @@ const SignupInput = () => {
     handleSubmit,
     register,
     setError,
+    setValue,
     formState: { isSubmitting, isSubmitted, errors },
   } = useForm<SignupFormData>({
     resolver: zodResolver(signupSchema),
     mode: 'onChange',
   });
 
-  const { mutate: signUp, isPending } = useSignUp(setError);
+  const { mutate: signUp, isPending } = useSignUp();
+  const router = useRouter();
 
   const onSubmit = (data: SignupFormData) => {
-    signUp({
-      email: data.email,
-      password: data.password,
-      nickname: data.nickname,
-    });
+    signUp(
+      {
+        email: data.email,
+        password: data.password,
+        nickname: data.nickname,
+      },
+      {
+        onSuccess: () => {
+          alert('회원가입이 완료되었습니다!');
+          router.push('/');
+        },
+
+        onError: (error: Error) => {
+          if (!setError) return;
+          const message = generateErrorMessage(error);
+
+          // 에러 메시지에 포함된 단어에 따라 해당 필드에 에러 주입
+          if (message.includes('이메일') || message.includes('사용자')) {
+            setError('email', { type: 'server', message: message });
+          } else if (message.includes('닉네임')) {
+            setError('nickname', { type: 'server', message: message });
+          } else if (message.includes('비밀번호')) {
+            setError('password', { type: 'server', message: message });
+          } else {
+            // 매핑되지 않은 기타 에러는 alert
+            alert(message);
+          }
+          //  setValue('password', '');
+        },
+      },
+    );
   };
 
   return (

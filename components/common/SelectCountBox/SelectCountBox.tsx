@@ -3,7 +3,6 @@
 import { Button } from '@/components/ui/button/Button';
 import { cn } from '@/lib/utils';
 import { useEditActions } from '@/store/useEditStore';
-import { SetStateAction, useActionState } from 'react';
 import { toast } from 'sonner';
 
 type State = 'save' | 'delete';
