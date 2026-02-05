@@ -20,8 +20,11 @@ const AUTH_ERROR_MESSAGE_MAP: Record<string, string> = {
   same_password: '이전과 동일한 비밀번호는 사용할 수 없습니다.',
   validation_failed: '이메일 주소가 올바르게 입력되지 않았습니다',
 };
-
-export const generateErrorMessage = (error: any) => {
+interface CustomAuthError {
+  code?: string;
+  message?: string;
+}
+export const generateErrorMessage = (error: CustomAuthError) => {
   // 1. 에러 코드 추출 (서버에서 던진 메시지나 객체 내부의 code 확인)
   const errorCode = error?.code || error?.message || String(error);
 
