@@ -3,6 +3,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import Header from '@/components/common/Header';
 import Providers from '@/providers/providers';
 import '@/css/globals.css';
+import { Toaster } from '@/components/ui/Sonner';
 
 export const metadata: Metadata = {
   title: 'Create Next App',
@@ -22,6 +23,7 @@ export default function RootLayout({
 
           <main className="mx-auto my-8 w-full max-w-6xl">
             <ReactQueryDevtools />
+            <Toaster />
             {children}
           </main>
         </Providers>

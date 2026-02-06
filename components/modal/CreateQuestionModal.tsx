@@ -14,6 +14,8 @@ import { MODAL_ID } from '@/constants/modalNames';
 import SelectCustom from '../common/SelectCustom';
 import { jobCategories } from '@/constants/jobCategories';
 import { JobCategory } from '@/types/jobCategory';
+import { useCreateQuesion } from '@/features/question/hooks/useCreateQuesion';
+import { toast } from 'sonner';
 
 const CreateQuestionModal = () => {
   const [title, setTitle] = useState('');
@@ -32,6 +34,22 @@ const CreateQuestionModal = () => {
 
   useEscClose(MODAL_ID.CREATE_QUESTION, isOpen, handleCloseModal);
 
+  const { mutate: createQuesion, isPending: isCreateQuesionPending } =
+    useCreateQuesion({
+      onSuccess: () => {
+        toast.success('질문이 등록되었습니다.', {
+          position: 'top-center',
+        });
+        close();
+      },
+      onError: (error) => {
+        toast.error('질문 생성에 실패했습니다.', {
+          position: 'top-center',
+        });
+        console.error('등록 실패 원인:', error);
+      },
+    });
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return;
 
@@ -48,6 +66,11 @@ const CreateQuestionModal = () => {
     setTagList(tagList.filter((tag) => tag !== tagPrams));
   };
 
+  const handleCreateQuesionClick = () => {
+    if (title.trim() === '' || category.trim() === '') return;
+    createQuesion({ title, category, tagList });
+  };
+
   return (
     <div onClick={handleCloseModal} className="modal-layout">
       <section
@@ -55,7 +78,7 @@ const CreateQuestionModal = () => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text- gray-1000">질문 입력</h2>
+          <h2 className="text- gray-1000">질문 등록</h2>
           <X
             onClick={handleCloseModal}
             className="text-icon-default cursor-pointer"
@@ -76,6 +99,7 @@ const CreateQuestionModal = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="질문을 입력하세요"
+              disabled={isCreateQuesionPending}
             />
           </div>
 
@@ -105,6 +129,7 @@ const CreateQuestionModal = () => {
               value={tag}
               onKeyDown={handleKeyDown}
               onChange={(e) => setTag(e.target.value)}
+              disabled={isCreateQuesionPending}
             />
             <ul className="mt-1 flex flex-wrap gap-2">
               {tagList.map((tag, idx) => (
@@ -124,7 +149,9 @@ const CreateQuestionModal = () => {
           </div>
         </article>
         <div className="mt-3 flex w-full justify-end">
-          <Button className="px-6">등록</Button>
+          <Button onClick={handleCreateQuesionClick} className="px-6">
+            등록
+          </Button>
         </div>
       </section>
     </div>

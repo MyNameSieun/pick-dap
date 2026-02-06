@@ -1,8 +1,15 @@
 import { useMutation } from '@tanstack/react-query';
-import { createQuesion } from '../services/createQuesion';
+import { UseMutationCallback } from '@/types/useMutationCallback';
+import { createQuestion } from '../services/createQuestion';
 
-export const useCreateQuesion = () => {
+export const useCreateQuesion = (callbacks?: UseMutationCallback) => {
   return useMutation({
-    mutationFn: createQuesion,
+    mutationFn: createQuestion,
+    onSuccess: () => {
+      if (callbacks?.onSuccess) callbacks.onSuccess();
+    },
+    onError: (error) => {
+      if (callbacks?.onError) callbacks.onError(error);
+    },
   });
 };

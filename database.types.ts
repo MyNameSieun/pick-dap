@@ -248,6 +248,29 @@ export type Database = {
         }
         Relationships: []
       }
+      question_category: {
+        Row: {
+          category_type: Database["public"]["Enums"]["category_type"]
+          question_id: string
+        }
+        Insert: {
+          category_type?: Database["public"]["Enums"]["category_type"]
+          question_id?: string
+        }
+        Update: {
+          category_type?: Database["public"]["Enums"]["category_type"]
+          question_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_category_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: true
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       question_stats: {
         Row: {
           bookmark_count: number
@@ -277,29 +300,59 @@ export type Database = {
           },
         ]
       }
+      question_tags: {
+        Row: {
+          question_id: string
+          tag_id: string
+        }
+        Insert: {
+          question_id?: string
+          tag_id?: string
+        }
+        Update: {
+          question_id?: string
+          tag_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_tags_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_tags_tag_id_fkey"
+            columns: ["tag_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       questions: {
         Row: {
-          category: Database["public"]["Enums"]["category"]
           created_at: string
           id: string
+          question_type: Database["public"]["Enums"]["question_type"]
           status: Database["public"]["Enums"]["status"]
           title: string
           updated_at: string
           user_id: string
         }
         Insert: {
-          category?: Database["public"]["Enums"]["category"]
           created_at?: string
           id?: string
+          question_type?: Database["public"]["Enums"]["question_type"]
           status?: Database["public"]["Enums"]["status"]
           title: string
           updated_at?: string
           user_id?: string
         }
         Update: {
-          category?: Database["public"]["Enums"]["category"]
           created_at?: string
           id?: string
+          question_type?: Database["public"]["Enums"]["question_type"]
           status?: Database["public"]["Enums"]["status"]
           title?: string
           updated_at?: string
@@ -349,7 +402,17 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      category: "pickdap" | "user"
+      category_type:
+        | "전체"
+        | "FrontEnd"
+        | "BackEnd"
+        | "CS"
+        | "인성면접"
+        | "Infra"
+        | "AI"
+        | "Android"
+        | "iOS"
+      question_type: "pickdap" | "user"
       social_provider: "email" | "google" | "github" | "kakao"
       status: "미답변" | "답변 완료"
       tag_type: "카테고리" | "기술스택" | "상태" | "면접결과" | "인기"
@@ -482,7 +545,18 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      category: ["pickdap", "user"],
+      category_type: [
+        "전체",
+        "FrontEnd",
+        "BackEnd",
+        "CS",
+        "인성면접",
+        "Infra",
+        "AI",
+        "Android",
+        "iOS",
+      ],
+      question_type: ["pickdap", "user"],
       social_provider: ["email", "google", "github", "kakao"],
       status: ["미답변", "답변 완료"],
       tag_type: ["카테고리", "기술스택", "상태", "면접결과", "인기"],

@@ -49,10 +49,9 @@ const SignupInput = () => {
           } else if (message.includes('비밀번호')) {
             setError('password', { type: 'server', message: message });
           } else {
-            // 매핑되지 않은 기타 에러는 alert
             alert(message);
           }
-          //  setValue('password', '');
+          setValue('password', '');
         },
       },
     );
