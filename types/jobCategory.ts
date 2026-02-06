@@ -1,5 +1,4 @@
 export type JobCategory =
-  | '전체'
   | 'FrontEnd'
   | 'BackEnd'
   | 'CS'

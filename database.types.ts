@@ -250,15 +250,15 @@ export type Database = {
       }
       question_category: {
         Row: {
-          category_type: Database["public"]["Enums"]["category_type"]
+          category_type: Database["public"]["Enums"]["category_type_enum"]
           question_id: string
         }
         Insert: {
-          category_type?: Database["public"]["Enums"]["category_type"]
+          category_type: Database["public"]["Enums"]["category_type_enum"]
           question_id?: string
         }
         Update: {
-          category_type?: Database["public"]["Enums"]["category_type"]
+          category_type?: Database["public"]["Enums"]["category_type_enum"]
           question_id?: string
         }
         Relationships: [
@@ -384,15 +384,7 @@ export type Database = {
           label?: string
           tag_type?: Database["public"]["Enums"]["tag_type"]
         }
-        Relationships: [
-          {
-            foreignKeyName: "tags_id_fkey"
-            columns: ["id"]
-            isOneToOne: true
-            referencedRelation: "posts"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
       }
     }
     Views: {
@@ -404,6 +396,15 @@ export type Database = {
     Enums: {
       category_type:
         | "전체"
+        | "FrontEnd"
+        | "BackEnd"
+        | "CS"
+        | "인성면접"
+        | "Infra"
+        | "AI"
+        | "Android"
+        | "iOS"
+      category_type_enum:
         | "FrontEnd"
         | "BackEnd"
         | "CS"
@@ -547,6 +548,16 @@ export const Constants = {
     Enums: {
       category_type: [
         "전체",
+        "FrontEnd",
+        "BackEnd",
+        "CS",
+        "인성면접",
+        "Infra",
+        "AI",
+        "Android",
+        "iOS",
+      ],
+      category_type_enum: [
         "FrontEnd",
         "BackEnd",
         "CS",

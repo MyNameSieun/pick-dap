@@ -13,13 +13,13 @@ import {
 import { MODAL_ID } from '@/constants/modalNames';
 import SelectCustom from '../common/SelectCustom';
 import { jobCategories } from '@/constants/jobCategories';
-import { JobCategory } from '@/types/jobCategory';
 import { useCreateQuesion } from '@/features/question/hooks/useCreateQuesion';
 import { toast } from 'sonner';
+import { CategoryType } from '@/types/entity';
 
 const CreateQuestionModal = () => {
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState<JobCategory | ''>('');
+  const [category, setCategory] = useState<CategoryType | ''>('');
   const [tag, setTag] = useState('');
   const [tagList, setTagList] = useState<string[]>([]);
 
@@ -51,12 +51,17 @@ const CreateQuestionModal = () => {
     });
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.nativeEvent.isComposing) return;
+    if (e.nativeEvent.isComposing) return; // IME로 인한 재생성 방지
 
     if (e.code === 'Enter') {
-      console.log('Enter');
-
       if (tag.trim() === '' || tagList.includes(tag)) return;
+      if (tagList.length >= 3) {
+        toast.success('태그는 3개까지 입력 가능합니다.', {
+          position: 'top-center',
+        });
+        return;
+      }
+
       setTagList([...tagList, tag]);
       setTag('');
     }
@@ -67,8 +72,21 @@ const CreateQuestionModal = () => {
   };
 
   const handleCreateQuesionClick = () => {
-    if (title.trim() === '' || category.trim() === '') return;
-    createQuesion({ title, category, tagList });
+    if (title.trim() === '') {
+      toast.success('질문을 입력해주세요.', {
+        position: 'top-center',
+      });
+      return;
+    }
+
+    if (category.trim() === '') {
+      toast.success('카테고리를 선택해주세요.', {
+        position: 'top-center',
+      });
+      return;
+    }
+
+    createQuesion({ title, category: category as CategoryType, tagList });
   };
 
   return (
@@ -89,7 +107,6 @@ const CreateQuestionModal = () => {
         <Line my={4} color="gray300" />
 
         <article className="flex flex-col gap-4">
-          {/* 질문 */}
           <div className="flex flex-col gap-1">
             <span className="flex gap-1 text-sm">
               <p className="text-gray-700">질문</p>
@@ -117,7 +134,7 @@ const CreateQuestionModal = () => {
               }))}
               placeholder="카테고리를 선택하세요"
               className="w-full"
-              onValueChange={(value) => setCategory(value as JobCategory)}
+              onValueChange={(value) => setCategory(value as CategoryType)}
             />
           </div>
 

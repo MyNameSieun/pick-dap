@@ -1,7 +1,6 @@
 import { JobCategory } from '@/types/jobCategory';
 
 export const jobCategories: JobCategory[] = [
-  '전체',
   'FrontEnd',
   'BackEnd',
   'CS',
@@ -11,4 +10,3 @@ export const jobCategories: JobCategory[] = [
   'Android',
   'iOS',
 ];
-

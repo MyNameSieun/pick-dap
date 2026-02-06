@@ -1,6 +1,8 @@
-"use client";
+'use client';
 
-import { useEffect } from "react";
+import Fallback from '@/components/ui/Fallback';
+import { Button } from '@/components/ui/button';
+import { useEffect } from 'react';
 
 export default function Error({
   error,
@@ -13,9 +15,9 @@ export default function Error({
     console.error(error);
   }, [error]);
   return (
-    <>
-      <h1>문제가 발생했습니다!</h1>
-      <button onClick={() => reset()}>다시시도</button>
-    </>
+    <div className="flex flex-col gap-2">
+      <Fallback />
+      <Button onClick={() => reset()}>다시시도</Button>
+    </div>
   );
 }
