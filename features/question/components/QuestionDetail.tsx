@@ -3,13 +3,10 @@
 import { Button } from '@/components/ui/button/Button';
 import { Sparkle, Users } from 'lucide-react';
 import { useRouter, useParams } from 'next/navigation';
-import questionData from '@/data/questionData.json';
 
 const QuestionDetail = () => {
   const router = useRouter();
   const params = useParams();
-  const data = questionData.find((question) => question.id === params.id);
-  if (!data) return <p>존재하지 않는 질문입니다.</p>;
 
   return (
     <>

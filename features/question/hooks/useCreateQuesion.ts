@@ -11,10 +11,13 @@ export const useCreateQuesion = (
 
   return useMutation({
     mutationFn: createQuestion,
-    onSuccess: (newQuestion: QuestionEntity) => {
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.question.list });
+    onSuccess: async (newQuestion: QuestionEntity) => {
+      // 캐시 무효화가 완료될 때까지 기다림
+      await queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.question.list,
+      });
 
-      // 2. 컴포넌트에서 넘겨준 후속 로직 실행 (toast, close 등)
+      // 컴포넌트에서 넘겨준 후속 로직 실행 (toast, close 등)
       if (callbacks?.onSuccess) {
         callbacks.onSuccess(newQuestion);
       }

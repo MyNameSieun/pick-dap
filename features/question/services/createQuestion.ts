@@ -73,7 +73,5 @@ export const createQuestion = async ({
     }
   }
 
-  // 6. 캐시 무효화 -> 질문 목록 최신화
-  revalidatePath('/questions');
   return question;
 };

@@ -3,18 +3,18 @@
 import Tags from '@/components/common/Tags/Tags';
 import { Bookmark, Send } from 'lucide-react';
 import { useParams, usePathname } from 'next/navigation';
-import questionData from '@/data/questionData.json';
 import { Textarea } from '@/components/ui/textarea/Textarea';
-import Line from '@/components/common/Line';
 import { Button } from '@/components/ui/button/Button';
 import { toast } from 'sonner';
+import { useFetchQuestionDataById } from '../hooks/useFetchQuestionData';
+import Image from 'next/image';
+import defaultProfile from '@/public/defaultProfile.png';
 
 const QuestionHeader = () => {
   const pathname = usePathname();
   const params = useParams();
 
-  const data = questionData.find((question) => question.id === params.id);
-  if (!data) return <p>존재하지 않는 질문입니다.</p>;
+  const { data: question } = useFetchQuestionDataById(String(params.id));
 
   const onClickSaveButtonHandler = () => {
     toast.success('마이페이지에 저장이 완료되었습니다!', {
@@ -42,40 +42,52 @@ const QuestionHeader = () => {
               onClick={onClickSaveButtonHandler}
             >
               <Bookmark />
-              저장
+              {question.stats?.bookmark_count ?? 0}
             </Button>
           </>
         ) : null}
       </div>
 
-      {pathname === `/question/${params.id}` ? (
-        <>
-          <h2 className="mt-8 mb-15">{data?.title}</h2>
-          {/* <AuthorInfo  /> */}
-          <div className="">프로필(추후 대체)</div>
-          <div className="mt-8 mb-8 border border-gray-100" />
-
-          <h3 className="mb-6">나의 답변 작성</h3>
-          <Textarea
-            placeholder="이 질문에 대한 답변을 작성해보세요"
-            className="bg-bg-default b1 h-45 p-4"
+      <h2 className="mt-8 mb-15">{question.title}</h2>
+      <div className="flex gap-3">
+        <div className="relative h-12 w-12 overflow-hidden rounded-full">
+          <Image
+            onDragStart={(e) => e.preventDefault()} // 드래그 이벤트 차단
+            className="object-cover"
+            alt="작성자 프로필"
+            src={question.author.avatar_url || defaultProfile}
+            fill
+            priority
           />
-          <div className="flex w-full justify-end">
-            <Button className="mt-4 h-12 gap-3.5" variant={'default'} size="lg">
-              <Send />
-              답변 저장
-            </Button>
+        </div>
+        <div className="flex flex-col justify-around">
+          <p className="b1 font-bold text-gray-900">
+            {question.author.nickname}
+          </p>
+          <div className="text-icon-default items-cen flex gap-5">
+            <div>
+              <p className="c1">
+                작성일 {new Date(question.created_at).toLocaleString()}
+              </p>
+            </div>
+            <div></div>
           </div>
-        </>
-      ) : (
-        <>
-          <h2 className="mt-8 mb-15">{data?.title}</h2>
+        </div>
+      </div>
 
-          <Line />
+      <div className="mt-8 mb-8 border border-gray-100" />
 
-          <div className="b1 text-gray-1000">{data.content}</div>
-        </>
-      )}
+      <h3 className="mb-6">나의 답변 작성</h3>
+      <Textarea
+        placeholder="이 질문에 대한 답변을 작성해보세요"
+        className="bg-bg-default b1 h-45 p-4"
+      />
+      <div className="flex w-full justify-end">
+        <Button className="mt-4 h-12 gap-3.5" variant={'default'} size="lg">
+          <Send />
+          답변 저장
+        </Button>
+      </div>
     </div>
   );
 };

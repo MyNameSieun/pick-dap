@@ -1,9 +1,9 @@
 import TagSearchBar from '@/components/TagSearchBar';
 import QuestionCardList from '../../features/question/components/QuestionCardList';
 import Paging from '@/components/common/Paging';
-import { Loader } from 'lucide-react';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
+import Loader from '@/components/ui/Loader';
 
 export const metadata: Metadata = {
   title: '면접 질문',
@@ -20,7 +20,7 @@ const QuestionPage = async ({
     <div className="mx-auto w-full">
       <TagSearchBar />
 
-      <Suspense key={q || ''} fallback={<Loader className="animate-spin" />}>
+      <Suspense key={q || ''} fallback={<Loader />}>
         <QuestionCardList key={q || ''} />
       </Suspense>
       <Paging />

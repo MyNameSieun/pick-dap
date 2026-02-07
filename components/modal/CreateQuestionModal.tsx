@@ -43,6 +43,7 @@ const CreateQuestionModal = () => {
         toast.success('질문이 등록되었습니다.', {
           position: 'top-center',
         });
+        router.push(`/question/${newQuestion.id}`);
         close();
       },
       onError: (error) => {
