@@ -2,6 +2,12 @@ import Link from 'next/link';
 import AuthHeader from '@/features/auth/AuthHeader';
 import LoginInput from '@/features/auth/LoginInput';
 import SocialButton from '@/features/auth/SocialButton';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '로그인 페이지',
+  description: '로그인 페이지 입니다.',
+};
 
 const LoginPage = () => {
   return (

@@ -1,12 +1,17 @@
 import InterviewRoom from '@/features/interview/components/InterviewRoom';
 
-export const generateMetadata = async ({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) => {
+type Props = {
+  params: {
+    id: string;
+  };
+};
+
+export const generateMetadata = async ({ params }: Props) => {
+  const { id } = await params;
+
   return {
-    title: `면접 ${(await params).id}`,
+    title: `${id}번`,
+    description: `Detail 페이지 : ${id}`,
   };
 };
 

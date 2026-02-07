@@ -1,4 +1,10 @@
 import { redirect } from 'next/navigation';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '커뮤니티',
+  description: '픽답 커뮤니티입니다.',
+};
 
 export default function CommunityPage() {
   redirect('/community/1');

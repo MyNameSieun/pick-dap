@@ -2,6 +2,12 @@ import Link from 'next/link';
 import AuthHeader from '@/features/auth/AuthHeader';
 import SignupInput from '@/features/auth/SignupInput';
 import SocialButton from '@/features/auth/SocialButton';
+import { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  title: '회원가입',
+  description: '픽답 회원가입 페이지입니다.',
+};
 
 const SignupPage = () => {
   return (

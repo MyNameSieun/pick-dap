@@ -6,7 +6,7 @@ import QuestionCardItem from './QuestionCardItem';
 import QuestionToolbar from './QuestionToolbar';
 import useSearch from '@/hooks/useSearch';
 import { useState } from 'react';
-import { useFeatchQuestionData } from '../hooks/useFetchQuestionData';
+import { useFetchQuestionData } from '../hooks/useFetchQuestionData';
 
 const QuestionCardList = () => {
   const { filterType, handleFilterSelect } = useFilter<FilterType>('ALL');
@@ -14,7 +14,7 @@ const QuestionCardList = () => {
   const { focusSearch, handleSearch, searchRef } = useSearch();
   const [category, setCategory] = useState<'pickdap' | 'user'>('pickdap');
 
-  const { data, error, isPending } = useFeatchQuestionData();
+  const { data, error, isPending } = useFetchQuestionData();
 
   // 로딩/에러 로직 삭제 (부모의 Suspense/ErrorBoundary가 처리)
   // if (isPending) return <Loader />;

@@ -1,8 +1,13 @@
 import Line from '@/components/common/Line';
 import { Input } from '@/components/ui/input/Input';
 import { Search } from 'lucide-react';
-
+import { Metadata } from 'next';
 import FormSelect from '@/components/common/SelectCustom';
+
+export const metadata: Metadata = {
+  title: '면접 후기',
+  description: '면접 후기를 검색하고 공유할 수 있습니다.',
+};
 
 import {
   EMPLOYMENT_TYPE_OPTIONS,

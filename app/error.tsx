@@ -1,6 +1,6 @@
 'use client';
 
-import Fallback from '@/components/ui/Fallback';
+import Fallback from '@/components/common/Fallback';
 import { Button } from '@/components/ui/button';
 import { useEffect } from 'react';
 
