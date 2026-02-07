@@ -2,6 +2,6 @@ export const QUERY_KEYS = {
   question: {
     all: ['question'],
     list: ['question', 'list'],
-    byId: (questionId: string) => ['question', 'detail', questionId] as const,
+    byId: (idx: string) => [...QUERY_KEYS.question.all, 'detail', idx] as const,
   },
 };

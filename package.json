@@ -38,7 +38,6 @@
     "react": "19.2.3",
     "react-dom": "19.2.3",
     "react-hook-form": "^7.71.1",
-    "slugify": "^1.6.6",
     "sonner": "^2.0.7",
     "supabase": "^2.72.9",
     "tailwind-merge": "^3.4.0",

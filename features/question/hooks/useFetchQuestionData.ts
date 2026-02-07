@@ -1,6 +1,6 @@
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/lib/constants';
-import { fetchQuestion, fetchQuestionById } from '../services/fetchQuestion';
+import { fetchQuestion, fetchQuestionByIdx } from '../services/fetchQuestion';
 
 export const useFetchQuestionData = () => {
   return useSuspenseQuery({
@@ -9,9 +9,11 @@ export const useFetchQuestionData = () => {
   });
 };
 
-export const useFetchQuestionDataById = (id: string) => {
+export const useFetchQuestionDataByIdx = (idx: string) => {
   return useSuspenseQuery({
-    queryKey: QUERY_KEYS.question.byId(id),
-    queryFn: () => fetchQuestionById(id), 
+    queryKey: QUERY_KEYS.question.byId(idx),
+    queryFn: () => fetchQuestionByIdx(idx),
+
+    staleTime: 1000 * 60 * 5,
   });
 };

@@ -1,7 +1,7 @@
 'use server';
+import { generateSlug } from '@/lib/slugify';
 import { createClient } from '@/lib/supabase/server';
 import { CategoryType, TagInsert } from '@/types/entity';
-import { revalidatePath } from 'next/cache';
 
 interface createQuestionProps {
   title: string;
@@ -16,7 +16,9 @@ export const createQuestion = async ({
 }: createQuestionProps) => {
   const supabase = await createClient();
 
-  //  1. 사용자 정보 받아오기
+  // 1. Slug 생성
+  const slug = generateSlug(title);
+
   const {
     data: { user },
     error: authError,
@@ -26,12 +28,13 @@ export const createQuestion = async ({
     throw new Error('로그인이 필요합니다.');
   }
 
-  // 2. 질문 테이블에 데이터 채우기
+  // 2. 질문 테이블에 삽입
   const { data: question, error: qError } = await supabase
     .from('questions')
     .insert({
       user_id: user.id,
       title: title,
+      slug: slug,
     })
     .select()
     .single();

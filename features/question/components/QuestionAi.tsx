@@ -1,12 +1,12 @@
-"use client";
-import { useParams } from "next/navigation";
-import questionData from "@/data/questionData.json";
-import HeaderTitleBox from "@/components/common/HeaderTitleBox";
-import { Sparkle } from "lucide-react";
+'use client';
+import { useParams } from 'next/navigation';
+import questionData from '@/data/questionData.json';
+import HeaderTitleBox from '@/components/common/HeaderTitleBox';
+import { Sparkle } from 'lucide-react';
 
 const QuestionAi = () => {
   const params = useParams();
-  const data = questionData.find((question) => question.id === params.id);
+  const data = questionData.find((question) => question.id === params.idx);
   const feedbackText = `
     안녕하세요! 면접 피드백을 제공하는 AI 파트너로서 답변을 분석해 드릴게요.
         제출하신 답변은 정의 자체는 틀리지 않았지만, 기술 면접용 답변으로는 다소
@@ -31,8 +31,8 @@ const QuestionAi = () => {
       <div className="text-gray-1000 b1 mt-15.5 mb-6">
         <HeaderTitleBox
           icon={Sparkle}
-          title={"AI 답변 분석"}
-          content={"AI가 답변을 분석하여 피드백을 제공합니다."}
+          title={'AI 답변 분석'}
+          content={'AI가 답변을 분석하여 피드백을 제공합니다.'}
         />
       </div>
 

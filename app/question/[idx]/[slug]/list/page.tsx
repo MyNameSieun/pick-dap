@@ -1,5 +1,5 @@
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
-import QuestionHeader from '../../../../features/question/components/QuestionHeader';
+import QuestionHeader from '../../../../../features/question/components/QuestionHeader';
 import BackButton from '@/components/common/BackButton';
 import { Crown, Heart } from 'lucide-react';
 import Line from '@/components/common/Line';

@@ -9,11 +9,12 @@ interface QuestionCardItemProps {
 }
 
 const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
-  const { id, title, created_at, tags, stats, author, category } = question;
+  const { idx, slug, title, created_at, tags, stats, author, category } =
+    question;
 
   return (
     <li>
-      <Link href={`/question/${id}`}>
+      <Link href={`/question/${idx}/${slug}`}>
         <article className="hover:text-highlight-deep rounded-[6px] border border-gray-300 p-4 transition-all duration-200">
           <div className="flex items-center justify-between">
             <div className="flex flex-wrap gap-2">

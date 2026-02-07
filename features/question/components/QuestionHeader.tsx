@@ -2,19 +2,22 @@
 
 import Tags from '@/components/common/Tags/Tags';
 import { Bookmark, Send } from 'lucide-react';
-import { useParams, usePathname } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 import { Textarea } from '@/components/ui/textarea/Textarea';
 import { Button } from '@/components/ui/button/Button';
 import { toast } from 'sonner';
-import { useFetchQuestionDataById } from '../hooks/useFetchQuestionData';
 import Image from 'next/image';
 import defaultProfile from '@/public/defaultProfile.png';
+import { useFetchQuestionDataByIdx } from '../hooks/useFetchQuestionData';
 
-const QuestionHeader = () => {
+interface QuestionHeaderProps {
+  idx: string;
+  slug: string;
+}
+
+const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
   const pathname = usePathname();
-  const params = useParams();
-
-  const { data: question } = useFetchQuestionDataById(String(params.id));
+  const { data: question } = useFetchQuestionDataByIdx(idx);
 
   const onClickSaveButtonHandler = () => {
     toast.success('마이페이지에 저장이 완료되었습니다!', {
@@ -26,14 +29,18 @@ const QuestionHeader = () => {
     <div className="rounded-[4] bg-white p-8 shadow-sm">
       <div className="flex items-center justify-between">
         <div className="flex gap-3">
-          <Tags color="blue" size="big">
-            CS
-          </Tags>
-          <Tags color="purple" size="big">
-            OS
-          </Tags>
+          {question.category?.category_type && (
+            <Tags color="blue" size="big">
+              {question.category.category_type}
+            </Tags>
+          )}
+          {question.tags.map(({ tag }) => (
+            <Tags key={tag.label} size="big">
+              {tag.label}
+            </Tags>
+          ))}
         </div>
-        {pathname.startsWith(`/question/${params.id}`) &&
+        {pathname.startsWith(`/question/${slug}`) &&
         !pathname.endsWith('/ai') ? (
           <>
             <Button
@@ -81,6 +88,7 @@ const QuestionHeader = () => {
       <Textarea
         placeholder="이 질문에 대한 답변을 작성해보세요"
         className="bg-bg-default b1 h-45 p-4"
+        autoFocus
       />
       <div className="flex w-full justify-end">
         <Button className="mt-4 h-12 gap-3.5" variant={'default'} size="lg">

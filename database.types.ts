@@ -334,7 +334,9 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          idx: number
           question_type: Database["public"]["Enums"]["question_type"]
+          slug: string
           status: Database["public"]["Enums"]["status"]
           title: string
           updated_at: string
@@ -343,7 +345,9 @@ export type Database = {
         Insert: {
           created_at?: string
           id?: string
+          idx?: number
           question_type?: Database["public"]["Enums"]["question_type"]
+          slug: string
           status?: Database["public"]["Enums"]["status"]
           title: string
           updated_at?: string
@@ -352,7 +356,9 @@ export type Database = {
         Update: {
           created_at?: string
           id?: string
+          idx?: number
           question_type?: Database["public"]["Enums"]["question_type"]
+          slug?: string
           status?: Database["public"]["Enums"]["status"]
           title?: string
           updated_at?: string
