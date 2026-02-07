@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import Tags from '@/components/common/Tags/Tags';
-import { Bookmark, Crown, Dot, Eye } from 'lucide-react';
+import { Bookmark, Eye } from 'lucide-react';
 import { QuestionWithDetails } from '../services/fetchQuestion';
 import Image from 'next/image';
 

@@ -16,6 +16,7 @@ import { jobCategories } from '@/constants/jobCategories';
 import { useCreateQuesion } from '@/features/question/hooks/useCreateQuesion';
 import { toast } from 'sonner';
 import { CategoryType } from '@/types/entity';
+import { useRouter } from 'next/navigation';
 
 const CreateQuestionModal = () => {
   const [title, setTitle] = useState('');
@@ -32,11 +33,13 @@ const CreateQuestionModal = () => {
     handleConfirmClose(title || category, close);
   };
 
+  const router = useRouter();
+
   useEscClose(MODAL_ID.CREATE_QUESTION, isOpen, handleCloseModal);
 
   const { mutate: createQuesion, isPending: isCreateQuesionPending } =
     useCreateQuesion({
-      onSuccess: () => {
+      onSuccess: (newQuestion) => {
         toast.success('질문이 등록되었습니다.', {
           position: 'top-center',
         });
