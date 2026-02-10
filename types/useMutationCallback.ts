@@ -1,5 +1,5 @@
 export interface UseMutationCallback<T = unknown> {
-  onSuccess?: (data: T) => void;
+  onSuccess?: (data?: T) => void;
   onError?: (error: Error) => void;
   onMutate?: () => void;
   onSettled?: () => void;

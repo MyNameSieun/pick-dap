@@ -397,7 +397,16 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      update_question_full: {
+        Args: {
+          q_category_type: string
+          q_id: string
+          q_slug: string
+          q_tags: string[]
+          q_title: string
+        }
+        Returns: undefined
+      }
     }
     Enums: {
       category_type:

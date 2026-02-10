@@ -2,13 +2,14 @@
 
 import Tags from '@/components/common/Tags/Tags';
 import { Bookmark, Send } from 'lucide-react';
-import { usePathname } from 'next/navigation';
 import { Textarea } from '@/components/ui/textarea/Textarea';
 import { Button } from '@/components/ui/button/Button';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import defaultProfile from '@/public/defaultProfile.png';
 import { useFetchQuestionDataByIdx } from '../hooks/useFetchQuestionData';
+import { useSession } from '@/store/session';
+import QuestionMenu from './QuestionMenu';
 
 interface QuestionHeaderProps {
   idx: string;
@@ -16,7 +17,6 @@ interface QuestionHeaderProps {
 }
 
 const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
-  const pathname = usePathname();
   const { data: question } = useFetchQuestionDataByIdx(idx);
 
   const onClickSaveButtonHandler = () => {
@@ -24,6 +24,9 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
       position: 'top-center',
     });
   };
+
+  const auth = useSession();
+  const isAuthor = question?.author?.id === auth?.user?.id;
 
   return (
     <div className="rounded-[4] bg-white p-8 shadow-sm">
@@ -40,19 +43,18 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
             </Tags>
           ))}
         </div>
-        {pathname.startsWith(`/question/${slug}`) &&
-        !pathname.endsWith('/ai') ? (
-          <>
-            <Button
-              variant={'white'}
-              className="h-10.5"
-              onClick={onClickSaveButtonHandler}
-            >
-              <Bookmark />
-              {question.stats?.bookmark_count ?? 0}
-            </Button>
-          </>
-        ) : null}
+
+        <div className="flex items-center gap-3">
+          <Button
+            variant={'white'}
+            className="h-10.5"
+            onClick={onClickSaveButtonHandler}
+          >
+            <Bookmark />
+            {question.stats?.bookmark_count ?? 0}
+          </Button>
+          {isAuthor && <QuestionMenu {...question} />}
+        </div>
       </div>
 
       <h2 className="mt-8 mb-15">{question.title}</h2>

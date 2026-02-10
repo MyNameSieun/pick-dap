@@ -1,4 +1,3 @@
-// components/modal/CreateQuestionModal.tsx
 import { X } from 'lucide-react';
 import Line from '../common/Line';
 import { Input } from '../ui/input/Input';
@@ -7,9 +6,10 @@ import { useConfirmCloseModal } from '@/hooks/useConfirmCloseModal';
 import { useState } from 'react';
 import { useEscClose } from '@/hooks/useEscClose';
 import {
-  useCreateQuestionModalAction,
-  useCreateQuestionModalState,
-} from '@/store/modal/createQuestionModal';
+  useQuestionEditModal,
+  useQuestionEditModalAction,
+  useQuestionEditModalState,
+} from '@/store/modal/useQuestionEditModal';
 import { MODAL_ID } from '@/constants/modalNames';
 import SelectCustom from '../common/SelectCustom';
 import { jobCategories } from '@/constants/jobCategories';
@@ -17,15 +17,22 @@ import { useCreateQuesion } from '@/features/question/hooks/useCreateQuesion';
 import { toast } from 'sonner';
 import { CategoryType } from '@/types/entity';
 import { useRouter } from 'next/navigation';
+import { useUpdateQuestion } from '@/features/question/hooks/useUpdateQuestion';
 
-const CreateQuestionModal = () => {
-  const [title, setTitle] = useState('');
-  const [category, setCategory] = useState<CategoryType | ''>('');
+const QuestionEditModal = () => {
+  const modalData = useQuestionEditModal();
+  const isEdit = modalData.isOpen && modalData.type === 'EDIT';
+  const isOpen = useQuestionEditModalState();
+
+  const [title, setTitle] = useState(isEdit ? modalData.title : '');
+  const [category, setCategory] = useState<CategoryType | ''>(
+    isEdit ? modalData.category : '',
+  );
+  const [tagList, setTagList] = useState<string[]>(
+    isEdit ? modalData.tagList : [],
+  );
   const [tag, setTag] = useState('');
-  const [tagList, setTagList] = useState<string[]>([]);
-
-  const { close } = useCreateQuestionModalAction();
-  const isOpen = useCreateQuestionModalState();
+  const { close, openCreate, openEdit } = useQuestionEditModalAction();
 
   const { handleConfirmClose } = useConfirmCloseModal();
 
@@ -43,7 +50,7 @@ const CreateQuestionModal = () => {
         toast.success('질문이 등록되었습니다.', {
           position: 'top-center',
         });
-        router.push(`/question/${newQuestion.idx}/${newQuestion.slug}`);
+        router.push(`/question/${newQuestion?.idx}/${newQuestion?.slug}`);
         close();
       },
       onError: (error) => {
@@ -54,6 +61,22 @@ const CreateQuestionModal = () => {
       },
     });
 
+  const { mutate: updateQuestion, isPending: isUpdateQuestionPending } =
+    useUpdateQuestion({
+      onSuccess: () => {
+        toast.success('질문이 수정 되었습니다.', {
+          position: 'top-center',
+        });
+        close();
+      },
+      onError: (error) => {
+        toast.error('질문 수정에 실패했습니다.', {
+          position: 'top-center',
+        });
+        console.error('등록 실패 원인:', error);
+      },
+    });
+  const isPending = isCreateQuesionPending || isUpdateQuestionPending;
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.nativeEvent.isComposing) return; // IME로 인한 재생성 방지
 
@@ -90,7 +113,19 @@ const CreateQuestionModal = () => {
       return;
     }
 
-    createQuesion({ title, category: category as CategoryType, tagList });
+    if (isEdit) {
+      updateQuestion({
+        id: modalData.questionId,
+        title,
+        category: {
+          category_type: category as CategoryType,
+        },
+        tagList,
+      });
+    } else {
+      // 생성 모드
+      createQuesion({ title, category: category as CategoryType, tagList });
+    }
   };
 
   return (
@@ -100,7 +135,9 @@ const CreateQuestionModal = () => {
         onClick={(e) => e.stopPropagation()}
       >
         <div className="mb-8 flex items-center justify-between">
-          <h2 className="text- gray-1000">질문 등록</h2>
+          <h2 className="text-gray-1000">
+            {isEdit ? '질문 수정' : '질문 등록'}
+          </h2>
           <X
             onClick={handleCloseModal}
             className="text-icon-default cursor-pointer"
@@ -120,7 +157,7 @@ const CreateQuestionModal = () => {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               placeholder="질문을 입력하세요"
-              disabled={isCreateQuesionPending}
+              disabled={isPending}
             />
           </div>
 
@@ -138,6 +175,7 @@ const CreateQuestionModal = () => {
               }))}
               placeholder="카테고리를 선택하세요"
               className="w-full"
+              value={category}
               onValueChange={(value) => setCategory(value as CategoryType)}
             />
           </div>
@@ -150,7 +188,7 @@ const CreateQuestionModal = () => {
               value={tag}
               onKeyDown={handleKeyDown}
               onChange={(e) => setTag(e.target.value)}
-              disabled={isCreateQuesionPending}
+              disabled={isPending}
             />
             <ul className="mt-1 flex flex-wrap gap-2">
               {tagList.map((tag, idx) => (
@@ -171,7 +209,7 @@ const CreateQuestionModal = () => {
         </article>
         <div className="mt-3 flex w-full justify-end">
           <Button onClick={handleCreateQuesionClick} className="px-6">
-            등록
+            {isPending ? '처리 중...' : isEdit ? '수정 완료' : '등록'}
           </Button>
         </div>
       </section>
@@ -179,4 +217,4 @@ const CreateQuestionModal = () => {
   );
 };
 
-export default CreateQuestionModal;
+export default QuestionEditModal;

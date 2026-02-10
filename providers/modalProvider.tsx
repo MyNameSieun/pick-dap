@@ -1,17 +1,17 @@
 // providers/modalProvider.tsx
 import { useEffect } from 'react';
-import CreateQuestionModal from '@/components/modal/CreateQuestionModal';
+import CreateQuestionModal from '@/components/modal/QuestionEditModal';
 import SavedQuestionsModal from '@/components/modal/SavedQuestionsModal';
 import { createPortal } from 'react-dom';
 import { AlertModal } from '@/components/modal/AlertModal';
 import PasswordResetModal from '@/components/modal/PasswordResetModal';
-import { useCreateQuestionModalState } from '@/store/modal/createQuestionModal';
 import { useModalStackStore } from '@/store/modal/modalStack';
 import { useSaveQuestionModalState } from '@/store/modal/saveQuestionModal';
 import { usePasswordResetOpen } from '@/store/modal/passwordResetModal';
+import { useQuestionEditModalState } from '@/store/modal/useQuestionEditModal';
 
 export const ModalProvider = ({ children }: { children: React.ReactNode }) => {
-  const isCreateOpen = useCreateQuestionModalState();
+  const isCreateOpen = useQuestionEditModalState();
   const isSavedOpen = useSaveQuestionModalState();
   const isPasswordOpen = usePasswordResetOpen();
 

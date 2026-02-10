@@ -20,6 +20,7 @@ interface FormSelectProps {
   label?: string;
   className?: string;
   required?: boolean;
+  value?: string;
   onValueChange?: (value: string) => void;
 }
 const SelectCustom = ({
@@ -29,6 +30,7 @@ const SelectCustom = ({
   label,
   className = 'w-[180px]',
   required,
+  value,
   onValueChange,
 }: FormSelectProps) => {
   return (
@@ -36,6 +38,7 @@ const SelectCustom = ({
       onValueChange={onValueChange}
       defaultValue={defaultValue}
       required={required}
+      value={value}
     >
       <SelectTrigger className={className}>
         <SelectValue placeholder={placeholder} />
