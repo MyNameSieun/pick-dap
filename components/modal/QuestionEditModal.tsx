@@ -32,7 +32,7 @@ const QuestionEditModal = () => {
     isEdit ? modalData.tagList : [],
   );
   const [tag, setTag] = useState('');
-  const { close, openCreate, openEdit } = useQuestionEditModalAction();
+  const { close } = useQuestionEditModalAction();
 
   const { handleConfirmClose } = useConfirmCloseModal();
 
@@ -44,6 +44,7 @@ const QuestionEditModal = () => {
 
   useEscClose(MODAL_ID.CREATE_QUESTION, isOpen, handleCloseModal);
 
+  // 등록
   const { mutate: createQuesion, isPending: isCreateQuesionPending } =
     useCreateQuesion({
       onSuccess: (newQuestion) => {
@@ -61,6 +62,7 @@ const QuestionEditModal = () => {
       },
     });
 
+  // 수정
   const { mutate: updateQuestion, isPending: isUpdateQuestionPending } =
     useUpdateQuestion({
       onSuccess: () => {
@@ -76,28 +78,8 @@ const QuestionEditModal = () => {
         console.error('등록 실패 원인:', error);
       },
     });
-  const isPending = isCreateQuesionPending || isUpdateQuestionPending;
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.nativeEvent.isComposing) return; // IME로 인한 재생성 방지
 
-    if (e.code === 'Enter') {
-      if (tag.trim() === '' || tagList.includes(tag)) return;
-      if (tagList.length >= 3) {
-        toast.success('태그는 3개까지 입력 가능합니다.', {
-          position: 'top-center',
-        });
-        return;
-      }
-
-      setTagList([...tagList, tag]);
-      setTag('');
-    }
-  };
-
-  const handleDeleteTag = (tagPrams: string) => {
-    setTagList(tagList.filter((tag) => tag !== tagPrams));
-  };
-
+  // 버튼 클릭시 수정/삭제 모드 결정 후 질문 추가
   const handleCreateQuesionClick = () => {
     if (title.trim() === '') {
       toast.success('질문을 입력해주세요.', {
@@ -127,6 +109,31 @@ const QuestionEditModal = () => {
       createQuesion({ title, category: category as CategoryType, tagList });
     }
   };
+
+  // ENTER 클릭 시 태그 추가
+  const handleAddTagKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.nativeEvent.isComposing) return; // IME로 인한 재생성 방지
+
+    if (e.code === 'Enter') {
+      if (tag.trim() === '' || tagList.includes(tag)) return;
+      if (tagList.length >= 3) {
+        toast.success('태그는 3개까지 입력 가능합니다.', {
+          position: 'top-center',
+        });
+        return;
+      }
+
+      setTagList([...tagList, tag]);
+      setTag('');
+    }
+  };
+
+  // 태그 삭제
+  const handleDeleteTag = (tagPrams: string) => {
+    setTagList(tagList.filter((tag) => tag !== tagPrams));
+  };
+
+  const isPending = isCreateQuesionPending || isUpdateQuestionPending;
 
   return (
     <div onClick={handleCloseModal} className="modal-layout">
@@ -186,7 +193,7 @@ const QuestionEditModal = () => {
             <Input
               placeholder="태그를 입력하세요"
               value={tag}
-              onKeyDown={handleKeyDown}
+              onKeyDown={handleAddTagKeyDown}
               onChange={(e) => setTag(e.target.value)}
               disabled={isPending}
             />
@@ -208,7 +215,11 @@ const QuestionEditModal = () => {
           </div>
         </article>
         <div className="mt-3 flex w-full justify-end">
-          <Button onClick={handleCreateQuesionClick} className="px-6">
+          <Button
+            disabled={isPending}
+            onClick={handleCreateQuesionClick}
+            className="px-6"
+          >
             {isPending ? '처리 중...' : isEdit ? '수정 완료' : '등록'}
           </Button>
         </div>

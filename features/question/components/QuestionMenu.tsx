@@ -4,14 +4,42 @@ import { EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
 import { QuestionWithDetails } from '../services/fetchQuestion';
 import { useQuestionEditModalAction } from '@/store/modal/useQuestionEditModal';
-
-const QuestionMenu = (question: QuestionWithDetails) => {
+import { useDeleteQuestion } from '../hooks/useDeleteQuestion';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
+interface QuestionMenuProps {
+  question: QuestionWithDetails;
+}
+const QuestionMenu = ({ question }: QuestionMenuProps) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openEdit } = useQuestionEditModalAction();
 
+  const router = useRouter();
+  const { mutate: deleteQuestion, isPending: isDeleteQuestionPending } =
+    useDeleteQuestion({
+      onSuccess: () => {
+        toast.success('질문이 삭제되었습니다.', {
+          position: 'top-center',
+        });
+        router.push(`/question`);
+      },
+      onError: (error) => {
+        toast.error('질문 삭제에 실패했습니다.', {
+          position: 'top-center',
+        });
+        console.error('삭제 실패 원인:', error);
+      },
+    });
+
+  // 삭제
   const handleDeleteButtonClick = () => {
+    if (!confirm('정말 삭제하시겠습니까?')) return;
+
     setIsMenuOpen(false);
+    deleteQuestion(String(question.idx));
   };
+
+  // 수정
   const handleEditButtonClick = () => {
     setIsMenuOpen(false);
 
@@ -23,13 +51,13 @@ const QuestionMenu = (question: QuestionWithDetails) => {
       category: question.category?.category_type || '',
       tagList: question.tags?.map((t) => t.tag.label) || [],
     });
-    setIsMenuOpen(false);
   };
 
   return (
     <div>
       <div className="relative">
         <button
+          disabled={isDeleteQuestionPending}
           onClick={() => setIsMenuOpen(!isMenuOpen)}
           className={cx(
             'flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100',
@@ -54,6 +82,7 @@ const QuestionMenu = (question: QuestionWithDetails) => {
                 수정하기
               </button>
               <button
+                disabled={isDeleteQuestionPending}
                 onClick={handleDeleteButtonClick}
                 className="flex w-full items-center rounded-lg px-3 py-2 text-sm transition-colors hover:bg-gray-100"
               >

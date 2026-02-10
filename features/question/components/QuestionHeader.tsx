@@ -53,7 +53,7 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
             <Bookmark />
             {question.stats?.bookmark_count ?? 0}
           </Button>
-          {isAuthor && <QuestionMenu {...question} />}
+          {isAuthor && <QuestionMenu question={question} />}
         </div>
       </div>
 

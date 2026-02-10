@@ -54,8 +54,7 @@ const QuestionToolbar = ({
     closeFilter();
   };
 
-  const isOpen = useQuestionEditModalState();
-  const { openCreate, close } = useQuestionEditModalAction();
+  const { openCreate } = useQuestionEditModalAction();
 
   return (
     <article className="mx-9">
