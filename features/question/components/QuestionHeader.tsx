@@ -10,6 +10,8 @@ import defaultProfile from '@/public/defaultProfile.png';
 import { useFetchQuestionDataByIdx } from '../hooks/useFetchQuestionData';
 import { useSession } from '@/store/session';
 import QuestionMenu from './QuestionMenu';
+import { useState } from 'react';
+import { useCreateQuestionAnswers } from '../hooks/useCreateQuestionAnswers';
 
 interface QuestionHeaderProps {
   idx: string;
@@ -19,6 +21,8 @@ interface QuestionHeaderProps {
 const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
   const { data: question } = useFetchQuestionDataByIdx(idx);
 
+  const [answer, setAnswer] = useState('');
+  const [successAnswer, setSuccessAnswer] = useState(false);
   const onClickSaveButtonHandler = () => {
     toast.success('마이페이지에 저장이 완료되었습니다!', {
       position: 'top-center',
@@ -27,6 +31,27 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
 
   const auth = useSession();
   const isAuthor = question?.author?.id === auth?.user?.id;
+
+  const { mutate: handleSaveQuesion, isPending: answerPending } =
+    useCreateQuestionAnswers({
+      onSuccess: () => {
+        setSuccessAnswer(true);
+        toast.success('답변이 등록되었습니다.');
+      },
+      onError: (error) => {
+        toast.success(
+          '답변 답변 등록에 실패했습니다. 잠시 후 다시 시도해 주세요.',
+        );
+        console.log(error.message);
+      },
+    });
+
+  const handleSaveQuesionClick = () => {
+    handleSaveQuesion({
+      answers: answer,
+      questionIdx: Number(idx),
+    });
+  };
 
   return (
     <div className="rounded-[4] bg-white p-8 shadow-sm">
@@ -87,13 +112,26 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
       <div className="mt-8 mb-8 border border-gray-100" />
 
       <h3 className="mb-6">나의 답변 작성</h3>
-      <Textarea
-        placeholder="이 질문에 대한 답변을 작성해보세요"
-        className="bg-bg-default b1 h-45 p-4"
-        autoFocus
-      />
+      {successAnswer ? (
+        <div>성공</div>
+      ) : (
+        <Textarea
+          value={answer}
+          onChange={(e) => setAnswer(e.target.value)}
+          placeholder="이 질문에 대한 답변을 작성해보세요"
+          className="bg-bg-default b1 h-45 p-4"
+          autoFocus
+        />
+      )}
+
       <div className="flex w-full justify-end">
-        <Button className="mt-4 h-12 gap-3.5" variant={'default'} size="lg">
+        <Button
+          disabled={answerPending}
+          onClick={handleSaveQuesionClick}
+          className="mt-4 h-12 gap-3.5"
+          variant={'default'}
+          size="lg"
+        >
           <Send />
           답변 저장
         </Button>

@@ -36,7 +36,7 @@ const QuestionMenu = ({ question }: QuestionMenuProps) => {
     if (!confirm('정말 삭제하시겠습니까?')) return;
 
     setIsMenuOpen(false);
-    deleteQuestion(String(question.idx));
+    deleteQuestion(question.idx);
   };
 
   // 수정
