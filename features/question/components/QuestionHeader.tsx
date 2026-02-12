@@ -15,6 +15,7 @@ import { useFetchAnswerQuestionById } from '../hooks/useFetchAnswerQuestion';
 import BackButton from '@/components/common/BackButton';
 import QuestionAnswerHeaderTextArea from './QuestionAnswerHeaderTextArea';
 import Loader from '@/components/ui/Loader';
+import { useUpdateAnswerQuestion } from '../hooks/useUpdateAnswerQuestion';
 
 interface QuestionHeaderProps {
   idx: number;
@@ -40,7 +41,7 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
       position: 'top-center',
     });
   };
-
+  // 등록
   const { mutate: handleSaveQuesion, isPending: answerPending } =
     useCreateQuestionAnswers({
       onSuccess: () => {
@@ -59,9 +60,25 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
     });
   };
 
+  // 수정
+  const { mutate: updateAnswer, isPending: isUpdateAnswerPending } =
+    useUpdateAnswerQuestion({
+      onSuccess: () => {
+        toast.success('답변이 수정 되었습니다.', { position: 'top-center' });
+        close();
+      },
+      onError: (error) => {
+        toast.error('답변 수정에 실패했습니다.', { position: 'top-center' });
+        console.error('답변 수정 실패 원인:', error);
+      },
+    });
+
   const handleEditModeClick = () => {
-    if (isEditing) {
-      console.log('수정된 내용 저장:', answer);
+    if (isEditing && answerData) {
+      updateAnswer({
+        id: answerData?.id,
+        answer: answer,
+      });
       setIsEditing(false);
     } else {
       setIsEditing(true); // 수정 모드로 전환
@@ -145,16 +162,27 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
               <p className="b1">답변 저장</p>
             </Button>
           ) : (
-            <Button
-              disabled={answerPending}
-              onClick={handleEditModeClick}
-              className="mt-2 h-12 gap-3.5"
-              variant={isEditing ? 'white' : 'default'}
-              size="lg"
-            >
-              <Pen />
-              <p className="b1">{isEditing ? '수정 완료' : '답변 수정'}</p>
-            </Button>
+            <div className="flex gap-1">
+              <Button
+                disabled={isUpdateAnswerPending}
+                onClick={handleEditModeClick}
+                className="mt-2 h-12"
+                variant={'default'}
+                size="lg"
+              >
+                <Pen />
+                <p className="b1">{isEditing ? '수정 완료' : '답변 수정'}</p>
+              </Button>
+              {isEditing && (
+                <Button
+                  onClick={() => setIsEditing(false)}
+                  className="b1 mt-2 h-12"
+                  variant={'white'}
+                >
+                  취소
+                </Button>
+              )}
+            </div>
           )}
         </div>
       </div>

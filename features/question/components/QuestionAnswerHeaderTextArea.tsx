@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { Textarea } from '@/components/ui/textarea/Textarea';
 import { useFetchAnswerQuestionById } from '../hooks/useFetchAnswerQuestion';
 
@@ -26,13 +26,26 @@ const QuestionAnswerHeaderTextArea = ({
       setAnswer(answerData.answer);
     }
   }, [answerData, setAnswer]);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+  // 커서 위치를 텍스트의 맨 끝으로
+  useEffect(() => {
+    if (isEditing && textareaRef.current) {
+      const el = textareaRef.current;
+
+      el.focus();
+
+      const length = el.value.length;
+      el.setSelectionRange(length, length);
+    }
+  }, [isEditing]);
   return (
     <div>
       {answerData ? (
         <div>
           {isEditing ? (
             <Textarea
+              ref={textareaRef}
               value={answer}
               onChange={(e) => setAnswer(e.target.value)}
               placeholder="이 질문에 대한 답변을 작성해보세요"

@@ -9,8 +9,7 @@ export const QUERY_KEYS = {
   answer: {
     all: ['answer'],
     list: ['answer', 'list'],
-
-    byIdx: (idx: string | number) =>
-      [...QUERY_KEYS.answer.all, 'byIdx', String(idx)] as const,
+    byId: (id: string | number, userId: string) =>
+      [...QUERY_KEYS.answer.all, 'byIdx', String(id), userId] as const,
   },
 };

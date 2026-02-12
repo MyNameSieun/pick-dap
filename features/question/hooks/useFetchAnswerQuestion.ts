@@ -20,7 +20,7 @@ export const useFetchAnswerQuestionById = (
 ) => {
   return useQuery({
     queryFn: () => fetchAnswerQuestionById(questionId!, userId!),
-    queryKey: [...QUERY_KEYS.answer.all, 'detail', questionId, userId],
+    queryKey: QUERY_KEYS.answer.byId(questionId!, userId!),
     enabled: !!questionId && !!userId,
   });
 };

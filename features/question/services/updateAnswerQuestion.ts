@@ -18,7 +18,7 @@ export const updateAnswerQuestion = async (
       updated_at: new Date().toISOString(),
     })
     .eq('id', answers.id)
-    .select()
+    .select('*')
     .maybeSingle();
 
   if (aError) {
