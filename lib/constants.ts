@@ -9,7 +9,12 @@ export const QUERY_KEYS = {
   answer: {
     all: ['answer'],
     list: ['answer', 'list'],
-    byId: (id: string | number, userId: string) =>
-      [...QUERY_KEYS.answer.all, 'byIdx', String(id), userId] as const,
+    // 단일 조회 (나의 답변)
+    byUserAndQuestion: (questionId: string | number, userId: string) =>
+      [...QUERY_KEYS.answer.all, 'mine', String(questionId), userId] as const,
+
+    // 리스트 조회 (다른 사람 답변들)
+    byQuestionId: (questionId: string | number) =>
+      [...QUERY_KEYS.answer.all, 'others', String(questionId)] as const,
   },
 };

@@ -1,6 +1,6 @@
 'use server';
 
-import { supabase } from '@/lib/supabase/supabase';
+import { createClient } from '@/lib/supabase/server';
 
 interface UpdateAnswerQuestionProps {
   id: string;
@@ -10,6 +10,8 @@ interface UpdateAnswerQuestionProps {
 export const updateAnswerQuestion = async (
   answers: Partial<UpdateAnswerQuestionProps> & { id: string },
 ) => {
+  const supabase = await createClient();
+
   // answers 테이블 수정
   const { data, error: aError } = await supabase
     .from('answers')

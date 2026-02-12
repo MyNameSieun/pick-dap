@@ -1,46 +1,45 @@
 'use client';
 
-import Tags from '@/components/common/Tags/Tags';
-import { Bookmark, Pen, Send } from 'lucide-react';
+import { Pen, Send } from 'lucide-react';
 import { Button } from '@/components/ui/button/Button';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import defaultProfile from '@/public/defaultProfile.png';
 import { useFetchQuestionDataByIdx } from '../hooks/useFetchQuestionData';
 import { useSession } from '@/store/session';
-import QuestionMenu from './QuestionMenu';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useCreateQuestionAnswers } from '../hooks/useCreateQuestionAnswers';
 import { useFetchAnswerQuestionById } from '../hooks/useFetchAnswerQuestion';
 import BackButton from '@/components/common/BackButton';
 import QuestionAnswerHeaderTextArea from './QuestionAnswerHeaderTextArea';
 import Loader from '@/components/ui/Loader';
 import { useUpdateAnswerQuestion } from '../hooks/useUpdateAnswerQuestion';
+import QuestionContentHeader from './QuestionContentHeader';
+import { usePathname } from 'next/navigation';
 
 interface QuestionHeaderProps {
   idx: number;
   slug: string;
 }
 
-const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
+const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
+  // 조회
   const { data: question } = useFetchQuestionDataByIdx(idx);
 
   const auth = useSession();
   const userId = auth?.user?.id;
   const isAuthor = question?.author?.id === userId;
+  const pathname = usePathname();
 
   const { data: answerData, isLoading } = useFetchAnswerQuestionById(
     question.id,
     userId,
   );
+
   const [answer, setAnswer] = useState('');
+
   const [isEditing, setIsEditing] = useState(false);
 
-  const onClickSaveButtonHandler = () => {
-    toast.success('마이페이지에 저장이 완료되었습니다!', {
-      position: 'top-center',
-    });
-  };
   // 등록
   const { mutate: handleSaveQuesion, isPending: answerPending } =
     useCreateQuestionAnswers({
@@ -58,6 +57,7 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
       answers: answer,
       questionIdx: Number(idx),
     });
+    setIsEditing(false);
   };
 
   // 수정
@@ -75,47 +75,37 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
 
   const handleEditModeClick = () => {
     if (isEditing && answerData) {
+      if (answer.trim() === answerData.answer?.trim()) {
+        toast.warning('변경된 내용이 없습니다', { position: 'top-center' });
+        return;
+      }
       updateAnswer({
         id: answerData?.id,
         answer: answer,
       });
       setIsEditing(false);
     } else {
+      if (answerData) {
+        setAnswer(answerData.answer);
+      }
       setIsEditing(true); // 수정 모드로 전환
     }
   };
   if (isLoading) return <Loader />;
 
+  // 수정 취소
+  const handleCancelClick = () => {
+    setAnswer(answerData?.answer || '');
+    setIsEditing(false);
+  };
+
   return (
     <>
-      <BackButton label={'뒤로가기'} />
+      {pathname.endsWith('/question') && <BackButton label={'뒤로가기'} />}
       <div className="rounded-[4] bg-white p-8 shadow-sm">
-        <div className="flex items-center justify-between">
-          <div className="flex gap-3">
-            {question.category?.category_type && (
-              <Tags color="blue" size="big">
-                {question.category.category_type}
-              </Tags>
-            )}
-            {question.tags.map(({ tag }) => (
-              <Tags key={tag.label} size="big">
-                {tag.label}
-              </Tags>
-            ))}
-          </div>
-          <div className="flex items-center gap-3">
-            <Button
-              variant={'white'}
-              className="h-10.5"
-              onClick={onClickSaveButtonHandler}
-            >
-              <Bookmark />
-              {question.stats?.bookmark_count ?? 0}
-            </Button>
-            {isAuthor && <QuestionMenu question={question} />}
-          </div>
-        </div>
-        <h2 className="mt-8 mb-15">{question.title}</h2>
+        <QuestionContentHeader question={question} isAuthor={isAuthor} />
+
+        {/* 프로필 */}
         <div className="flex gap-3">
           <div className="relative h-12 w-12 overflow-hidden rounded-full">
             <Image
@@ -134,7 +124,7 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
             <div className="text-icon-default items-cen flex gap-5">
               <div>
                 <p className="c1">
-                  작성일 {new Date(question.created_at).toLocaleString()}
+                  작성일: {new Date(question.created_at).toLocaleString()}
                 </p>
               </div>
               <div></div>
@@ -143,8 +133,8 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
         </div>
         <div className="mt-8 mb-8 border border-gray-100" />
         <QuestionAnswerHeaderTextArea
+          answerData={answerData ?? null}
           questionId={question.id}
-          userId={userId as string}
           answer={answer}
           setAnswer={setAnswer}
           isEditing={isEditing}
@@ -175,7 +165,7 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
               </Button>
               {isEditing && (
                 <Button
-                  onClick={() => setIsEditing(false)}
+                  onClick={handleCancelClick}
                   className="b1 mt-2 h-12"
                   variant={'white'}
                 >

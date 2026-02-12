@@ -11,7 +11,10 @@ export const useUpdateAnswerQuestion = (callbacks?: UseMutationCallback) => {
     onSuccess: async (updatedData) => {
       if (updatedData) {
         queryClient.setQueryData(
-          QUERY_KEYS.answer.byId(updatedData.question_id, updatedData.user_id),
+          QUERY_KEYS.answer.byUserAndQuestion(
+            updatedData.question_id,
+            updatedData.user_id,
+          ),
           updatedData,
         );
       }

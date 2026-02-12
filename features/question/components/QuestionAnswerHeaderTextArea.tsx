@@ -2,30 +2,22 @@
 
 import { useEffect, useRef } from 'react';
 import { Textarea } from '@/components/ui/textarea/Textarea';
-import { useFetchAnswerQuestionById } from '../hooks/useFetchAnswerQuestion';
+import { AnswerQuestionJoinType } from '../services/fetchAnswerQuestion';
 
 interface Props {
+  answerData: AnswerQuestionJoinType | null;
   questionId: string;
-  userId: string;
   answer: string;
   setAnswer: (val: string) => void;
   isEditing: boolean;
 }
 
 const QuestionAnswerHeaderTextArea = ({
-  questionId,
-  userId,
+  answerData,
   answer,
   setAnswer,
   isEditing,
 }: Props) => {
-  const { data: answerData } = useFetchAnswerQuestionById(questionId, userId);
-
-  useEffect(() => {
-    if (answerData?.answer) {
-      setAnswer(answerData.answer);
-    }
-  }, [answerData, setAnswer]);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // 커서 위치를 텍스트의 맨 끝으로
@@ -39,6 +31,7 @@ const QuestionAnswerHeaderTextArea = ({
       el.setSelectionRange(length, length);
     }
   }, [isEditing]);
+
   return (
     <div>
       {answerData ? (
