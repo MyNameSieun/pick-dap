@@ -2,6 +2,15 @@ export const QUERY_KEYS = {
   question: {
     all: ['question'],
     list: ['question', 'list'],
-    byId: (idx: string) => [...QUERY_KEYS.question.all, 'detail', idx] as const,
+    byIdx: (idx: string | number) =>
+      [...QUERY_KEYS.question.all, 'detail', String(idx)] as const,
+  },
+
+  answer: {
+    all: ['answer'],
+    list: ['answer', 'list'],
+
+    byIdx: (idx: string | number) =>
+      [...QUERY_KEYS.answer.all, 'byIdx', String(idx)] as const,
   },
 };

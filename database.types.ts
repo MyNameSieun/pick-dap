@@ -20,7 +20,7 @@ export type Database = {
           created_at: string
           id: string
           like_count: number
-          question_idx: number
+          question_id: string
           updated_at: string
           user_id: string
         }
@@ -29,7 +29,7 @@ export type Database = {
           created_at?: string
           id?: string
           like_count?: number
-          question_idx: number
+          question_id?: string
           updated_at?: string
           user_id?: string
         }
@@ -38,17 +38,24 @@ export type Database = {
           created_at?: string
           id?: string
           like_count?: number
-          question_idx?: number
+          question_id?: string
           updated_at?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "answers_question_idx_fkey"
-            columns: ["question_idx"]
+            foreignKeyName: "answers_question_id_fkey"
+            columns: ["question_id"]
             isOneToOne: false
             referencedRelation: "questions"
-            referencedColumns: ["idx"]
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "answers_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
           },
         ]
       }

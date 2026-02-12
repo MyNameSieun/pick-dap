@@ -11,10 +11,16 @@ export const useUpdateQuestion = (
 
   return useMutation({
     mutationFn: updateQuestion,
-    onSuccess: async (data) => {
-      await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.question.byId(String(data.idx)),
-      });
+    onSuccess: async (updatedData) => {
+      /* 방법1. 캐시 즉시 업데이트 */
+      queryClient.setQueryData(
+        QUERY_KEYS.question.byIdx(String(updatedData.idx)),
+        updatedData,
+      );
+      /* 방법2. 쿼리 무효화 */
+      // await queryClient.invalidateQueries({
+      //   queryKey: QUERY_KEYS.question.byIdx(data.idx),
+      // });
 
       if (callbacks?.onSuccess) {
         callbacks.onSuccess();

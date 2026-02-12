@@ -9,7 +9,7 @@ interface QuestionCardItemProps {
 }
 
 const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
-  const { id, idx, slug, title, created_at, tags, stats, author, category } =
+  const { idx, slug, title, created_at, tags, stats, author, category } =
     question;
 
   return (

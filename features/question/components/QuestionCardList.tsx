@@ -1,4 +1,3 @@
-// features/question/components/QuestionCardList.tsx
 'use client';
 import useFilter from '@/hooks/useFilter';
 import { FilterType } from '../../../types/FilterType';

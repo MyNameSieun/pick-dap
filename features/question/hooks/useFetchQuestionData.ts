@@ -9,9 +9,9 @@ export const useFetchQuestionData = () => {
   });
 };
 
-export const useFetchQuestionDataByIdx = (idx: string) => {
+export const useFetchQuestionDataByIdx = (idx: number) => {
   return useSuspenseQuery({
-    queryKey: QUERY_KEYS.question.byId(idx),
+    queryKey: QUERY_KEYS.question.byIdx(idx),
     queryFn: () => fetchQuestionByIdx(idx),
 
     staleTime: 1000 * 60 * 5,

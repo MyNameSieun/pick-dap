@@ -27,11 +27,11 @@ const questionsQuery = supabase
 export type QuestionWithDetails = QueryData<typeof questionsQuery>[number];
 
 // 상세 조회
-export const fetchQuestionByIdx = async (idx: string) => {
+export const fetchQuestionByIdx = async (idx: number) => {
   const { data, error } = await supabase
     .from('questions')
     .select(QUESTION_WITH_DETAILS_QUERY)
-    .eq('idx', Number(idx))
+    .eq('idx', idx)
     .single();
 
   if (error) throw error;

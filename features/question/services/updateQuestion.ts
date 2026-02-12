@@ -2,6 +2,7 @@
 import { createClient } from '@/lib/supabase/server';
 import { generateSlug } from '@/lib/slugify';
 import { CategoryType, TagInsert } from '@/types/entity';
+import { QuestionWithDetails } from './fetchQuestion';
 
 export interface UpdateQuestionParams {
   id: string;
@@ -94,5 +95,20 @@ export const updateQuestion = async (
     }
   }
 
-  return updatedQuestion;
+  // 4. 캐시 즉시 업데이트를 위한 코드 -> 쿼리 무효화 할 거면 필요 x
+  const { data: fullData } = await supabase
+    .from('questions')
+    .select(
+      `
+        *,
+        author:profiles(*),
+        category:question_category(category_type),
+        tags:question_tags(tag:tags(*)),
+        stats:question_stats(*) 
+     `,
+    )
+    .eq('id', questionId)
+    .single();
+
+  return fullData as QuestionWithDetails;
 };

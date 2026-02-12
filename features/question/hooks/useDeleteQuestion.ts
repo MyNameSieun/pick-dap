@@ -24,7 +24,7 @@ export const useDeleteQuestion = (
 
       // 2. 상세 페이지 캐시가 있다면 제거
       queryClient.removeQueries({
-        queryKey: QUERY_KEYS.question.byId(String(deletedIdx)),
+        queryKey: QUERY_KEYS.question.byIdx(deletedIdx),
       });
 
       if (callbacks?.onSuccess) callbacks.onSuccess();
