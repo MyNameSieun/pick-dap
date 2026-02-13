@@ -61,32 +61,41 @@ export type Database = {
       }
       comments: {
         Row: {
-          answer_id: string
+          answer_id: string | null
           content: string
           created_at: string
+          depth: number
           id: string
-          post_id: string
-          target_type: Database["public"]["Enums"]["target_type"]
+          like_count: number
+          parent_id: string | null
+          post_id: string | null
+          sort_order: string
           updated_at: string
           user_id: string
         }
         Insert: {
-          answer_id?: string
+          answer_id?: string | null
           content?: string
           created_at?: string
+          depth: number
           id?: string
-          post_id?: string
-          target_type: Database["public"]["Enums"]["target_type"]
+          like_count?: number
+          parent_id?: string | null
+          post_id?: string | null
+          sort_order: string
           updated_at?: string
           user_id?: string
         }
         Update: {
-          answer_id?: string
+          answer_id?: string | null
           content?: string
           created_at?: string
+          depth?: number
           id?: string
-          post_id?: string
-          target_type?: Database["public"]["Enums"]["target_type"]
+          like_count?: number
+          parent_id?: string | null
+          post_id?: string | null
+          sort_order?: string
           updated_at?: string
           user_id?: string
         }
@@ -96,6 +105,13 @@ export type Database = {
             columns: ["answer_id"]
             isOneToOne: false
             referencedRelation: "answers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
             referencedColumns: ["id"]
           },
           {
@@ -424,16 +440,6 @@ export type Database = {
       }
     }
     Enums: {
-      category_type:
-        | "전체"
-        | "FrontEnd"
-        | "BackEnd"
-        | "CS"
-        | "인성면접"
-        | "Infra"
-        | "AI"
-        | "Android"
-        | "iOS"
       category_type_enum:
         | "FrontEnd"
         | "BackEnd"
@@ -447,7 +453,6 @@ export type Database = {
       social_provider: "email" | "google" | "github" | "kakao"
       status: "미답변" | "답변 완료"
       tag_type: "카테고리" | "기술스택" | "상태" | "면접결과" | "인기"
-      target_type: "POST" | "ANSWER"
       user_role: "user" | "admin"
     }
     CompositeTypes: {
@@ -576,17 +581,6 @@ export type CompositeTypes<
 export const Constants = {
   public: {
     Enums: {
-      category_type: [
-        "전체",
-        "FrontEnd",
-        "BackEnd",
-        "CS",
-        "인성면접",
-        "Infra",
-        "AI",
-        "Android",
-        "iOS",
-      ],
       category_type_enum: [
         "FrontEnd",
         "BackEnd",
@@ -601,7 +595,6 @@ export const Constants = {
       social_provider: ["email", "google", "github", "kakao"],
       status: ["미답변", "답변 완료"],
       tag_type: ["카테고리", "기술스택", "상태", "면접결과", "인기"],
-      target_type: ["POST", "ANSWER"],
       user_role: ["user", "admin"],
     },
   },

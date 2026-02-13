@@ -102,7 +102,7 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
   return (
     <>
       {pathname.endsWith('/question') && <BackButton label={'뒤로가기'} />}
-      <div className="rounded-[4] bg-white p-8 shadow-sm">
+      <div className="rounded-[4px] bg-white p-8 shadow-sm">
         <QuestionContentHeader question={question} isAuthor={isAuthor} />
 
         {/* 프로필 */}

@@ -1,15 +1,14 @@
-import { useFetchAnswerQuestion } from '@/features/question/hooks/useFetchAnswerQuestion';
 import QuestionListHeader from '@/features/question/components/QuestionListHeader';
-import QuestionListAnswers from '@/features/question/components/QuestionListAnswers';
+import QuestionListAnswers from '@/features/question/components/AnswersList';
 import { Suspense } from 'react';
-import { Loader } from 'lucide-react';
+import Loader from '@/components/ui/Loader';
 
 interface QuestionPageProps {
   params: Promise<{ idx: string; slug: string }>;
 }
 
-const QuestionListPage = ({ idx, slug }: QuestionPageProps) => {
-  // const comment = qustionCommentData.map((data) => data.comment);
+const QuestionListPage = async ({ params }: QuestionPageProps) => {
+  const { idx, slug } = await params;
 
   return (
     <>
@@ -17,7 +16,7 @@ const QuestionListPage = ({ idx, slug }: QuestionPageProps) => {
         <QuestionListHeader idx={idx} />
       </Suspense>
       <Suspense fallback={<Loader />}>
-        <QuestionListAnswers />
+        <QuestionListAnswers idx={idx} />
       </Suspense>
     </>
   );

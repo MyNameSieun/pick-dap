@@ -21,11 +21,14 @@ export type LineSpacingKey = keyof typeof LINE_SPACE;
 interface LineProps {
   color?: BorderColorKey;
   my?: LineSpacingKey;
+  className?: React.ReactNode;
 }
 
-const Line = ({ color = 'gray300', my = 8 }: LineProps) => {
+const Line = ({ color = 'gray300', my = 8, className }: LineProps) => {
   return (
-    <div className={`${LINE_SPACE[my]} border-t ${LINE_BORDER_COLOR[color]}`} />
+    <div
+      className={`${LINE_SPACE[my]} border-t ${LINE_BORDER_COLOR[color]} ${className}`}
+    />
   );
 };
 
