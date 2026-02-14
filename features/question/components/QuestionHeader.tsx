@@ -16,6 +16,7 @@ import { useFetchMyAnswerData } from '../hooks/answer/useFetchAnswer';
 import { useCreateAnswer } from '../hooks/answer/useCreateAnswers';
 import { useUpdateAnswer } from '../hooks/answer/useUpdateAnswer';
 import QuestionContentHeader from './common/QuestionContentHeader';
+import { isUpdateWrite } from '@/lib/isUpdateWrite';
 
 interface QuestionHeaderProps {
   idx: string;
@@ -123,9 +124,15 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
             </p>
             <div className="text-icon-default items-cen flex gap-5">
               <div>
-                <p className="c1">
-                  작성일: {new Date(question.created_at).toLocaleString()}
-                </p>
+                <div className="c1">
+                  {isUpdateWrite(question.created_at, question.updated_at) ? (
+                    <p>{new Date(question.created_at).toLocaleString()}</p>
+                  ) : (
+                    <p>
+                      {new Date(question.updated_at).toLocaleString()} (수정됨)
+                    </p>
+                  )}
+                </div>
               </div>
               <div></div>
             </div>
