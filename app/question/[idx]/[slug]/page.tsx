@@ -4,7 +4,7 @@ import QuestionDetail from '@/features/question/components/QuestionDetail';
 import Loader from '@/components/ui/Loader';
 
 interface PageProps {
-  params: Promise<{ idx: number; slug: string }>;
+  params: Promise<{ idx: string; slug: string }>;
 }
 
 const QuestionPage = async ({ params }: PageProps) => {
@@ -12,7 +12,7 @@ const QuestionPage = async ({ params }: PageProps) => {
   return (
     <div className="flex flex-col">
       <Suspense fallback={<Loader />}>
-        <QuestionHeader idx={idx} slug={slug} />
+        <QuestionHeader idx={idx} />
       </Suspense>
       <Suspense fallback={<Loader />}>
         <QuestionDetail idx={idx} slug={slug} />

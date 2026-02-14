@@ -5,7 +5,7 @@ import { Sparkle, Users } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 interface QuestionDetailProps {
-  idx: number;
+  idx: string;
   slug: string;
 }
 

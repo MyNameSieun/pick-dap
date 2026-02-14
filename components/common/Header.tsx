@@ -102,7 +102,7 @@ const Header = () => {
                 <div className="relative">
                   <div
                     onClick={() => setVisible(!isVisible)}
-                    className="relative h-12 w-12 cursor-pointer overflow-hidden rounded-full"
+                    className="relative h-12 w-12 cursor-pointer overflow-hidden rounded-full border border-gray-200"
                   >
                     <Image
                       className="object-cover"

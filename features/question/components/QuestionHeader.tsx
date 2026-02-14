@@ -20,10 +20,9 @@ import { isUpdateWrite } from '@/lib/isUpdateWrite';
 
 interface QuestionHeaderProps {
   idx: string;
-  slug: string;
 }
 
-const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
+const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
   // 조회
   const { data: question } = useFetchQuestionByIdx(idx);
 
@@ -70,16 +69,19 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
       },
       onError: (error) => {
         toast.error('답변 수정에 실패했습니다.', { position: 'top-center' });
-        console.error('답변 수정 실패 원인:', error);
+        console.error('답변 수정 실패:', error);
       },
     });
 
   const handleEditModeClick = () => {
     if (isEditing && answerData) {
+      if (answer.trim() === '') return;
+
       if (answer.trim() === answerData.answer?.trim()) {
         toast.warning('변경된 내용이 없습니다', { position: 'top-center' });
         return;
       }
+
       updateAnswer({
         id: answerData?.id,
         answer: answer,
@@ -102,7 +104,9 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
 
   return (
     <>
-      {pathname.startsWith('/question') && <BackButton label={'뒤로가기'} />}
+      {pathname.startsWith('/question') && (
+        <BackButton label={'전체 질문 보기'} />
+      )}
       <div className="rounded-[4px] bg-white p-8 shadow-sm">
         <QuestionContentHeader question={question} isAuthor={isAuthor} />
 
@@ -134,7 +138,6 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
                   )}
                 </div>
               </div>
-              <div></div>
             </div>
           </div>
         </div>
@@ -161,7 +164,12 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
           ) : (
             <div className="flex gap-1">
               <Button
-                disabled={isUpdateAnswerPending}
+                disabled={
+                  isUpdateAnswerPending ||
+                  (isEditing &&
+                    (!answer.trim() ||
+                      answer.trim() === answerData?.answer?.trim()))
+                }
                 onClick={handleEditModeClick}
                 className="mt-2 h-12"
                 variant={'default'}
@@ -172,6 +180,7 @@ const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
               </Button>
               {isEditing && (
                 <Button
+                  disabled={isUpdateAnswerPending}
                   onClick={handleCancelClick}
                   className="b1 mt-2 h-12"
                   variant={'white'}

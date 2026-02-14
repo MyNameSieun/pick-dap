@@ -2,7 +2,7 @@
 import EmptyStateBox from '@/components/common/EmptyStateBox/EmptyStateBox';
 import Line from '@/components/common/Line';
 import { Button } from '@/components/ui/button/Button';
-import { Dot, Heart } from 'lucide-react';
+import { Dot, Heart, Pencil, Trash2 } from 'lucide-react';
 import Image from 'next/image';
 import defaultProfile from '@/public/defaultProfile.png';
 import CommentInput from './CommentInput';
@@ -59,10 +59,8 @@ const AnswersList = ({ idx }: QuestionListAnswersProps) => {
                     </p>
                     <div className="flex items-center gap-1 text-[13px] text-gray-500">
                       <time>
-                        {new Date(answer.created_at).toLocaleDateString()}
+                        {new Date(answer.created_at).toLocaleString()}
                       </time>
-                      <Dot size={14} className="text-gray-300" />
-                      <span>답변 완료</span>
                     </div>
                   </div>
                 </div>

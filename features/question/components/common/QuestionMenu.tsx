@@ -1,17 +1,15 @@
 'use client';
-import { cx } from 'class-variance-authority';
-import { EllipsisVertical } from 'lucide-react';
-import { useState } from 'react';
+import { Pencil, Trash2 } from 'lucide-react';
 import { useQuestionEditModalAction } from '@/store/modal/useQuestionEditModal';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { QuestionWithDetails } from '../../services/question/fetchQuestion';
 import { useDeleteQuestion } from '../../hooks/question/useDeleteQuestion';
+import MoreOptionsMenu from '@/components/common/MoreOptionsMenu';
 interface QuestionMenuProps {
   question: QuestionWithDetails;
 }
 const QuestionMenu = ({ question }: QuestionMenuProps) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const { openEdit } = useQuestionEditModalAction();
 
   const router = useRouter();
@@ -35,14 +33,11 @@ const QuestionMenu = ({ question }: QuestionMenuProps) => {
   const handleDeleteButtonClick = () => {
     if (!confirm('정말 삭제하시겠습니까?')) return;
 
-    setIsMenuOpen(false);
     deleteQuestion(question.idx);
   };
 
   // 수정
   const handleEditButtonClick = () => {
-    setIsMenuOpen(false);
-
     if (!question.category?.category_type) return;
 
     openEdit({
@@ -54,45 +49,29 @@ const QuestionMenu = ({ question }: QuestionMenuProps) => {
   };
 
   return (
-    <div>
-      <div className="relative">
-        <button
-          disabled={isDeleteQuestionPending}
-          onClick={() => setIsMenuOpen(!isMenuOpen)}
-          className={cx(
-            'flex h-10 w-10 items-center justify-center rounded-full transition-colors hover:bg-gray-100',
-            isMenuOpen ? 'bg-gray-100' : '',
-          )}
-        >
-          <EllipsisVertical size={20} className="text-gray-900" />
-        </button>
+    <MoreOptionsMenu>
+      {/* 수정하기 버튼 */}
+      <button
+        onClick={handleEditButtonClick}
+        className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100"
+      >
+        <Pencil size={16} className="text-gray-400 group-hover:text-gray-600" />
+        <span>수정하기</span>
+      </button>
 
-        {isMenuOpen && (
-          <>
-            <div
-              className="fixed inset-0 z-10"
-              onClick={() => setIsMenuOpen(false)}
-            />
-            {/* 드롭다운 박스 */}
-            <div className="absolute right-0 z-20 mt-2 w-32 origin-top-right rounded-xl border border-gray-100 bg-white p-1.5 text-gray-900 shadow-lg ring-1 ring-black/5">
-              <button
-                onClick={handleEditButtonClick}
-                className="flex w-full items-center rounded-lg px-3 py-2 text-sm transition-colors hover:bg-gray-100"
-              >
-                수정하기
-              </button>
-              <button
-                disabled={isDeleteQuestionPending}
-                onClick={handleDeleteButtonClick}
-                className="flex w-full items-center rounded-lg px-3 py-2 text-sm transition-colors hover:bg-gray-100"
-              >
-                삭제하기
-              </button>
-            </div>
-          </>
-        )}
-      </div>
-    </div>
+      {/* 삭제하기 버튼 */}
+      <button
+        disabled={isDeleteQuestionPending}
+        onClick={handleDeleteButtonClick}
+        className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50"
+      >
+        <Trash2
+          size={16}
+          className="text-gray-400 group-hover:text-gray-600 hover:bg-gray-100"
+        />
+        <span>삭제하기</span>
+      </button>
+    </MoreOptionsMenu>
   );
 };
 
