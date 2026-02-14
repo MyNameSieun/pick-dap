@@ -1,6 +1,6 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseMutationCallback } from '@/types/useMutationCallback';
-import { createQuestion } from '../services/createQuestion';
+import { createQuestion } from '../../services/question/createQuestion';
 import { QuestionEntity } from '@/types/entity';
 import { QUERY_KEYS } from '@/lib/constants';
 

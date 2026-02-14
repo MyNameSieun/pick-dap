@@ -65,11 +65,11 @@ export type Database = {
           content: string
           created_at: string
           depth: number
+          group_id: string | null
           id: string
           like_count: number
           parent_id: string | null
           post_id: string | null
-          sort_order: string
           updated_at: string
           user_id: string
         }
@@ -78,11 +78,11 @@ export type Database = {
           content?: string
           created_at?: string
           depth: number
+          group_id?: string | null
           id?: string
           like_count?: number
           parent_id?: string | null
           post_id?: string | null
-          sort_order: string
           updated_at?: string
           user_id?: string
         }
@@ -91,11 +91,11 @@ export type Database = {
           content?: string
           created_at?: string
           depth?: number
+          group_id?: string | null
           id?: string
           like_count?: number
           parent_id?: string | null
           post_id?: string | null
-          sort_order?: string
           updated_at?: string
           user_id?: string
         }
@@ -105,6 +105,13 @@ export type Database = {
             columns: ["answer_id"]
             isOneToOne: false
             referencedRelation: "answers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "comments_group_id_fkey"
+            columns: ["group_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
             referencedColumns: ["id"]
           },
           {

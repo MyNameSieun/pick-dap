@@ -19,7 +19,6 @@ const QuestionPage = async ({
   return (
     <div className="mx-auto w-full">
       <TagSearchBar />
-
       <Suspense key={q || ''} fallback={<Loader />}>
         <QuestionCardList key={q || ''} />
       </Suspense>

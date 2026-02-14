@@ -1,5 +1,4 @@
-import QuestionAi from '@/features/question/components/QuestionAi';
-import BackButton from '@/components/common/BackButton';
+import QuestionAi from '@/features/question/components/ai/QuestionAi';
 import QuestionHeader from '@/features/question/components/QuestionHeader';
 
 interface InterviewAiPageProps {
@@ -11,7 +10,6 @@ const InterviewAiPage = async ({ params }: InterviewAiPageProps) => {
 
   return (
     <>
-      <BackButton label={'질문으로 돌아가기'} />
       <QuestionHeader idx={idx} slug={slug} />
       <QuestionAi />
     </>

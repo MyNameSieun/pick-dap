@@ -8,19 +8,18 @@ export const QUERY_KEYS = {
 
   answer: {
     all: ['answer'],
-    list: ['answer', 'list'],
-    // 단일 조회 (나의 답변)
-    byUserAndQuestion: (questionId: string | number, userId: string) =>
-      [...QUERY_KEYS.answer.all, 'mine', String(questionId), userId] as const,
-
-    // 리스트 조회 (다른 사람 답변들)
+    // 특정 질문에 대한 모든 답변
     byQuestionId: (questionId: string | number) =>
       [...QUERY_KEYS.answer.all, 'others', String(questionId)] as const,
+
+    // 나의 답변
+    byUserAndQuestion: (questionId: string | number, userId: string) =>
+      [...QUERY_KEYS.answer.all, 'mine', String(questionId), userId] as const,
   },
 
   comment: {
     all: ['comment'],
-    // 특정 게시물(post 페이지)에 달린 댓글 리스트
+    // 특정 게시물에 달린 댓글 리스트 (post 페이지)
     byPostId: (postId: string | number) =>
       [...QUERY_KEYS.comment.all, 'post', String(postId)] as const,
 

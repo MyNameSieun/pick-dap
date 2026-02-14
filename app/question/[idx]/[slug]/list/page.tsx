@@ -1,7 +1,7 @@
-import QuestionListHeader from '@/features/question/components/QuestionListHeader';
-import QuestionListAnswers from '@/features/question/components/AnswersList';
 import { Suspense } from 'react';
 import Loader from '@/components/ui/Loader';
+import AnswersList from '@/features/question/components/list/AnswersList';
+import QuestionAnswerStatus from '@/features/question/components/list/QuestionAnswerStatus';
 
 interface QuestionPageProps {
   params: Promise<{ idx: string; slug: string }>;
@@ -13,10 +13,10 @@ const QuestionListPage = async ({ params }: QuestionPageProps) => {
   return (
     <>
       <Suspense fallback={<Loader />}>
-        <QuestionListHeader idx={idx} />
+        <QuestionAnswerStatus idx={idx} slug={slug} />
       </Suspense>
       <Suspense fallback={<Loader />}>
-        <QuestionListAnswers idx={idx} />
+        <AnswersList idx={idx} />
       </Suspense>
     </>
   );

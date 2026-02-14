@@ -7,7 +7,7 @@ interface UpdateAnswerQuestionProps {
   answer: string;
 }
 
-export const updateAnswerQuestion = async (
+export const updateAnswer = async (
   answers: Partial<UpdateAnswerQuestionProps> & { id: string },
 ) => {
   const supabase = await createClient();

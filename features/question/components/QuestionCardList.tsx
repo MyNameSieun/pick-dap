@@ -5,7 +5,7 @@ import QuestionCardItem from './QuestionCardItem';
 import QuestionToolbar from './QuestionToolbar';
 import useSearch from '@/hooks/useSearch';
 import { useState } from 'react';
-import { useFetchQuestionData } from '../hooks/useFetchQuestionData';
+import { useFetchQuestionData } from '../hooks/question/useFetchQuestionData';
 
 const QuestionCardList = () => {
   const { filterType, handleFilterSelect } = useFilter<FilterType>('ALL');

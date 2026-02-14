@@ -13,11 +13,11 @@ import {
 import { MODAL_ID } from '@/constants/modalNames';
 import SelectCustom from '../common/SelectCustom';
 import { jobCategories } from '@/constants/jobCategories';
-import { useCreateQuesion } from '@/features/question/hooks/useCreateQuesion';
+import { useCreateQuesion } from '@/features/question/hooks/question/useCreateQuesion';
 import { toast } from 'sonner';
 import { CategoryType } from '@/types/entity';
 import { useRouter } from 'next/navigation';
-import { useUpdateQuestion } from '@/features/question/hooks/useUpdateQuestion';
+import { useUpdateQuestion } from '@/features/question/hooks/question/useUpdateQuestion';
 
 const QuestionEditModal = () => {
   const modalData = useQuestionEditModal();
@@ -36,8 +36,23 @@ const QuestionEditModal = () => {
 
   const { handleConfirmClose } = useConfirmCloseModal();
 
+  // 달라진 데이터 있는지 비교
+  const checkIsDirty = () => {
+    if (isEdit) {
+      // 수정 모드일 때 (스토어에 저장된 데이터랑 비교)
+      const isTitleChanged = title !== modalData.title;
+      const isCategoryChanged = category !== modalData.category;
+      const isTagsChanged =
+        JSON.stringify(tagList) !== JSON.stringify(modalData.tagList);
+
+      return isTitleChanged || isCategoryChanged || isTagsChanged;
+    } else {
+      return title.trim() !== '' || category !== '' || tagList.length > 0;
+    }
+  };
+
   const handleCloseModal = () => {
-    handleConfirmClose(title || category, close);
+    handleConfirmClose(checkIsDirty(), title || category, close);
   };
 
   const router = useRouter();
@@ -216,11 +231,11 @@ const QuestionEditModal = () => {
         </article>
         <div className="mt-3 flex w-full justify-end">
           <Button
-            disabled={isPending}
+            disabled={isPending || title == '' || category == ''}
             onClick={handleCreateQuesionClick}
             className="px-6"
           >
-            {isPending ? '처리 중...' : isEdit ? '수정 완료' : '등록'}
+            {isEdit ? '수정 완료' : '등록'}
           </Button>
         </div>
       </section>

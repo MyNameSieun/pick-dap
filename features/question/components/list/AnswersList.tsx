@@ -1,0 +1,112 @@
+'use client';
+import EmptyStateBox from '@/components/common/EmptyStateBox/EmptyStateBox';
+import Line from '@/components/common/Line';
+import { Button } from '@/components/ui/button/Button';
+import { Dot, Heart } from 'lucide-react';
+import Image from 'next/image';
+import defaultProfile from '@/public/defaultProfile.png';
+import CommentInput from './CommentInput';
+import { Suspense } from 'react';
+import Loader from '@/components/ui/Loader';
+import { useFetchQuestionByIdx } from '../../hooks/question/useFetchQuestionData';
+import { useFetchAnswersData } from '../../hooks/answer/useFetchAnswer';
+import { cn } from '@/lib/utils';
+
+interface QuestionListAnswersProps {
+  idx: string;
+}
+
+const AnswersList = ({ idx }: QuestionListAnswersProps) => {
+  const { data: question } = useFetchQuestionByIdx(Number(idx));
+  const { data: answers, isLoading } = useFetchAnswersData(question?.id);
+
+  if (isLoading)
+    return (
+      <div className="flex justify-center py-20">
+        <Loader />
+      </div>
+    );
+
+  return (
+    <div className="space-y-6">
+      {!answers || answers.length === 0 ? (
+        <EmptyStateBox
+          title="아직 답변이 없습니다"
+          description="첫 번째 답변의 주인공이 되어보세요!"
+          buttonName="답변 작성하러 가기"
+        />
+      ) : (
+        <section className="flex flex-col gap-6">
+          {answers.map((answer) => (
+            <article
+              key={answer.id}
+              className="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md md:p-8"
+            >
+              <div className="flex items-start justify-between">
+                {/* 프로필 */}
+                <div className="flex items-center gap-4">
+                  <div className="relative h-11 w-11 overflow-hidden rounded-full ring-2 ring-gray-50">
+                    <Image
+                      src={answer.author?.avatar_url || defaultProfile}
+                      fill
+                      className="object-cover"
+                      alt="프로필 이미지"
+                    />
+                  </div>
+                  <div>
+                    <p className="mb-1.5 text-[15px] leading-none font-bold text-gray-900">
+                      {answer.author?.nickname}
+                    </p>
+                    <div className="flex items-center gap-1 text-[13px] text-gray-500">
+                      <time>
+                        {new Date(answer.created_at).toLocaleDateString()}
+                      </time>
+                      <Dot size={14} className="text-gray-300" />
+                      <span>답변 완료</span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* 좋아요 버튼  */}
+                <Button
+                  variant="none"
+                  className={cn(
+                    'group/like flex h-10 gap-2 rounded-full border-gray-200 text-gray-900 transition-all active:scale-95',
+                    answer.like_count > 0
+                      ? 'border-red-100 bg-red-50 text-red-600 hover:bg-red-100'
+                      : 'hover:border-gray-300',
+                  )}
+                >
+                  <Heart
+                    size={16}
+                    className={cn(
+                      'transition-colors',
+                      answer.like_count > 0
+                        ? 'fill-red-500 text-red-500'
+                        : 'text-gray-400 group-hover/like:text-red-400',
+                    )}
+                  />
+                  <span className="font-semibold">{answer.like_count}</span>
+                </Button>
+              </div>
+
+              <div className="b1 mt-7 min-h-[60px] leading-relaxed whitespace-pre-wrap text-gray-800">
+                {answer.answer}
+              </div>
+
+              <div className="mt-8 mb-6">
+                <Line className="bg-gray-50" />
+              </div>
+
+              <Suspense fallback={<Loader />}>
+                <CommentInput answerData={answer} />
+              </Suspense>
+            </article>
+          ))}
+        </section>
+      )}
+    </div>
+  );
+};
+
+export default AnswersList;

@@ -5,33 +5,33 @@ import { Button } from '@/components/ui/button/Button';
 import { toast } from 'sonner';
 import Image from 'next/image';
 import defaultProfile from '@/public/defaultProfile.png';
-import { useFetchQuestionDataByIdx } from '../hooks/useFetchQuestionData';
 import { useSession } from '@/store/session';
-import { useEffect, useState } from 'react';
-import { useCreateQuestionAnswers } from '../hooks/useCreateQuestionAnswers';
-import { useFetchAnswerQuestionById } from '../hooks/useFetchAnswerQuestion';
+import { useState } from 'react';
 import BackButton from '@/components/common/BackButton';
 import QuestionAnswerHeaderTextArea from './QuestionAnswerHeaderTextArea';
 import Loader from '@/components/ui/Loader';
-import { useUpdateAnswerQuestion } from '../hooks/useUpdateAnswerQuestion';
-import QuestionContentHeader from './QuestionContentHeader';
 import { usePathname } from 'next/navigation';
+import { useFetchQuestionByIdx } from '../hooks/question/useFetchQuestionData';
+import { useFetchMyAnswerData } from '../hooks/answer/useFetchAnswer';
+import { useCreateAnswer } from '../hooks/answer/useCreateAnswers';
+import { useUpdateAnswer } from '../hooks/answer/useUpdateAnswer';
+import QuestionContentHeader from './common/QuestionContentHeader';
 
 interface QuestionHeaderProps {
-  idx: number;
+  idx: string;
   slug: string;
 }
 
-const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
+const QuestionHeader = ({ idx, slug }: QuestionHeaderProps) => {
   // 조회
-  const { data: question } = useFetchQuestionDataByIdx(idx);
+  const { data: question } = useFetchQuestionByIdx(idx);
 
   const auth = useSession();
   const userId = auth?.user?.id;
   const isAuthor = question?.author?.id === userId;
   const pathname = usePathname();
 
-  const { data: answerData, isLoading } = useFetchAnswerQuestionById(
+  const { data: answerData, isLoading } = useFetchMyAnswerData(
     question.id,
     userId,
   );
@@ -42,7 +42,7 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
 
   // 등록
   const { mutate: handleSaveQuesion, isPending: answerPending } =
-    useCreateQuestionAnswers({
+    useCreateAnswer({
       onSuccess: () => {
         toast.success('답변이 등록되었습니다.');
       },
@@ -62,7 +62,7 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
 
   // 수정
   const { mutate: updateAnswer, isPending: isUpdateAnswerPending } =
-    useUpdateAnswerQuestion({
+    useUpdateAnswer({
       onSuccess: () => {
         toast.success('답변이 수정 되었습니다.', { position: 'top-center' });
         close();
@@ -101,7 +101,7 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
 
   return (
     <>
-      {pathname.endsWith('/question') && <BackButton label={'뒤로가기'} />}
+      {pathname.startsWith('/question') && <BackButton label={'뒤로가기'} />}
       <div className="rounded-[4px] bg-white p-8 shadow-sm">
         <QuestionContentHeader question={question} isAuthor={isAuthor} />
 

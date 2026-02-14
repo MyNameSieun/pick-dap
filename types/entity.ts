@@ -28,7 +28,6 @@ export type TagInsert = TablesInsert<'tags'>;
 export type QuestionTagInsert = TablesInsert<'question_tags'>;
 export type QuestionCategoryInsert = TablesInsert<'question_category'>;
 
-export type TargetType = Enums<'target_type'>;
 export type TagType = Enums<'tag_type'>;
 export type UserRole = Enums<'user_role'>;
 export type QuestionStatus = Enums<'status'>;

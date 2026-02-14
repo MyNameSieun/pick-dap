@@ -1,15 +1,15 @@
 'use server';
 import { createClient } from '@/lib/supabase/server';
 
-interface createAnswerQuestionProps {
+interface createAnswerProps {
   questionIdx: number;
   answers: string;
 }
 
-export const createAnswerQuestion = async ({
+export const createAnswer = async ({
   answers,
   questionIdx,
-}: createAnswerQuestionProps) => {
+}: createAnswerProps) => {
   const supabase = await createClient();
 
   // 사용자 정보 조회

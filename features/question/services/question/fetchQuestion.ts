@@ -10,7 +10,7 @@ const QUESTION_WITH_DETAILS_QUERY = `
 `;
 
 // 목록 조회
-export const fetchQuestion = async () => {
+export const fetchQuestions = async () => {
   const { data, error } = await supabase
     .from('questions')
     .select(QUESTION_WITH_DETAILS_QUERY)

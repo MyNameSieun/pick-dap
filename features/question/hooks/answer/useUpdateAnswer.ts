@@ -1,13 +1,13 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { updateAnswerQuestion } from '../services/updateAnswerQuestion';
 import { UseMutationCallback } from '@/types/useMutationCallback';
 import { QUERY_KEYS } from '@/lib/constants';
+import { updateAnswer } from '../../services/answer/updateAnswer';
 
-export const useUpdateAnswerQuestion = (callbacks?: UseMutationCallback) => {
+export const useUpdateAnswer = (callbacks?: UseMutationCallback) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: updateAnswerQuestion,
+    mutationFn: updateAnswer,
     onSuccess: async (updatedData) => {
       if (updatedData) {
         queryClient.setQueryData(

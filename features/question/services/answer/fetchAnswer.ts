@@ -10,24 +10,22 @@ author:profiles(*),
 question:questions!inner(*)
 `;
 
-// 리스트 조회
-export const fetchAnswerQuestion = async () => {
+// 특정 질문에 대한 모든 답변 조회
+export const fetchAnswers = async (questionId: string) => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('answers')
     .select(ANSWER_JOIN_DATA)
+    .eq('question_id', questionId)
     .order('created_at', { ascending: false });
 
   if (error) throw error;
   return data;
 };
 
-// 단일 조회 (내가 쓴 답변 찾기)
-export const fetchAnswerQuestionById = async (
-  questionId: string,
-  userId: string,
-) => {
+// 단일 조회 (나의 답변)
+export const fetchMyAnswerData = async (questionId: string, userId: string) => {
   if (!userId) return null;
 
   const supabase = await createClient();
@@ -53,29 +51,3 @@ export const fetchAnswerQuestionById = async (
 const answerQuery = supabase.from('answers').select(ANSWER_JOIN_DATA);
 
 export type AnswerQuestionJoinType = QueryData<typeof answerQuery>[number];
-
-// 해당 질문에 대한 댓글 조회
-export const fetchAnswerForQuestion = async (
-  questionId: string,
-  myUserId?: string,
-) => {
-  const supabase = await createClient();
-
-  let query = supabase
-    .from('answers')
-    .select(ANSWER_JOIN_DATA)
-    .eq('question_id', questionId);
-
-  if (myUserId) {
-    query = query.neq('user_id', myUserId);
-  }
-
-  const { data, error } = await query.order('created_at', {
-    ascending: false,
-  });
-
-  // 내 ID가 있다면, 리스트에서 내 답변은 제외
-
-  if (error) throw error;
-  return data;
-};

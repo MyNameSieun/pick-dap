@@ -1,5 +1,6 @@
 'use server';
 import { createClient } from '@/lib/supabase/server';
+import { reverse } from 'dns';
 
 interface initital {
   parent_id?: string | null;
@@ -38,18 +39,36 @@ export const createComment = async ({
     throw new Error('로그인이 필요합니다.');
   }
 
-  // 답글 기능 구현
-  // user_id는 DB 기본값 auth.uid()가 자동으로 채워줌
-  // sort_order, depth는 DB 트리거가 자동으로 채워줌
+  // 2. 기본값 설정
+  let depth = 0;
+  let group_id: string | null = null;
+
+  // 3. 답글인 경우 (parent_id가 있음) 부모 데이터 조회
+  if (parent_id) {
+    const { data: parent } = await supabase
+      .from('comments')
+      .select('id, group_id, depth')
+      .eq('id', parent_id)
+      .single();
+
+    if (parent) {
+      // 부모의 group_id가 있으면 상속, 없으면 부모가 루트이므로 부모의 id가 그룹의 중심이 됨
+      group_id = parent.group_id || parent.id;
+      // 시각적 3계층 제한 (최대 depth 2)
+      depth = parent.depth >= 2 ? 2 : parent.depth + 1;
+    }
+  }
+
+  // 4. 데이터 삽입
   const { data: comment, error: cError } = await supabase
     .from('comments')
     .insert({
       content,
       answer_id,
-      parent_id: parent_id || null, // 루트 댓글인 경우 반드시 null이어야 트리거 작동
       post_id,
-      depth: 0, // 트리거가 덮어씌울 가짜 값
-      sort_order: '', // 트리거가 덮어씌울 가짜 값
+      parent_id,
+      group_id,
+      depth,
     })
     .select()
     .single();

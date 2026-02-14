@@ -2,11 +2,11 @@
 import { cx } from 'class-variance-authority';
 import { EllipsisVertical } from 'lucide-react';
 import { useState } from 'react';
-import { QuestionWithDetails } from '../services/fetchQuestion';
 import { useQuestionEditModalAction } from '@/store/modal/useQuestionEditModal';
-import { useDeleteQuestion } from '../hooks/useDeleteQuestion';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
+import { QuestionWithDetails } from '../../services/question/fetchQuestion';
+import { useDeleteQuestion } from '../../hooks/question/useDeleteQuestion';
 interface QuestionMenuProps {
   question: QuestionWithDetails;
 }

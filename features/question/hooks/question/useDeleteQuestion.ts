@@ -1,7 +1,7 @@
 import { QuestionEntity } from '@/types/entity';
 import { UseMutationCallback } from '@/types/useMutationCallback';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteQuestion } from '../services/deleteQuestion';
+import { deleteQuestion } from '../../services/question/deleteQuestion';
 import { QUERY_KEYS } from '@/lib/constants';
 
 export const useDeleteQuestion = (

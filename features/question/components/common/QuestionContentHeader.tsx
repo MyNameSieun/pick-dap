@@ -2,8 +2,8 @@ import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
 import { Bookmark } from 'lucide-react';
 import { toast } from 'sonner';
+import { QuestionWithDetails } from '../../services/question/fetchQuestion';
 import QuestionMenu from './QuestionMenu';
-import { QuestionWithDetails } from '../services/fetchQuestion';
 
 interface QuestionContentHeaderProps {
   question: QuestionWithDetails;
@@ -47,7 +47,7 @@ const QuestionContentHeader = ({
           {isAuthor && <QuestionMenu question={question} />}
         </div>
       </div>
-      <h2 className="mt-8 mb-15">{question.title}</h2>
+      <h2 className="my-6">{question.title}</h2>
     </div>
   );
 };

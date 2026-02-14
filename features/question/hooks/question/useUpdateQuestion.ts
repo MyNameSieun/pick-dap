@@ -1,8 +1,8 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { UseMutationCallback } from '@/types/useMutationCallback';
 import { QUERY_KEYS } from '@/lib/constants';
-import { updateQuestion } from '../services/updateQuestion';
-import { QuestionWithDetails } from '../services/fetchQuestion';
+import { updateQuestion } from '../../services/question/updateQuestion';
+import { QuestionWithDetails } from '../../services/question/fetchQuestion';
 
 export const useUpdateQuestion = (
   callbacks?: UseMutationCallback<QuestionWithDetails>,

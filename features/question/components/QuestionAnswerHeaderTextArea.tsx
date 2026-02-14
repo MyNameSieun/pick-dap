@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Textarea } from '@/components/ui/textarea/Textarea';
-import { AnswerQuestionJoinType } from '../services/fetchAnswerQuestion';
+import { AnswerQuestionJoinType } from '../services/answer/fetchAnswer';
 
 interface Props {
   answerData: AnswerQuestionJoinType | null;

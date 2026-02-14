@@ -1,19 +1,19 @@
 import { AnswerEntity } from '@/types/entity';
 import { UseMutationCallback } from '@/types/useMutationCallback';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { createAnswerQuestion } from '../services/createAnswerQuestion';
 import { QUERY_KEYS } from '@/lib/constants';
+import { createAnswer } from '../../services/answer/createAnswer';
 
-export const useCreateQuestionAnswers = (
+export const useCreateAnswer = (
   callbacks?: UseMutationCallback<AnswerEntity>,
 ) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: createAnswerQuestion,
+    mutationFn: createAnswer,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.answer.list,
+        queryKey: QUERY_KEYS.answer.all,
       });
 
       if (callbacks?.onSuccess) callbacks.onSuccess();
