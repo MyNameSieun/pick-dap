@@ -8,9 +8,12 @@ import { useCreateComment } from '../../hooks/comment/useCreateComment';
 import { useFetchComment } from '../../hooks/comment/useFetchComment';
 import defaultProfile from '@/public/defaultProfile.png';
 import Loader from '@/components/ui/Loader';
-import { Heart, MessageSquare, Pencil, Trash2 } from 'lucide-react';
+import { Heart, MessageSquare, Pencil, Siren, Trash2 } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import MoreOptionsMenu from '@/components/common/MoreOptionsMenu';
+import { useDeleteComment } from '../../hooks/comment/useDeleteComment';
+import { useSession } from '@/store/session';
+import { toast } from 'sonner';
 
 interface CommentItemtemProps {
   answerData: AnswerEntity;
@@ -21,10 +24,17 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
   const [replyingCommentId, setReplyingCommentId] = useState<string | null>(
     null,
   );
+
   const [reply, setReply] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
+
+  const user = useSession()?.user;
 
   // 댓글 조회
-  const { data: comments, isLoading } = useFetchComment(answerData.id);
+  const { data: comments, isLoading } = useFetchComment(
+    answerData.id,
+    user?.id,
+  );
 
   // 댓글 등록
   const { mutate: createComment, isPending } = useCreateComment({
@@ -46,11 +56,21 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
   };
 
   // 댓글 삭제
-
-  const handleCommentDeleteButton = () => {};
+  const { mutate: deleteCommentMutate } = useDeleteComment(answerData.id);
+  const handleCommentDeleteButton = (commentId: string) => {
+    if (!user) {
+      return alert('로그인이 필요합니다');
+    }
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      deleteCommentMutate({ commentId, userId: user.id });
+      toast.success('삭제 되었습니다!', { position: 'top-center' });
+    }
+  };
 
   // 댓글 수정
-  const handleCommentEditButton = () => {};
+  const handleCommentEditButton = () => {
+    setIsEditing(true);
+  };
 
   if (isLoading) return <Loader />;
 
@@ -146,26 +166,40 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
                   </div>
 
                   <MoreOptionsMenu>
-                    <button
-                      onClick={handleCommentEditButton}
-                      className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100"
-                    >
-                      <Pencil
-                        size={16}
-                        className="text-gray-400 group-hover:text-gray-600"
-                      />
-                      <span>수정하기</span>
-                    </button>
-                    <button
-                      onClick={handleCommentDeleteButton}
-                      className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50"
-                    >
-                      <Trash2
-                        size={16}
-                        className="text-gray-400 group-hover:text-gray-600 hover:bg-gray-100"
-                      />
-                      <span>삭제하기</span>
-                    </button>
+                    {user?.id === comment.user_id ? (
+                      <>
+                        <button
+                          onClick={handleCommentEditButton}
+                          className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100"
+                        >
+                          <Pencil
+                            size={16}
+                            className="text-gray-400 group-hover:text-gray-600"
+                          />
+                          <span>수정하기</span>
+                        </button>
+                        <button
+                          onClick={() => handleCommentDeleteButton(comment.id)}
+                          className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50"
+                        >
+                          <Trash2
+                            size={16}
+                            className="text-gray-400 group-hover:text-gray-600 hover:bg-gray-100"
+                          />
+                          <span>삭제하기</span>
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <button className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50">
+                          <Siren
+                            size={16}
+                            className="text-gray-400 group-hover:text-gray-600 hover:bg-gray-100"
+                          />
+                          <span>신고</span>
+                        </button>
+                      </>
+                    )}
                   </MoreOptionsMenu>
                 </div>
               </article>

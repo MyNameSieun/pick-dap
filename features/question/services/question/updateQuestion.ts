@@ -21,7 +21,7 @@ export const updateQuestion = async (
   const questionId = String(question.id);
 
   // 1. questions 테이블만 수정 (실제 컬럼만)
-  const { data: updatedQuestion, error: qError } = await supabase
+  const { error: qError } = await supabase
     .from('questions')
     .update({
       title: question.title,
