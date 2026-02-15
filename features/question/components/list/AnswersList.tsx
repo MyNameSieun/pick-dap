@@ -11,6 +11,7 @@ import { useFetchQuestionByIdx } from '../../hooks/question/useFetchQuestionData
 import { useFetchAnswersData } from '../../hooks/answer/useFetchAnswer';
 import { cn } from '@/lib/utils';
 import CommentInput from './CommentInput';
+import { isUpdateWrite } from '@/lib/isUpdateWrite';
 
 interface QuestionListAnswersProps {
   idx: string;
@@ -58,8 +59,12 @@ const AnswersList = ({ idx }: QuestionListAnswersProps) => {
                       {answer.author?.nickname}
                     </p>
                     <div className="flex items-center gap-1 text-[13px] text-gray-500">
-                      <time>
+                      <time className="c1 text-gray-500">
                         {new Date(answer.created_at).toLocaleString()}
+                        {isUpdateWrite(
+                          answer.created_at,
+                          answer.updated_at,
+                        ) && <span className="ml-1">(수정됨)</span>}
                       </time>
                     </div>
                   </div>

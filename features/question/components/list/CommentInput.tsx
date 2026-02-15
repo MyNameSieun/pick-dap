@@ -15,6 +15,7 @@ import { useDeleteComment } from '../../hooks/comment/useDeleteComment';
 import { useSession } from '@/store/session';
 import { toast } from 'sonner';
 import { useUpdateComment } from '../../hooks/answer/useUpdateComment';
+import { isUpdateWrite } from '@/lib/isUpdateWrite';
 
 interface CommentItemtemProps {
   answerData: AnswerEntity;
@@ -190,6 +191,10 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
                           </span>
                           <time className="c1 text-gray-500">
                             {new Date(comment.created_at).toLocaleString()}
+                            {isUpdateWrite(
+                              comment.created_at,
+                              comment.updated_at,
+                            ) && <span className="ml-1">(수정됨)</span>}
                           </time>
                         </div>
                         <p className="b2 leading-relaxed text-gray-800">
