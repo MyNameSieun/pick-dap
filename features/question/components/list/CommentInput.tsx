@@ -1,7 +1,7 @@
 'use client';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input/Input';
-import { AnswerEntity } from '@/types/entity';
+import { AnswerEntity, CommentEntity } from '@/types/entity';
 import Image from 'next/image';
 import { useState } from 'react';
 import { useCreateComment } from '../../hooks/comment/useCreateComment';
@@ -14,6 +14,7 @@ import MoreOptionsMenu from '@/components/common/MoreOptionsMenu';
 import { useDeleteComment } from '../../hooks/comment/useDeleteComment';
 import { useSession } from '@/store/session';
 import { toast } from 'sonner';
+import { useUpdateComment } from '../../hooks/answer/useUpdateComment';
 
 interface CommentItemtemProps {
   answerData: AnswerEntity;
@@ -26,7 +27,9 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
   );
 
   const [reply, setReply] = useState('');
-  const [isEditing, setIsEditing] = useState(false);
+
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null);
+  const [editValue, setEditValue] = useState('');
 
   const user = useSession()?.user;
 
@@ -68,8 +71,24 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
   };
 
   // 댓글 수정
-  const handleCommentEditButton = () => {
-    setIsEditing(true);
+  const handleCommentEditButton = (comment: CommentEntity) => {
+    setReplyingCommentId(null);
+    setEditingCommentId(comment.id);
+    setEditValue(comment.content);
+  };
+
+  const { mutate: commnetUpdateMutate, isPending: isCommentUpdatePending } =
+    useUpdateComment(answerData.id, {
+      onSuccess: () => {
+        setEditingCommentId(null);
+        toast.success('수정되었습니다!', { position: 'top-center' });
+      },
+    });
+  const handleCommentUpdateButton = (comment: CommentEntity) => {
+    if (!editValue.trim()) return;
+    if (comment.content === editValue) return;
+
+    commnetUpdateMutate({ id: comment.id, content: editValue });
   };
 
   if (isLoading) return <Loader />;
@@ -126,81 +145,123 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
                   width={32}
                   alt="사용자"
                 />
+                {/* 수정모드 분기처리 */}
                 <div className="flex w-full items-center justify-between gap-1">
-                  <div className="flex flex-col">
-                    <div className="flex items-center gap-2">
-                      <span className="b2 font-bold text-gray-900">
-                        {comment.author.nickname}
-                      </span>
-                      <time className="c1 text-gray-500">
-                        {new Date(comment.created_at).toLocaleDateString()}
-                      </time>
-                    </div>
-                    <p className="b2 leading-relaxed text-gray-800">
-                      {comment.content}
-                    </p>
-
-                    <div className="mt-1 flex items-center gap-3">
-                      <div className="c1 flex items-center gap-1 text-gray-500">
-                        <Heart
-                          fill={
-                            comment.like_count > 0 ? 'currentColor' : 'none'
-                          }
-                          className={cn(
-                            'cursor-pointer',
-                            comment.like_count > 0
-                              ? 'text-red-500'
-                              : 'text-gray-400',
-                          )}
-                          size={14}
+                  {editingCommentId === comment.id ? (
+                    <div className="flex flex-1 flex-col gap-3">
+                      <div className="flex flex-1 flex-col">
+                        <div className="flex items-center gap-2">
+                          <span className="b2 font-bold text-gray-900">
+                            {comment.author.nickname}
+                          </span>
+                        </div>
+                        <input
+                          value={editValue}
+                          onChange={(e) => setEditValue(e.target.value)}
+                          className="b2 border-b pb-3 leading-relaxed text-gray-800 outline-none focus:border-gray-600"
                         />
-                        {comment.like_count ?? 0}
                       </div>
-                      <button
-                        onClick={() => setReplyingCommentId(comment.id)}
-                        className="c1 hover:text-gray-90 cursor-pointer0 text-gray-500"
-                      >
-                        답글
-                      </button>
+                      <div className="flex justify-end gap-2">
+                        <button
+                          onClick={() => setEditingCommentId(null)}
+                          className="c1 rounded px-3 py-1.5 text-gray-600 hover:bg-gray-200"
+                        >
+                          취소
+                        </button>
+                        <button
+                          disabled={
+                            isCommentUpdatePending ||
+                            editValue === comment.content ||
+                            editValue.trim() === ''
+                          }
+                          onClick={() => handleCommentUpdateButton(comment)}
+                          className="c1 rounded bg-gray-900 px-3 py-1.5 text-white disabled:bg-gray-300"
+                        >
+                          수정 완료
+                        </button>
+                      </div>
                     </div>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="flex flex-col">
+                        <div className="flex items-center gap-2">
+                          <span className="b2 font-bold text-gray-900">
+                            {comment.author.nickname}
+                          </span>
+                          <time className="c1 text-gray-500">
+                            {new Date(comment.created_at).toLocaleString()}
+                          </time>
+                        </div>
+                        <p className="b2 leading-relaxed text-gray-800">
+                          {comment.content}
+                        </p>
 
-                  <MoreOptionsMenu>
-                    {user?.id === comment.user_id ? (
-                      <>
-                        <button
-                          onClick={handleCommentEditButton}
-                          className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100"
-                        >
-                          <Pencil
-                            size={16}
-                            className="text-gray-400 group-hover:text-gray-600"
-                          />
-                          <span>수정하기</span>
-                        </button>
-                        <button
-                          onClick={() => handleCommentDeleteButton(comment.id)}
-                          className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50"
-                        >
-                          <Trash2
-                            size={16}
-                            className="text-gray-400 group-hover:text-gray-600 hover:bg-gray-100"
-                          />
-                          <span>삭제하기</span>
-                        </button>
-                      </>
-                    ) : (
-                      <>
-                        <button className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50">
-                          <Siren
-                            size={16}
-                            className="text-gray-400 group-hover:text-gray-600 hover:bg-gray-100"
-                          />
-                          <span>신고</span>
-                        </button>
-                      </>
-                    )}
-                  </MoreOptionsMenu>
+                        <div className="mt-1 flex items-center gap-3">
+                          <div className="c1 flex items-center gap-1 text-gray-500">
+                            <Heart
+                              fill={
+                                comment.like_count > 0 ? 'currentColor' : 'none'
+                              }
+                              className={cn(
+                                'cursor-pointer',
+                                comment.like_count > 0
+                                  ? 'text-red-500'
+                                  : 'text-gray-400',
+                              )}
+                              size={14}
+                            />
+                            {comment.like_count ?? 0}
+                          </div>
+                          <button
+                            onClick={() => setReplyingCommentId(comment.id)}
+                            className="c1 hover:text-gray-90 cursor-pointer0 text-gray-500"
+                          >
+                            답글
+                          </button>
+                        </div>
+                      </div>
+                    </>
+                  )}
+                  {editingCommentId !== comment.id && (
+                    <MoreOptionsMenu>
+                      {user?.id === comment.user_id ? (
+                        <>
+                          <button
+                            onClick={() => handleCommentEditButton(comment)}
+                            className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100"
+                          >
+                            <Pencil
+                              size={16}
+                              className="text-gray-400 group-hover:text-gray-600"
+                            />
+                            <span>수정하기</span>
+                          </button>
+                          <button
+                            onClick={() =>
+                              handleCommentDeleteButton(comment.id)
+                            }
+                            className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50"
+                          >
+                            <Trash2
+                              size={16}
+                              className="text-gray-400 group-hover:text-gray-600 hover:bg-gray-100"
+                            />
+                            <span>삭제하기</span>
+                          </button>
+                        </>
+                      ) : (
+                        <>
+                          <button className="group flex w-full cursor-pointer items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium transition-colors hover:bg-gray-100 disabled:opacity-50">
+                            <Siren
+                              size={16}
+                              className="text-gray-400 group-hover:text-gray-600 hover:bg-gray-100"
+                            />
+                            <span>신고</span>
+                          </button>
+                        </>
+                      )}
+                    </MoreOptionsMenu>
+                  )}
                 </div>
               </article>
 
