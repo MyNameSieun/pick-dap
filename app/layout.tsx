@@ -4,6 +4,7 @@ import Header from '@/components/common/Header';
 import Providers from '@/providers/providers';
 import '@/css/globals.css';
 import { Toaster } from '@/components/ui/Sonner';
+import Footer from '@/components/common/Footer';
 
 export const metadata: Metadata = {
   title: {
@@ -34,6 +35,7 @@ export default function RootLayout({
             <Toaster />
             {children}
           </main>
+          <Footer/>
         </Providers>
         <div id="modal-root"></div>
       </body>

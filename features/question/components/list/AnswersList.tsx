@@ -2,15 +2,15 @@
 import EmptyStateBox from '@/components/common/EmptyStateBox/EmptyStateBox';
 import Line from '@/components/common/Line';
 import { Button } from '@/components/ui/button/Button';
-import { Dot, Heart, Pencil, Trash2 } from 'lucide-react';
+import { Heart } from 'lucide-react';
 import Image from 'next/image';
 import defaultProfile from '@/public/defaultProfile.png';
-import CommentInput from './CommentInput';
 import { Suspense } from 'react';
 import Loader from '@/components/ui/Loader';
 import { useFetchQuestionByIdx } from '../../hooks/question/useFetchQuestionData';
 import { useFetchAnswersData } from '../../hooks/answer/useFetchAnswer';
 import { cn } from '@/lib/utils';
+import CommentInput from './CommentInput';
 
 interface QuestionListAnswersProps {
   idx: string;

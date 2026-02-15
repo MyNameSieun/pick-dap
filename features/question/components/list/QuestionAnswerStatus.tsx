@@ -31,10 +31,8 @@ const QuestionAnswerStatus = ({ idx, slug }: { idx: string; slug: string }) => {
   return (
     <div className="flex flex-col gap-6">
       <BackButton label={'답변 목록으로'} />
-      {/* 메인 질문 카드 */}
       <div className="rounded-xl border border-gray-100 bg-white p-6 shadow-sm">
         <QuestionContentHeader question={question} isAuthor={isAuthor} />
-        {/* 내 답변 섹션 */}
         <div className="overflow-hidden rounded-lg border border-blue-50 bg-blue-50/30">
           {!answerData?.answer ? (
             <Link
@@ -58,8 +56,8 @@ const QuestionAnswerStatus = ({ idx, slug }: { idx: string; slug: string }) => {
             </Link>
           ) : (
             <div className="p-5">
-              <span className="mb-2 inline-block text-[10px] font-bold tracking-wider text-blue-500 uppercase">
-                My Answer
+              <span className="c1 text-main-400 mb-2 font-bold tracking-wider">
+                내 답변
               </span>
               <p className="b1 leading-relaxed text-gray-800">
                 {answerData?.answer}
@@ -68,7 +66,6 @@ const QuestionAnswerStatus = ({ idx, slug }: { idx: string; slug: string }) => {
           )}
         </div>
       </div>
-      {/* 구분선 및 타이틀 섹션 */}
       <div className="mt-8">
         <HeaderTitleBox
           icon={Crown}

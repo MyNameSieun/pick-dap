@@ -17,6 +17,7 @@ import { useCreateAnswer } from '../hooks/answer/useCreateAnswers';
 import { useUpdateAnswer } from '../hooks/answer/useUpdateAnswer';
 import QuestionContentHeader from './common/QuestionContentHeader';
 import { isUpdateWrite } from '@/lib/isUpdateWrite';
+import { useDeleteAnswer } from '../hooks/answer/useDeleteAnswer';
 
 interface QuestionHeaderProps {
   idx: string;
@@ -94,13 +95,37 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
       setIsEditing(true); // 수정 모드로 전환
     }
   };
-  if (isLoading) return <Loader />;
 
   // 수정 취소
   const handleCancelClick = () => {
     setAnswer(answerData?.answer || '');
     setIsEditing(false);
   };
+
+  // 삭제
+  const { mutate: deleteAnswer, isPending: isDeleteAnswerPending } =
+    useDeleteAnswer({
+      onSuccess: () => {
+        toast.success('답변이 삭제 되었습니다.', { position: 'top-center' });
+        setAnswer('');
+      },
+      onError: (error) => {
+        toast.error('답변 삭제에 실패했습니다.', { position: 'top-center' });
+        console.error('답변 삭제 실패:', error);
+      },
+    });
+
+  const handleDeleteAnswerButton = (answerId: string) => {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      deleteAnswer({
+        answerId: answerId,
+        questionId: question.id,
+        userId: userId,
+      });
+    }
+  };
+
+  if (isLoading) return <Loader />;
 
   return (
     <>
@@ -178,7 +203,8 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
                 <Pen />
                 <p className="b1">{isEditing ? '수정 완료' : '답변 수정'}</p>
               </Button>
-              {isEditing && (
+
+              {isEditing ? (
                 <Button
                   disabled={isUpdateAnswerPending}
                   onClick={handleCancelClick}
@@ -186,6 +212,15 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
                   variant={'white'}
                 >
                   취소
+                </Button>
+              ) : (
+                <Button
+                  disabled={isDeleteAnswerPending}
+                  onClick={() => handleDeleteAnswerButton(answerData.id)}
+                  className="b1 mt-2 h-12"
+                  variant={'white'}
+                >
+                  삭제
                 </Button>
               )}
             </div>
