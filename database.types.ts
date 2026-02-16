@@ -19,7 +19,6 @@ export type Database = {
           answer: string
           created_at: string
           id: string
-          like_count: number
           question_id: string
           updated_at: string
           user_id: string
@@ -28,7 +27,6 @@ export type Database = {
           answer: string
           created_at?: string
           id?: string
-          like_count?: number
           question_id?: string
           updated_at?: string
           user_id?: string
@@ -37,7 +35,6 @@ export type Database = {
           answer?: string
           created_at?: string
           id?: string
-          like_count?: number
           question_id?: string
           updated_at?: string
           user_id?: string
@@ -67,7 +64,6 @@ export type Database = {
           depth: number
           group_id: string | null
           id: string
-          like_count: number
           parent_id: string | null
           post_id: string | null
           updated_at: string
@@ -77,10 +73,9 @@ export type Database = {
           answer_id?: string | null
           content?: string
           created_at?: string
-          depth: number
+          depth?: number
           group_id?: string | null
           id?: string
-          like_count?: number
           parent_id?: string | null
           post_id?: string | null
           updated_at?: string
@@ -93,7 +88,6 @@ export type Database = {
           depth?: number
           group_id?: string | null
           id?: string
-          like_count?: number
           parent_id?: string | null
           post_id?: string | null
           updated_at?: string
@@ -137,23 +131,76 @@ export type Database = {
           },
         ]
       }
+      like: {
+        Row: {
+          answer_id: string | null
+          comment_id: string | null
+          created_at: string
+          id: string
+          post_id: string | null
+          user_id: string
+        }
+        Insert: {
+          answer_id?: string | null
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          user_id?: string
+        }
+        Update: {
+          answer_id?: string | null
+          comment_id?: string | null
+          created_at?: string
+          id?: string
+          post_id?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "like_answer_id_fkey"
+            columns: ["answer_id"]
+            isOneToOne: false
+            referencedRelation: "answers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "like_comment_id_fkey"
+            columns: ["comment_id"]
+            isOneToOne: false
+            referencedRelation: "comments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "like_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "like_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       post_stats: {
         Row: {
-          bookmark_count: number
           comment_count: number
           id: string
           like_count: number
           view_count: number
         }
         Insert: {
-          bookmark_count?: number
           comment_count?: number
           id?: string
           like_count?: number
           view_count?: number
         }
         Update: {
-          bookmark_count?: number
           comment_count?: number
           id?: string
           like_count?: number
@@ -206,7 +253,6 @@ export type Database = {
           create_at: string
           id: string
           image_urls: string[] | null
-          like_count: number
           slug: string
           title: string
           update_at: string
@@ -218,7 +264,6 @@ export type Database = {
           create_at?: string
           id?: string
           image_urls?: string[] | null
-          like_count?: number
           slug: string
           title: string
           update_at?: string
@@ -230,7 +275,6 @@ export type Database = {
           create_at?: string
           id?: string
           image_urls?: string[] | null
-          like_count?: number
           slug?: string
           title?: string
           update_at?: string
@@ -435,6 +479,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      toggle_like: {
+        Args: { p_target_id: string; p_type: string }
+        Returns: boolean
+      }
       update_question_full: {
         Args: {
           q_category_type: string
