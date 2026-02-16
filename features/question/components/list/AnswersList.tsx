@@ -67,12 +67,11 @@ const AnswersList = ({ idx }: QuestionListAnswersProps) => {
                     </div>
                   </div>
                 </div>
-
                 {/* 좋아요 버튼  */}
                 <LikeAnswerButton
                   answerId={answer.id}
                   questionId={question.id}
-                  anserLikeCount={answer.like_count}
+                  answerLikeCount={answer.like_count}
                   isLiked={answer.isLiked}
                 />
               </div>

@@ -8,14 +8,14 @@ import { useCreateComment } from '../../hooks/comment/useCreateComment';
 import { useFetchComment } from '../../hooks/comment/useFetchComment';
 import defaultProfile from '@/public/defaultProfile.png';
 import Loader from '@/components/ui/Loader';
-import { Heart, MessageSquare, Pencil, Siren, Trash2 } from 'lucide-react';
-import { cn } from '@/lib/utils';
+import { MessageSquare, Pencil, Siren, Trash2 } from 'lucide-react';
 import MoreOptionsMenu from '@/components/common/MoreOptionsMenu';
 import { useDeleteComment } from '../../hooks/comment/useDeleteComment';
 import { useSession } from '@/store/session';
 import { toast } from 'sonner';
 import { useUpdateComment } from '../../hooks/comment/useUpdateComment';
 import { isUpdateWrite } from '@/lib/isUpdateWrite';
+import LikeCommentButton from './LikeCommentButton';
 
 interface CommentItemtemProps {
   answerData: AnswerEntity;
@@ -91,6 +91,8 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
 
     commnetUpdateMutate({ id: comment.id, content: editValue });
   };
+
+  // 좋아요
 
   if (isLoading) return <Loader />;
 
@@ -202,21 +204,11 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
                         </p>
 
                         <div className="mt-1 flex items-center gap-3">
-                          <div className="c1 flex items-center gap-1 text-gray-500">
-                            <Heart
-                              fill={
-                                comment.like_count > 0 ? 'currentColor' : 'none'
-                              }
-                              className={cn(
-                                'cursor-pointer',
-                                comment.like_count > 0
-                                  ? 'text-red-500'
-                                  : 'text-gray-400',
-                              )}
-                              size={14}
-                            />
-                            {comment.like_count ?? 0}
-                          </div>
+                          {/* 좋아요 버튼 */}
+                          <LikeCommentButton
+                            comment={comment}
+                            answerId={answerData.id}
+                          />
                           <button
                             onClick={() => setReplyingCommentId(comment.id)}
                             className="c1 hover:text-gray-90 cursor-pointer0 text-gray-500"

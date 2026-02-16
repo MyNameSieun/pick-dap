@@ -6,14 +6,14 @@ import { useToggleAnswerLike } from '../../hooks/answer/useToggleAnswerLike';
 
 interface LikeAnswerButtonProps {
   answerId: string;
-  anserLikeCount: number;
+  answerLikeCount: number;
   isLiked: boolean;
   questionId: string;
 }
 
 export const LikeAnswerButton = ({
   answerId,
-  anserLikeCount,
+  answerLikeCount,
   isLiked,
   questionId,
 }: LikeAnswerButtonProps) => {
@@ -27,7 +27,6 @@ export const LikeAnswerButton = ({
 
     toggleAnswerLikeMutation({ answerId, questionId });
   };
-  console.log(isLiked);
   return (
     <Button
       onClick={handleLikeClick}
@@ -49,7 +48,7 @@ export const LikeAnswerButton = ({
         )}
       />
 
-      <span className="font-semibold">{anserLikeCount}</span>
+      <span className="font-semibold">{answerLikeCount}</span>
     </Button>
   );
 };

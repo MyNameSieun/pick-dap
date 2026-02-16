@@ -38,9 +38,7 @@ export const useToggleAnswerLike = (callbacks?: UseMutationCallback) => {
               ? {
                   ...a,
                   isLiked: !a.isLiked,
-                  like_count: a.isLiked
-                    ? Math.max(0, (a.like_count ?? 0) - 1)
-                    : (a.like_count ?? 0) + 1,
+                  like_count: a.isLiked ? a.like_count - 1 : a.like_count + 1,
                 }
               : a,
           ),

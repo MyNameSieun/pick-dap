@@ -1,6 +1,5 @@
 'use server';
 import { createClient } from '@/lib/supabase/server';
-import { reverse } from 'dns';
 
 interface initital {
   parent_id?: string | null;
