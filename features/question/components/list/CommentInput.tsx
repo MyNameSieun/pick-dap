@@ -14,7 +14,7 @@ import MoreOptionsMenu from '@/components/common/MoreOptionsMenu';
 import { useDeleteComment } from '../../hooks/comment/useDeleteComment';
 import { useSession } from '@/store/session';
 import { toast } from 'sonner';
-import { useUpdateComment } from '../../hooks/answer/useUpdateComment';
+import { useUpdateComment } from '../../hooks/comment/useUpdateComment';
 import { isUpdateWrite } from '@/lib/isUpdateWrite';
 
 interface CommentItemtemProps {

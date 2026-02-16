@@ -1,17 +1,15 @@
 'use client';
 import EmptyStateBox from '@/components/common/EmptyStateBox/EmptyStateBox';
 import Line from '@/components/common/Line';
-import { Button } from '@/components/ui/button/Button';
-import { Heart } from 'lucide-react';
 import Image from 'next/image';
 import defaultProfile from '@/public/defaultProfile.png';
 import { Suspense } from 'react';
 import Loader from '@/components/ui/Loader';
 import { useFetchQuestionByIdx } from '../../hooks/question/useFetchQuestionData';
 import { useFetchAnswersData } from '../../hooks/answer/useFetchAnswer';
-import { cn } from '@/lib/utils';
 import CommentInput from './CommentInput';
 import { isUpdateWrite } from '@/lib/isUpdateWrite';
+import { LikeAnswerButton } from './LikeAnswerButton';
 
 interface QuestionListAnswersProps {
   idx: string;
@@ -71,26 +69,12 @@ const AnswersList = ({ idx }: QuestionListAnswersProps) => {
                 </div>
 
                 {/* 좋아요 버튼  */}
-                <Button
-                  variant="none"
-                  className={cn(
-                    'group/like flex h-10 gap-2 rounded-full border-gray-200 text-gray-900 transition-all active:scale-95',
-                    answer.like_count > 0
-                      ? 'border-red-100 bg-red-50 text-red-600 hover:bg-red-100'
-                      : 'hover:border-gray-300',
-                  )}
-                >
-                  <Heart
-                    size={16}
-                    className={cn(
-                      'transition-colors',
-                      answer.like_count > 0
-                        ? 'fill-red-500 text-red-500'
-                        : 'text-gray-400 group-hover/like:text-red-400',
-                    )}
-                  />
-                  <span className="font-semibold">{answer.like_count}</span>
-                </Button>
+                <LikeAnswerButton
+                  answerId={answer.id}
+                  questionId={question.id}
+                  anserLikeCount={answer.like_count}
+                  isLiked={answer.isLiked}
+                />
               </div>
 
               <div className="b1 mt-7 min-h-[60px] leading-relaxed whitespace-pre-wrap text-gray-800">
