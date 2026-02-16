@@ -13,11 +13,13 @@ const LikeCommentButton = ({ comment, answerId }: LikeCommentButtonProps) => {
     useToggleCommentLike();
 
   const handleLikeClick = () => {
+    if (isCommentLikePending) return;
     commentLikeMutate({ commentId: comment.id, answerId });
   };
   return (
     <button
       onClick={handleLikeClick}
+      disabled={isCommentLikePending}
       className="c1 flex items-center gap-1 text-gray-500"
     >
       <Heart

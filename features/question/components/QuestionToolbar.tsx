@@ -8,10 +8,7 @@ import { Plus, Search } from 'lucide-react';
 import { SetStateAction, useEffect } from 'react';
 import { FilterType } from '../../../types/FilterType';
 import { useDisclosure } from '@/hooks/useClickOutside';
-import {
-  useQuestionEditModalAction,
-  useQuestionEditModalState,
-} from '@/store/modal/useQuestionEditModal';
+import { useQuestionEditModalAction } from '@/store/modal/useQuestionEditModal';
 
 const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
   { value: 'ALL', label: '전체' },
@@ -122,7 +119,7 @@ const QuestionToolbar = ({
         <Input
           className="c1 text-gray-1000 h-10"
           type="text"
-          placeholder="제목을 입력해주세요 "
+          placeholder="제목 또는 태그를 입력해주세요 "
           leftIcon={Search}
           onChange={handleSearch}
           ref={searchRef}
