@@ -412,6 +412,36 @@ export type Database = {
           },
         ]
       }
+      question_tech_stack: {
+        Row: {
+          questions_id: string
+          tech_stack_id: string
+        }
+        Insert: {
+          questions_id?: string
+          tech_stack_id?: string
+        }
+        Update: {
+          questions_id?: string
+          tech_stack_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_tech_stack_questions_id_fkey"
+            columns: ["questions_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_tech_stack_tech_stack_id_fkey"
+            columns: ["tech_stack_id"]
+            isOneToOne: false
+            referencedRelation: "tech_stack"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       questions: {
         Row: {
           created_at: string
@@ -474,11 +504,30 @@ export type Database = {
         }
         Relationships: []
       }
+      tech_stack: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+        }
+        Insert: {
+          id?: string
+          name?: string
+          slug: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
+      toggle_bookmark: { Args: { p_question_id: string }; Returns: boolean }
       toggle_like: {
         Args: { p_target_id: string; p_type: string }
         Returns: boolean
@@ -506,7 +555,7 @@ export type Database = {
         | "iOS"
       question_type: "pickdap" | "user"
       social_provider: "email" | "google" | "github" | "kakao"
-      status: "미답변" | "답변 완료"
+      status: "pending" | "completed"
       tag_type: "카테고리" | "기술스택" | "상태" | "면접결과" | "인기"
       user_role: "user" | "admin"
     }
@@ -648,7 +697,7 @@ export const Constants = {
       ],
       question_type: ["pickdap", "user"],
       social_provider: ["email", "google", "github", "kakao"],
-      status: ["미답변", "답변 완료"],
+      status: ["pending", "completed"],
       tag_type: ["카테고리", "기술스택", "상태", "면접결과", "인기"],
       user_role: ["user", "admin"],
     },

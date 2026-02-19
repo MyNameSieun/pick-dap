@@ -10,13 +10,18 @@ import { useFetchAnswersData } from '../../hooks/answer/useFetchAnswer';
 import CommentInput from './CommentInput';
 import { isUpdateWrite } from '@/lib/isUpdateWrite';
 import { LikeAnswerButton } from './LikeAnswerButton';
+import { useSession } from '@/store/session';
 
 interface QuestionListAnswersProps {
   idx: string;
 }
 
 const AnswersList = ({ idx }: QuestionListAnswersProps) => {
-  const { data: question } = useFetchQuestionByIdx(Number(idx));
+  const user = useSession()?.user;
+  const { data: question } = useFetchQuestionByIdx(
+    Number(idx),
+    String(user?.id),
+  );
   const { data: answers, isLoading } = useFetchAnswersData(question?.id);
 
   if (isLoading)

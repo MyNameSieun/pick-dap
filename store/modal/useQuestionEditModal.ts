@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { combine, devtools } from 'zustand/middleware';
 import { useModalStackStore } from './modalStack';
 import { MODAL_ID } from '@/constants/modalNames';
-import { CategoryType } from '@/types/entity';
+import { CategoryTypeEnums } from '@/types/entity';
 
 type CreateMode = {
   isOpen: true;
@@ -14,7 +14,7 @@ type EditMode = {
   type: 'EDIT';
   questionId: string;
   title: string;
-  category: CategoryType;
+  category: CategoryTypeEnums;
   tagList: string[];
 };
 

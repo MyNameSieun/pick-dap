@@ -3,7 +3,6 @@
 import Filter from '@/components/common/Filter';
 import { Input } from '@/components/ui/input/Input';
 import { useDisclosure } from '@/hooks/useClickOutside';
-import { FilterType } from '@/types/FilterType';
 import { Search } from 'lucide-react';
 import { useEffect } from 'react';
 
@@ -17,7 +16,6 @@ interface QuestionSearchToolbarProps {
   handleFilterSelect: (value: FilterType) => void;
   isFilterOpen: boolean;
 }
-const { onToggle } = useDisclosure();
 const QuestionSearchToolbar = ({
   focusSearch,
   searchRef,
@@ -32,6 +30,7 @@ const QuestionSearchToolbar = ({
     { value: 'PENDING', label: '답변 대기' },
     { value: 'COMPLETED', label: '답변 완료' },
   ];
+  const { onToggle } = useDisclosure();
 
   useEffect(() => {
     focusSearch();

@@ -15,11 +15,12 @@ import QuestionContentHeader from '../common/QuestionContentHeader';
 import Loader from '@/components/ui/Loader';
 
 const QuestionAnswerStatus = ({ idx, slug }: { idx: string; slug: string }) => {
-  const { data: question } = useFetchQuestionByIdx(idx);
-  const { data: answers } = useFetchAnswersData(question.id);
-
   const auth = useSession();
   const userId = auth?.user?.id;
+
+  const { data: question } = useFetchQuestionByIdx(idx, String(userId));
+  const { data: answers } = useFetchAnswersData(question.id);
+
   const isAuthor = question?.author?.id === userId;
   const { data: answerData, isLoading: isAnswerLoading } = useFetchMyAnswerData(
     question.id,

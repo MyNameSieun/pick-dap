@@ -2,11 +2,11 @@
 'use server';
 import { generateSlug } from '@/lib/slugify';
 import { createClient } from '@/lib/supabase/server';
-import { CategoryType, TagInsert } from '@/types/entity';
+import { CategoryTypeEnums, TagInsert } from '@/types/entity';
 
 interface createQuestionProps {
   title: string;
-  category: CategoryType;
+  category: CategoryTypeEnums;
   tagList: string[];
 }
 
@@ -82,5 +82,15 @@ export const createQuestion = async ({
     }
   }
 
+  const { error: statsError } = await supabase.from('question_stats').insert({
+    question_id: question.id,
+    bookmark_count: 0,
+    view_count: 0,
+    comment_count: 0,
+  });
+
+  if (statsError) {
+    console.error('통계 데이터를 불러올 수 없습니다:', statsError.message);
+  }
   return question;
 };

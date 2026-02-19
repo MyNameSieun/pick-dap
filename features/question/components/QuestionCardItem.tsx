@@ -24,11 +24,16 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
                   {category.category_type}
                 </Tags>
               )}
-              {tags.map(({ tag }) => (
-                <Tags key={tag.label} color="blue" size="small">
-                  {tag.label}
-                </Tags>
-              ))}
+              {tags?.map(({ tag }) => {
+                // tag가 null이거나 label이 없는 경우를 방어합니다.
+                if (!tag?.label) return null;
+
+                return (
+                  <Tags key={tag.label} color="blue" size="small">
+                    {tag.label}
+                  </Tags>
+                );
+              })}
             </div>
             <div className="c2 flex items-center gap-1 text-gray-700">
               <span className="flex items-center gap-1">

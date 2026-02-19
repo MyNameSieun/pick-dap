@@ -47,5 +47,14 @@ export const createAnswer = async ({
     throw new Error('답변 등록 중 오류가 발생했습니다.');
   }
 
+  // 상태 변경
+  const { error: updateError } = await supabase
+    .from('questions')
+    .update({ status: 'completed' })
+    .eq('id', question.id);
+
+  if (updateError) {
+    console.error('상태 업데이트 실패:', updateError);
+  }
   return answer;
 };

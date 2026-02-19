@@ -1,6 +1,5 @@
 import TagSearchBar from '@/components/TagSearchBar';
 import QuestionCardList from '../../features/question/components/QuestionCardList';
-import Paging from '@/components/common/Paging';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import Loader from '@/components/ui/Loader';
@@ -22,7 +21,6 @@ const QuestionPage = async ({
       <Suspense key={q || ''} fallback={<Loader />}>
         <QuestionCardList key={q || ''} />
       </Suspense>
-      <Paging />
     </div>
   );
 };

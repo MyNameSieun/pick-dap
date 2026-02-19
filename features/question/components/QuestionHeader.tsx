@@ -25,10 +25,11 @@ interface QuestionHeaderProps {
 
 const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
   // 조회
-  const { data: question } = useFetchQuestionByIdx(idx);
 
   const auth = useSession();
   const userId = auth?.user?.id;
+  const { data: question } = useFetchQuestionByIdx(idx, String(userId));
+
   const isAuthor = question?.author?.id === userId;
   const pathname = usePathname();
 

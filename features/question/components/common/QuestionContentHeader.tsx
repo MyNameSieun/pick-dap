@@ -7,6 +7,8 @@ import { useDeleteQuestion } from '../../hooks/question/useDeleteQuestion';
 import MoreOptionsMenu from '@/components/common/MoreOptionsMenu';
 import { useQuestionEditModalAction } from '@/store/modal/useQuestionEditModal';
 import { useRouter } from 'next/navigation';
+import { useToggleBookmark } from '../../hooks/question/useBookmark';
+import { cn } from '@/lib/utils';
 
 interface QuestionContentHeaderProps {
   question: QuestionWithDetails;
@@ -19,7 +21,12 @@ const QuestionContentHeader = ({
 }: QuestionContentHeaderProps) => {
   const router = useRouter();
 
+  const { mutate: bookmark } = useToggleBookmark();
+
+  const questionId = question.id;
+  const questionIdx = question.idx;
   const onClickSaveButtonHandler = () => {
+    bookmark({ questionId, questionIdx });
     toast.success('마이페이지에 저장이 완료되었습니다!', {
       position: 'top-center',
     });
@@ -81,7 +88,14 @@ const QuestionContentHeader = ({
             className="h-10.5"
             onClick={onClickSaveButtonHandler}
           >
-            <Bookmark />
+            <Bookmark
+              className={cn(
+                'transition-colors',
+                question.is_mine_bookmarked
+                  ? 'fill-blue-400 text-blue-400'
+                  : 'text-gray-400 group-hover/like:text-gray-400',
+              )}
+            />
             {question.stats?.bookmark_count ?? 0}
           </Button>
           {isAuthor && (

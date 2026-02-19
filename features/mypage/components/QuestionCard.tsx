@@ -3,7 +3,6 @@ import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
 import { savedQuestions } from '@/data/savedQuestions';
-import { FilterType } from '@/types/FilterType';
 import { Bookmark, Dot, Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

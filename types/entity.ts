@@ -11,6 +11,7 @@ export type AnswerEntity = Tables<'answers'>;
 export type CommentEntity = Tables<'comments'>;
 export type TagEntity = Tables<'tags'>;
 export type QuestionEntity = Tables<'questions'>;
+export type TechStack = Tables<'tech_stack'>;
 
 export type PostStatsEntity = Tables<'post_stats'>;
 export type PostTagEntity = Tables<'post_tags'>;
@@ -26,11 +27,13 @@ export type AnswerInsert = TablesInsert<'answers'>;
 export type QuestionInsert = TablesInsert<'questions'>;
 export type TagInsert = TablesInsert<'tags'>;
 export type QuestionTagInsert = TablesInsert<'question_tags'>;
+export type QuestionTechStackInsert = TablesInsert<'question_tech_stack'>;
 export type QuestionCategoryInsert = TablesInsert<'question_category'>;
 
 export type TagType = Enums<'tag_type'>;
-export type UserRole = Enums<'user_role'>;
 export type QuestionStatus = Enums<'status'>;
-export type SocialProvider = Enums<'social_provider'>;
-export type CategoryType = Enums<'category_type_enum'>;
 export type QuestionType = Enums<'question_type'>;
+export type CategoryTypeEnums = Enums<'category_type_enum'>;
+
+export type SocialProvider = Enums<'social_provider'>;
+export type UserRole = Enums<'user_role'>;

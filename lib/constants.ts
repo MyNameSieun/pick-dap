@@ -1,7 +1,10 @@
+import { QuestionFilterOptions } from '@/features/question/services/question/fetchQuestion';
+
 export const QUERY_KEYS = {
   question: {
     all: ['question'],
-    list: ['question', 'list'],
+    list: (filters: QuestionFilterOptions) =>
+      [...QUERY_KEYS.question.all, filters] as const,
     byIdx: (idx: string | number) =>
       [...QUERY_KEYS.question.all, 'detail', String(idx)] as const,
   },

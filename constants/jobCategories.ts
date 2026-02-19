@@ -1,6 +1,6 @@
-import { JobCategory } from '@/types/jobCategory';
+import { CategoryTypeEnums } from '@/types/entity';
 
-export const jobCategories: JobCategory[] = [
+export const jobCategories: CategoryTypeEnums[] = [
   'FrontEnd',
   'BackEnd',
   'CS',
@@ -9,4 +9,5 @@ export const jobCategories: JobCategory[] = [
   'AI',
   'Android',
   'iOS',
-];
+] as const;
+export const ALL_CATEGORIES = ['전체', ...jobCategories] as const;

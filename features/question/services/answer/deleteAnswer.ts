@@ -19,5 +19,14 @@ export const deleteAnswer = async ({
     throw new Error('답변 삭제중 오류가 발생했습니다');
   }
 
+  // 상태 변경
+  const { error: updateError } = await supabase
+    .from('questions')
+    .update({ status: 'pending' })
+    .eq('id', questionId);
+
+  if (updateError) {
+    console.error('상태 업데이트 실패:', updateError);
+  }
   return { answerId, questionId, userId };
 };
