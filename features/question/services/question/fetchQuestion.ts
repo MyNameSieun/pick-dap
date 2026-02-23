@@ -1,89 +1,104 @@
+// feature/question/services/question/fetchQuestion.ts
+'use server';
+
+import { createClient } from '@/lib/supabase/server';
 import { supabase } from '@/lib/supabase/supabase';
-import {
-  CategoryTypeEnums,
-  QuestionStatus,
-  QuestionType,
-} from '@/types/entity';
+import { CategoryTypeEnums, QuestionType, StatusEnums } from '@/types/entity';
 import { QueryData } from '@supabase/supabase-js';
 
-// 1. 공통 조인 쿼리 정의 (is_bookmarked 추가)
-export const QUERY_JOIN = `
+// 1. 조인 쿼리 정의
+const QUERY_JOIN_DATA = `
   *,
   author:profiles(*),
   stats:question_stats(*),
+  status:question_status(status),
+  category:question_category(category_type),
+  is_bookmarked:bookmark!question_id(user_id),
   tags:question_tags(tag:tags(label)),
   tech_stacks:question_tech_stack(
     tech:tech_stack_id(id, name, slug)
-  ),
-  category:question_category(category_type),
-  is_bookmarked:bookmark!question_id(user_id)
+  )
 `;
 
-// 2. 타입 정의 (추론 기반)
-const questionsQuery = supabase.from('questions').select(QUERY_JOIN);
-export type RawQuestionData = QueryData<typeof questionsQuery>[number];
+// 2. 조인된 결과 데이터 타입 추론
+const questionsJoinQuery = supabase.from('questions').select(QUERY_JOIN_DATA); // questions 기준 JOIN select 쿼리 정의(타입 추론용)
+export type RawQuestionJoined = QueryData<typeof questionsJoinQuery>[number]; // 해당 쿼리 결과 배열의 요소(질문 1개) 타입 추출
 
-// 최종적으로 UI에서 사용할 데이터 타입
-export type QuestionWithDetails = RawQuestionData & {
+// UI에서 사용할 최종 타입
+export type QuestionWithDetails = RawQuestionJoined & {
   total_bookmark_count: number;
   is_mine_bookmarked: boolean;
+  current_status: StatusEnums;
 };
-// tech_stack_id라는 FK를 통해 tech_stack 테이블의 id, name, slug를 가져옴
 
-// 태그 필터용 조인 쿼리 (태그가 있을 때: 해당 태그가 있는 질문만 inner join)
-// !를 안 쓸 때 (기본): 질문(questions) 데이터는 무조건 가져옵니다. 설령 그 질문에 연결된 기술 스택(tech_stack)이 하나도 없더라도, 질문 정보는 화면에 나타납니다. (기술 스택 부분만 빈 배열로 표시됨)
-// !를 쓸 때 (!inner): 질문에 연결된 기술 스택이 최소 하나 이상 있을 때만 그 질문을 가져옵니다. 기술 스택이 없는 질문은 아예 목록에서 사라집니다.
+// DB 조인 결과를 화면에서 사용하기 위한 형태로 가공
+const mapToQuestionDetail = (q: RawQuestionJoined): QuestionWithDetails => ({
+  ...q,
+  total_bookmark_count: q.stats?.bookmark_count || 0,
+  is_mine_bookmarked: !!(q.is_bookmarked && q.is_bookmarked.length > 0),
+  current_status: q.status?.status || 'pending',
+});
 
-// 2. 필터링 옵션 타입
+// 필터링 옵션 타입
 export type QuestionFilterOptions = {
   type?: QuestionType; //  'pickdap' | 'user'
   category?: CategoryTypeEnums | 'ALL';
   tag?: string;
   techs?: string;
   // '전체' 조회를 위해 'ALL' 리터럴과 Enum 타입을 합침
-  status?: 'ALL' | QuestionStatus;
+  status?: 'ALL' | StatusEnums;
   searchQuery?: string;
   sort?: 'latest' | 'popular';
 };
 
-// 목록 조회
+// 3. 실제 데이터를 가져오는 함수
+/**
+ *  전체 목록 조회
+ */
 export const fetchQuestions = async ({
   type,
   category,
-  tag,
   techs,
   status,
   searchQuery,
   sort = 'popular', // 정렬 기본값
 }: QuestionFilterOptions = {}) => {
+  const supabase = await createClient();
+
   // 필터 활성화 여부 확인
   const hasCategory = category && category !== 'ALL';
-  const hasTechs = !!techs;
+  const hasStatus = status && status !== 'ALL';
 
-  const DYNAMIC_QUERY = `
+  const DYNAMIC_QUERY_DATA = `
   *,
   author:profiles(*),
-  stats:question_stats(bookmark_count),
-  is_bookmarked:bookmark(user_id),
-  tags:question_tags${hasTechs ? '!inner' : ''}(
-    tag:tags${hasTechs ? '!inner' : ''}(label)
-  ),
+  stats:question_stats(*),
+  status:question_status${hasStatus ? '!inner' : ''}(status), 
+  category:question_category${hasCategory ? '!inner' : ''}(category_type),
+  is_bookmarked:bookmark!question_id(user_id),
+  tags:question_tags(tag:tags(label)),
   tech_stacks:question_tech_stack(
     tech:tech_stack_id(id, name, slug)
-  ),
-  category:question_category${hasCategory ? '!inner' : ''}(category_type)
+  )
 `;
-
   //  필터링 시작 - 태그 존재 여부에 따라 조인 방식 결정
-  let query = supabase.from('questions').select(DYNAMIC_QUERY);
+  let query = supabase.from('questions').select(DYNAMIC_QUERY_DATA);
 
   // --- 필터링 로직 ---
-
   // 1. 기술 스택 필터링 로직
   if (techs) {
-    // URL에서 온 "c,react" 문자열을 ["c", "react"] 배열로 변환
     const techArray = techs.split(',');
-    query = query.in('tags.tag.label', techArray);
+
+    const { data: filteredQuestions, error } = await supabase.rpc(
+      'get_questions_with_all_techs',
+      { tech_slugs: techArray },
+    );
+
+    if (error) throw error;
+
+    const ids = filteredQuestions.map((q) => q.id);
+
+    query = query.in('id', ids);
   }
   // 2. 질문 출처 필터
   if (type) {
@@ -97,7 +112,7 @@ export const fetchQuestions = async ({
 
   // 4. 상태 필터
   if (status && status !== 'ALL') {
-    query = query.eq('status', status);
+    query = query.eq('question_status.status', status);
   }
 
   // 5. 제목 검색
@@ -121,31 +136,79 @@ export const fetchQuestions = async ({
   const { data, error } = await query;
   if (error) throw error;
 
-  // 3. 타입 안전한 데이터 가공
-  return (data as unknown as RawQuestionData[]).map(
-    (q): QuestionWithDetails => ({
-      ...q,
-      total_bookmark_count: q.stats?.bookmark_count || 0,
-      is_mine_bookmarked: !!(q.is_bookmarked && q.is_bookmarked.length > 0),
-    }),
-  );
+  return (data as unknown as RawQuestionJoined[]).map(mapToQuestionDetail);
 };
 
-export type QuestionEnitiy = QueryData<typeof questionsQuery>[number];
+/**
+ *  단건 상세 조회
+ */
+export const fetchQuestionByIdx = async (idx: number) => {
+  const supabase = await createClient();
 
-// 상세 조회
-export const fetchQuestionByIdx = async (idx: number, userId: string) => {
+  // 로그인한 나의 정보를 가져와서, 내가 북마크를 눌렀는지 확인
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let query = supabase.from('questions').select(QUERY_JOIN_DATA).eq('idx', idx);
+
+  if (user?.id) {
+    query = query.eq('is_bookmarked.user_id', user.id);
+  }
+
+  const { data, error } = await query.single();
+  if (error) throw error;
+
+  return mapToQuestionDetail(data);
+};
+
+/**
+ * 내 마이페이지용: 현재 로그인한 세션의 질문만 조회
+ * userId를 인자로 받지 않아 보안상 안전
+ */
+export const fetchMyQuestions = async () => {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error('로그인이 필요합니다.');
+
   const { data, error } = await supabase
     .from('questions')
-    .select(QUERY_JOIN)
-    .eq('idx', idx)
-    .eq('is_bookmarked.user_id', userId || '')
-    .single();
+    .select(QUERY_JOIN_DATA)
+    .eq('author_id', user.id) // 서버에서 가져온 유저 ID 사용
+    .order('created_at', { ascending: false });
 
   if (error) throw error;
-  return {
-    ...data,
-    total_bookmark_count: data.stats?.bookmark_count || 0,
-    is_mine_bookmarked: !!(data.is_bookmarked && data.is_bookmarked.length > 0),
-  };
+
+  return data.map(mapToQuestionDetail);
+};
+
+/**
+ * 타인 프로필용: 특정 유저의 질문 목록 조회
+ * 공개된 프로필 페이지 등에서 사용
+ */
+export const fetchUserQuestions = async (userId: string) => {
+  const supabase = await createClient();
+
+  // 로그인한 나의 정보를 가져와서, 타인의 답변에 내가 북마크를 눌렀는지 확인
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  let query = supabase
+    .from('questions')
+    .select(QUERY_JOIN_DATA)
+    .eq('author_id', userId)
+    .order('created_at', { ascending: false });
+
+  if (user?.id) {
+    query = query.eq('is_bookmarked.user_id', user.id);
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+
+  return data.map(mapToQuestionDetail);
 };

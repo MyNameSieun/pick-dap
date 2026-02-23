@@ -1,4 +1,4 @@
-import { X } from 'lucide-react';
+import { Check, X } from 'lucide-react';
 import Line from '../common/Line';
 import { Input } from '../ui/input/Input';
 import { Button } from '../ui/button/Button';
@@ -13,55 +13,29 @@ import {
 import { MODAL_ID } from '@/constants/modalNames';
 import SelectCustom from '../common/SelectCustom';
 import { jobCategories } from '@/constants/jobCategories';
-import { useCreateQuesion } from '@/features/question/hooks/question/useCreateQuesion';
+import { useCreateQuestion } from '@/features/question/hooks/question/useCreateQuestion';
 import { toast } from 'sonner';
-import { CategoryType } from '@/types/entity';
-import { useRouter } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useUpdateQuestion } from '@/features/question/hooks/question/useUpdateQuestion';
+import { CategoryTypeEnums } from '@/types/entity';
+import { cn } from '@/lib/utils';
+import { useTechStackData } from '@/hooks/useTechStackData';
+import { useDisclosure } from '@/hooks/useClickOutside';
 
 const QuestionEditModal = () => {
   const modalData = useQuestionEditModal();
   const isEdit = modalData.isOpen && modalData.type === 'EDIT';
   const isOpen = useQuestionEditModalState();
-
-  const [title, setTitle] = useState(isEdit ? modalData.title : '');
-  const [category, setCategory] = useState<CategoryType | ''>(
-    isEdit ? modalData.category : '',
-  );
-  const [tagList, setTagList] = useState<string[]>(
-    isEdit ? modalData.tagList : [],
-  );
-  const [tag, setTag] = useState('');
-  const { close } = useQuestionEditModalAction();
-
   const { handleConfirmClose } = useConfirmCloseModal();
 
-  // 달라진 데이터 있는지 비교
-  const checkIsDirty = () => {
-    if (isEdit) {
-      // 수정 모드일 때 (스토어에 저장된 데이터랑 비교)
-      const isTitleChanged = title !== modalData.title;
-      const isCategoryChanged = category !== modalData.category;
-      const isTagsChanged =
-        JSON.stringify(tagList) !== JSON.stringify(modalData.tagList);
-
-      return isTitleChanged || isCategoryChanged || isTagsChanged;
-    } else {
-      return title.trim() !== '' || category !== '' || tagList.length > 0;
-    }
-  };
-
-  const handleCloseModal = () => {
-    handleConfirmClose(checkIsDirty(), title || category, close);
-  };
+  const [tagInput, setTagInput] = useState('');
+  const { close } = useQuestionEditModalAction();
 
   const router = useRouter();
-
-  useEscClose(MODAL_ID.CREATE_QUESTION, isOpen, handleCloseModal);
-
+  const pathname = usePathname();
   // 등록
   const { mutate: createQuesion, isPending: isCreateQuesionPending } =
-    useCreateQuesion({
+    useCreateQuestion({
       onSuccess: (newQuestion) => {
         toast.success('질문이 등록되었습니다.', {
           position: 'top-center',
@@ -77,7 +51,47 @@ const QuestionEditModal = () => {
       },
     });
 
-  // 수정
+  // 수정: 달라진 데이터 있는지 비교
+  const [title, setTitle] = useState(isEdit ? modalData.title : '');
+  const [category, setCategory] = useState<CategoryTypeEnums | ''>(
+    isEdit ? modalData.category : '',
+  );
+  const [tagList, setTagList] = useState<string[]>(
+    isEdit ? modalData.tagList : [],
+  );
+  const [seletedTech, setSeletedTech] = useState<string[]>(
+    isEdit ? modalData.techList || [] : [], // 수정 모드 시 스토어의 techList(slug 배열) 사용
+  );
+  const checkIsDirty = () => {
+    if (isEdit) {
+      const isTitleChanged = title !== modalData.title;
+      const isCategoryChanged = category !== modalData.category;
+      const isTagsChanged =
+        JSON.stringify(tagList.sort()) !==
+        JSON.stringify([...modalData.tagList].sort());
+
+      const isTechChanged =
+        JSON.stringify([...seletedTech].sort()) !==
+        JSON.stringify([...(modalData.techList || [])].sort());
+
+      return (
+        isTitleChanged || isCategoryChanged || isTagsChanged || isTechChanged
+      );
+    } else {
+      return (
+        title.trim() !== '' ||
+        category !== '' ||
+        tagList.length > 0 ||
+        seletedTech.length > 0
+      );
+    }
+  };
+  const handleCloseModal = () => {
+    handleConfirmClose(checkIsDirty(), title || category, close);
+  };
+  useEscClose(MODAL_ID.CREATE_QUESTION, isOpen, handleCloseModal);
+
+  // 수정 훅 
   const { mutate: updateQuestion, isPending: isUpdateQuestionPending } =
     useUpdateQuestion({
       onSuccess: () => {
@@ -95,7 +109,7 @@ const QuestionEditModal = () => {
     });
 
   // 버튼 클릭시 수정/삭제 모드 결정 후 질문 추가
-  const handleCreateQuesionClick = () => {
+  const handleEditQuesionClick = () => {
     if (title.trim() === '') {
       toast.success('질문을 입력해주세요.', {
         position: 'top-center',
@@ -110,18 +124,28 @@ const QuestionEditModal = () => {
       return;
     }
 
+    const techStackIds = techStack
+      .filter((tech) => seletedTech.includes(tech.slug))
+      .map((tech) => tech.id);
+
     if (isEdit) {
       updateQuestion({
         id: modalData.questionId,
         title,
         category: {
-          category_type: category as CategoryType,
+          category_type: category as CategoryTypeEnums,
         },
         tagList,
+        techStackIds,
       });
     } else {
-      // 생성 모드
-      createQuesion({ title, category: category as CategoryType, tagList });
+      createQuesion({
+        title,
+        category: category as CategoryTypeEnums,
+        tagList,
+        techStackIds,
+        currentPath: pathname,
+      });
     }
   };
 
@@ -130,7 +154,7 @@ const QuestionEditModal = () => {
     if (e.nativeEvent.isComposing) return; // IME로 인한 재생성 방지
 
     if (e.code === 'Enter') {
-      if (tag.trim() === '' || tagList.includes(tag)) return;
+      if (tagInput.trim() === '' || tagList.includes(tagInput)) return;
       if (tagList.length >= 3) {
         toast.success('태그는 3개까지 입력 가능합니다.', {
           position: 'top-center',
@@ -138,8 +162,8 @@ const QuestionEditModal = () => {
         return;
       }
 
-      setTagList([...tagList, tag]);
-      setTag('');
+      setTagList([...tagList, tagInput]);
+      setTagInput('');
     }
   };
 
@@ -148,6 +172,31 @@ const QuestionEditModal = () => {
     setTagList(tagList.filter((tag) => tag !== tagPrams));
   };
 
+  // 기술 스택 관련
+  const {
+    containerRef,
+    onClose: techClose,
+    isOpen: techIsOpen,
+    onOpen: techOnOpen,
+  } = useDisclosure();
+
+  const { data: techStack = [] } = useTechStackData();
+  // 기술 스택 선택 (slug를 URL에 저장)
+  const handleSelectTech = (slug: string) => {
+    if (seletedTech.length >= 3) return alert('최대 3개까지 선택 가능합니다.');
+
+    const newTechs = [...seletedTech, slug];
+    setSeletedTech(newTechs);
+    setSearchTerm('');
+    techClose();
+  };
+
+  // 기술 스택 삭제
+  const handleRemoveTech = (slug: string) => {
+    setSeletedTech(seletedTech.filter((t) => t !== slug));
+  };
+
+  const [searchTerm, setSearchTerm] = useState('');
   const isPending = isCreateQuesionPending || isUpdateQuestionPending;
 
   return (
@@ -198,18 +247,73 @@ const QuestionEditModal = () => {
               placeholder="카테고리를 선택하세요"
               className="w-full"
               value={category}
-              onValueChange={(value) => setCategory(value as CategoryType)}
+              onValueChange={(value) => setCategory(value as CategoryTypeEnums)}
             />
           </div>
+          {/* 기술 스택 */}
+          <article className="flex flex-col gap-3">
+            <span className="flex gap-1 text-sm">
+              <p className="text-gray-700">기술 스택</p>
+            </span>
+            <div className="relative" ref={containerRef}>
+              <Input
+                className="c1 text-gray-1000 focus:ring-main-400 border-gray-200 bg-gray-100"
+                type="text"
+                placeholder="기술 스택을 입력해주세요"
+                value={searchTerm} // state와 연결
+                onClick={techOnOpen}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+
+              {/* 선택된 배지들 (URL 상태 기반) */}
+              <div className="mt-3 flex flex-wrap gap-2">
+                {seletedTech.map((slug, index) => (
+                  <span
+                    key={slug}
+                    className="bg-main-400 flex items-center gap-2 rounded-full px-3 py-1 text-xs text-white"
+                  >
+                    {seletedTech[index]}
+                    <button onClick={() => handleRemoveTech(slug)}>×</button>
+                  </span>
+                ))}
+              </div>
+
+              {techIsOpen && (
+                <div className="animate-in fade-in zoom-in-95 absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
+                  <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
+                    {techStack.map((tech) => {
+                      const isSelected = seletedTech.includes(tech.slug);
+
+                      return (
+                        <button
+                          key={tech.id}
+                          onClick={() => handleSelectTech(tech.slug)}
+                          className={cn(
+                            'flex items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-all',
+                            isSelected
+                              ? 'bg-main-50 text-main-600 font-semibold'
+                              : 'text-gray-700 hover:bg-gray-100',
+                          )}
+                        >
+                          {tech.name}
+                          {isSelected && <Check size={15} />}
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </div>
+          </article>
 
           {/* 태그 */}
           <div className="flex flex-col gap-1">
             <p className="text-sm text-gray-700">태그</p>
             <Input
               placeholder="태그를 입력하세요"
-              value={tag}
+              value={tagInput}
               onKeyDown={handleAddTagKeyDown}
-              onChange={(e) => setTag(e.target.value)}
+              onChange={(e) => setTagInput(e.target.value)}
               disabled={isPending}
             />
             <ul className="mt-1 flex flex-wrap gap-2">
@@ -232,7 +336,7 @@ const QuestionEditModal = () => {
         <div className="mt-3 flex w-full justify-end">
           <Button
             disabled={isPending || title == '' || category == ''}
-            onClick={handleCreateQuesionClick}
+            onClick={handleEditQuesionClick}
             className="px-6"
           >
             {isEdit ? '수정 완료' : '등록'}

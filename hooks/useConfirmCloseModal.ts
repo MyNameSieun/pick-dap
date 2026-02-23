@@ -1,4 +1,3 @@
-// hooks/useConfirmCloseModal.ts
 import { useOpenAlertModal } from '@/store/modal/alertModal';
 
 export const useConfirmCloseModal = () => {

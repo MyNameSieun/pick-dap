@@ -6,7 +6,7 @@ import { useSignUp } from '@/hooks/mutations/useSignUp';
 import { generateErrorMessage } from '@/lib/auth/error';
 import { SignupFormData, signupSchema } from '@/types/schema';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 
 const SignupInput = () => {
@@ -23,6 +23,7 @@ const SignupInput = () => {
 
   const { mutate: signUp, isPending } = useSignUp();
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const onSubmit = (data: SignupFormData) => {
     signUp(
@@ -33,8 +34,8 @@ const SignupInput = () => {
       },
       {
         onSuccess: () => {
-          alert('회원가입이 완료되었습니다!');
-          router.push('/');
+          const returnTo = searchParams.get('returnTo') || '/';
+          router.push(returnTo);
         },
 
         onError: (error: Error) => {

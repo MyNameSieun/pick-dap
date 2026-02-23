@@ -10,7 +10,7 @@ const InterviewAiPage = async ({ params }: InterviewAiPageProps) => {
 
   return (
     <>
-      <QuestionHeader idx={idx} slug={slug} />
+      <QuestionHeader idx={idx} />
       <QuestionAi />
     </>
   );

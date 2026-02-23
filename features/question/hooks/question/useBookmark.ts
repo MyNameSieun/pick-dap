@@ -16,7 +16,7 @@ export const useToggleBookmark = (callbacks?: UseMutationCallback) => {
     mutationFn: ({ questionId }: useToggleBookmarkProps) =>
       toggleBookmark({ questionId }),
 
-    onMutate: async ({ questionId, questionIdx }: useToggleBookmarkProps) => {
+    onMutate: async ({ questionIdx }: useToggleBookmarkProps) => {
       // 1. 모든 관련 쿼리 취소 (충돌 방지)
       await queryClient.cancelQueries({ queryKey: QUERY_KEYS.question.all });
 
@@ -28,7 +28,7 @@ export const useToggleBookmark = (callbacks?: UseMutationCallback) => {
       // 4. [상세 페이지 업데이트]
       // 정확한 idx 키를 타겟팅하여 단일 객체 업데이트
       queryClient.setQueryData<QuestionWithDetails>(
-        QUERY_KEYS.question.byIdx(questionIdx),
+        QUERY_KEYS.question.detail(questionIdx),
         (old) => {
           if (!old) return old;
           const isBookmarked = old.is_mine_bookmarked;

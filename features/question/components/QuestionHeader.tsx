@@ -6,43 +6,59 @@ import { toast } from 'sonner';
 import Image from 'next/image';
 import defaultProfile from '@/public/defaultProfile.png';
 import { useSession } from '@/store/session';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import BackButton from '@/components/common/BackButton';
 import QuestionAnswerHeaderTextArea from './QuestionAnswerHeaderTextArea';
 import Loader from '@/components/ui/Loader';
 import { usePathname } from 'next/navigation';
-import { useFetchQuestionByIdx } from '../hooks/question/useFetchQuestionData';
-import { useFetchMyAnswerData } from '../hooks/answer/useFetchAnswer';
+import { useFetchMyAnswerData } from '../hooks/answer/useFetchAnswerData';
 import { useCreateAnswer } from '../hooks/answer/useCreateAnswers';
 import { useUpdateAnswer } from '../hooks/answer/useUpdateAnswer';
 import QuestionContentHeader from './common/QuestionContentHeader';
 import { isUpdateWrite } from '@/lib/isUpdateWrite';
 import { useDeleteAnswer } from '../hooks/answer/useDeleteAnswer';
+import { useFetchQuestionByIdxData } from '../hooks/question/useFetchQuestionData';
+import { useIncrementViewCount } from '../hooks/question/useincrementViewCount';
 
 interface QuestionHeaderProps {
   idx: string;
 }
 
 const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
-  // 조회
+  // 조회수
+  const { mutate: incrementView } = useIncrementViewCount();
+
+  useEffect(() => {
+    const questionIdx = parseInt(idx);
+
+    // 세션 스토리지로 중복 조회수 방지
+    const viewed = JSON.parse(
+      sessionStorage.getItem('viewed_questions') || '[]',
+    );
+    if (!viewed.includes(questionIdx)) {
+      incrementView(questionIdx);
+      sessionStorage.setItem(
+        'viewed_questions',
+        JSON.stringify([...viewed, questionIdx]),
+      );
+    }
+  }, [idx, incrementView]);
 
   const auth = useSession();
   const userId = auth?.user?.id;
-  const { data: question } = useFetchQuestionByIdx(idx, String(userId));
-
-  const isAuthor = question?.author?.id === userId;
   const pathname = usePathname();
 
-  const { data: answerData, isLoading } = useFetchMyAnswerData(
-    question.id,
-    userId,
+  const { data: question, isLoading: isQuestionLoading } =
+    useFetchQuestionByIdxData(idx);
+  const { data: answerData, isLoading: isAnswerLoading } = useFetchMyAnswerData(
+    question?.id || '',
   );
+  const isAuthor = question?.author?.id === userId;
 
   const [answer, setAnswer] = useState('');
-
   const [isEditing, setIsEditing] = useState(false);
 
-  // 등록
+  // 등록 훅
   const { mutate: handleSaveQuesion, isPending: answerPending } =
     useCreateAnswer({
       onSuccess: () => {
@@ -54,15 +70,7 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
       },
     });
 
-  const handleSaveQuesionClick = () => {
-    handleSaveQuesion({
-      answers: answer,
-      questionIdx: Number(idx),
-    });
-    setIsEditing(false);
-  };
-
-  // 수정
+  // 수정 훅
   const { mutate: updateAnswer, isPending: isUpdateAnswerPending } =
     useUpdateAnswer({
       onSuccess: () => {
@@ -75,6 +83,44 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
       },
     });
 
+  // 삭제 훅
+  const { mutate: deleteAnswer, isPending: isDeleteAnswerPending } =
+    useDeleteAnswer({
+      onSuccess: () => {
+        toast.success('답변이 삭제 되었습니다.', { position: 'top-center' });
+        setAnswer('');
+      },
+      onError: (error) => {
+        toast.error('답변 삭제에 실패했습니다.', { position: 'top-center' });
+        console.error('답변 삭제 실패:', error);
+      },
+    });
+
+  // 데이터가 없으면 먼저 리턴
+  // 이 줄 아래부터는 반드시 데이터 존재함을 보장함
+  if (isQuestionLoading || isAnswerLoading || !question) return <Loader />;
+
+  // 등록
+  const handleSaveQuesionClick = () => {
+    handleSaveQuesion({
+      answers: answer,
+      questionId: question.id,
+      currentPath: pathname,
+    });
+    setIsEditing(false);
+  };
+
+  // 삭제
+  const handleDeleteAnswerButton = (answerId: string) => {
+    if (window.confirm('정말 삭제하시겠습니까?')) {
+      deleteAnswer({
+        answerId: answerId,
+        questionId: question.id,
+      });
+    }
+  };
+
+  // 수정
   const handleEditModeClick = () => {
     if (isEditing && answerData) {
       if (answer.trim() === '') return;
@@ -102,32 +148,6 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
     setAnswer(answerData?.answer || '');
     setIsEditing(false);
   };
-
-  // 삭제
-  const { mutate: deleteAnswer, isPending: isDeleteAnswerPending } =
-    useDeleteAnswer({
-      onSuccess: () => {
-        toast.success('답변이 삭제 되었습니다.', { position: 'top-center' });
-        setAnswer('');
-      },
-      onError: (error) => {
-        toast.error('답변 삭제에 실패했습니다.', { position: 'top-center' });
-        console.error('답변 삭제 실패:', error);
-      },
-    });
-
-  const handleDeleteAnswerButton = (answerId: string) => {
-    if (window.confirm('정말 삭제하시겠습니까?')) {
-      deleteAnswer({
-        answerId: answerId,
-        questionId: question.id,
-        userId: userId,
-      });
-    }
-  };
-
-  if (isLoading) return <Loader />;
-
   return (
     <>
       {pathname.startsWith('/question') && (

@@ -38,7 +38,7 @@ const QuestionContentHeader = ({
         toast.success('질문이 삭제되었습니다.', {
           position: 'top-center',
         });
-        router.push(`/question`);
+        router.replace(`/question`);
       },
       onError: (error) => {
         toast.error('질문 삭제에 실패했습니다.', {
@@ -65,6 +65,7 @@ const QuestionContentHeader = ({
       title: question.title,
       category: question.category?.category_type || '',
       tagList: question.tags?.map((t) => t.tag.label) || [],
+      techList: question.tech_stacks?.map((ts) => ts.tech.slug) || [],
     });
   };
   return (
@@ -72,16 +73,20 @@ const QuestionContentHeader = ({
       <div className="flex items-center justify-between">
         <div className="flex gap-3">
           {question.category?.category_type && (
-            <Tags color="blue" size="big">
-              {question.category.category_type}
-            </Tags>
+            <Tags size="big">{question.category.category_type}</Tags>
           )}
+          {question.tech_stacks.map(({ tech }) => (
+            <Tags color="purple" key={tech.id} size="big">
+              {tech.name}
+            </Tags>
+          ))}
           {question.tags.map(({ tag }) => (
-            <Tags key={tag.label} size="big">
+            <Tags color="green" key={tag.label} size="big">
               {tag.label}
             </Tags>
           ))}
         </div>
+
         <div className="flex items-center gap-3">
           <Button
             variant={'white'}

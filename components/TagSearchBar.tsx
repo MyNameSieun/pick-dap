@@ -26,8 +26,6 @@ const TagSearchBar = () => {
   // 2. 검색어에 따른 기술 스택 필터링 로직 추가
   const { data: techStack = [] } = useTechStackData();
 
-  {
-  }
   // 3. slug를 기반으로 실제 name을 찾아서 배지에 표시하기 위한 매핑
   const selectedTechNames = useMemo(() => {
     return selectedTechSlugs.map((slug) => {

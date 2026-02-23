@@ -23,10 +23,10 @@ const LikeCommentButton = ({ comment, answerId }: LikeCommentButtonProps) => {
       className="c1 flex items-center gap-1 text-gray-500"
     >
       <Heart
-        fill={comment.like_count > 0 ? 'currentColor' : 'none'}
+        fill={comment.isLiked ? 'currentColor' : 'none'}
         className={cn(
           'cursor-pointer',
-          comment.like_count > 0 ? 'text-red-500' : 'text-gray-400',
+          comment.isLiked ? 'text-red-500' : 'text-gray-400',
         )}
         size={14}
       />

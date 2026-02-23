@@ -56,6 +56,42 @@ export type Database = {
           },
         ]
       }
+      bookmark: {
+        Row: {
+          created_at: string
+          id: string
+          question_id: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          question_id?: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          question_id?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "bookmark_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: false
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "bookmark_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       comments: {
         Row: {
           answer_id: string | null
@@ -66,6 +102,8 @@ export type Database = {
           id: string
           parent_id: string | null
           post_id: string | null
+          root_created_at: string
+          root_user_id: string
           updated_at: string
           user_id: string
         }
@@ -78,6 +116,8 @@ export type Database = {
           id?: string
           parent_id?: string | null
           post_id?: string | null
+          root_created_at?: string
+          root_user_id: string
           updated_at?: string
           user_id?: string
         }
@@ -90,6 +130,8 @@ export type Database = {
           id?: string
           parent_id?: string | null
           post_id?: string | null
+          root_created_at?: string
+          root_user_id?: string
           updated_at?: string
           user_id?: string
         }
@@ -382,6 +424,39 @@ export type Database = {
           },
         ]
       }
+      question_status: {
+        Row: {
+          question_id: string
+          status: Database["public"]["Enums"]["status"]
+          user_id: string
+        }
+        Insert: {
+          question_id: string
+          status?: Database["public"]["Enums"]["status"]
+          user_id?: string
+        }
+        Update: {
+          question_id?: string
+          status?: Database["public"]["Enums"]["status"]
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "question_status_question_id_fkey"
+            columns: ["question_id"]
+            isOneToOne: true
+            referencedRelation: "questions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "question_status_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       question_tags: {
         Row: {
           question_id: string
@@ -414,21 +489,21 @@ export type Database = {
       }
       question_tech_stack: {
         Row: {
-          questions_id: string
+          question_id: string
           tech_stack_id: string
         }
         Insert: {
-          questions_id?: string
+          question_id?: string
           tech_stack_id?: string
         }
         Update: {
-          questions_id?: string
+          question_id?: string
           tech_stack_id?: string
         }
         Relationships: [
           {
             foreignKeyName: "question_tech_stack_questions_id_fkey"
-            columns: ["questions_id"]
+            columns: ["question_id"]
             isOneToOne: false
             referencedRelation: "questions"
             referencedColumns: ["id"]
@@ -449,7 +524,6 @@ export type Database = {
           idx: number
           question_type: Database["public"]["Enums"]["question_type"]
           slug: string
-          status: Database["public"]["Enums"]["status"]
           title: string
           updated_at: string
           user_id: string
@@ -460,7 +534,6 @@ export type Database = {
           idx?: number
           question_type?: Database["public"]["Enums"]["question_type"]
           slug: string
-          status?: Database["public"]["Enums"]["status"]
           title: string
           updated_at?: string
           user_id?: string
@@ -471,7 +544,6 @@ export type Database = {
           idx?: number
           question_type?: Database["public"]["Enums"]["question_type"]
           slug?: string
-          status?: Database["public"]["Enums"]["status"]
           title?: string
           updated_at?: string
           user_id?: string
@@ -527,6 +599,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      get_questions_with_all_techs: {
+        Args: { tech_slugs: string[] }
+        Returns: {
+          created_at: string
+          id: string
+          idx: number
+          question_type: Database["public"]["Enums"]["question_type"]
+          slug: string
+          title: string
+          updated_at: string
+          user_id: string
+        }[]
+        SetofOptions: {
+          from: "*"
+          to: "questions"
+          isOneToOne: false
+          isSetofReturn: true
+        }
+      }
+      increment_view_count: { Args: { target_idx: number }; Returns: undefined }
       toggle_bookmark: { Args: { p_question_id: string }; Returns: boolean }
       toggle_like: {
         Args: { p_target_id: string; p_type: string }

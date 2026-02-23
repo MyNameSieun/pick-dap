@@ -35,10 +35,7 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
   const user = useSession()?.user;
 
   // 댓글 조회
-  const { data: comments, isLoading } = useFetchComment(
-    answerData.id,
-    user?.id,
-  );
+  const { data: comments, isLoading } = useFetchComment(answerData.id);
 
   // 댓글 등록
   const { mutate: createComment, isPending } = useCreateComment({
@@ -60,13 +57,10 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
   };
 
   // 댓글 삭제
-  const { mutate: deleteCommentMutate } = useDeleteComment(answerData.id);
+  const { mutate: deleteCommentMutate } = useDeleteComment();
   const handleCommentDeleteButton = (commentId: string) => {
-    if (!user) {
-      return alert('로그인이 필요합니다');
-    }
     if (window.confirm('정말 삭제하시겠습니까?')) {
-      deleteCommentMutate({ commentId, userId: user.id });
+      deleteCommentMutate({ commentId });
       toast.success('삭제 되었습니다!', { position: 'top-center' });
     }
   };
@@ -79,7 +73,7 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
   };
 
   const { mutate: commnetUpdateMutate, isPending: isCommentUpdatePending } =
-    useUpdateComment(answerData.id, {
+    useUpdateComment({
       onSuccess: () => {
         setEditingCommentId(null);
         toast.success('수정되었습니다!', { position: 'top-center' });
@@ -139,9 +133,7 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
                   // depth가 0보다 크면(답글이면) 왼쪽 여백
                   style={{
                     marginLeft:
-                      comment.depth > 0
-                        ? `${Math.min(comment.depth * 2, 4)}rem`
-                        : '0',
+                      comment.depth > 0 ? `${comment.depth * 2}rem` : '0',
                   }}
                   src={comment.author.avatar_url || defaultProfile}
                   height={32}
@@ -192,11 +184,19 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
                             {comment.author.nickname}
                           </span>
                           <time className="c1 text-gray-500">
-                            {new Date(comment.created_at).toLocaleString()}
                             {isUpdateWrite(
                               comment.created_at,
                               comment.updated_at,
-                            ) && <span className="ml-1">(수정됨)</span>}
+                            ) ? (
+                              <p>
+                                {new Date(comment.created_at).toLocaleString()}
+                              </p>
+                            ) : (
+                              <p>
+                                {new Date(comment.updated_at).toLocaleString()}
+                                (수정됨)
+                              </p>
+                            )}
                           </time>
                         </div>
                         <p className="b2 leading-relaxed text-gray-800">
@@ -233,6 +233,7 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
                             />
                             <span>수정하기</span>
                           </button>
+
                           <button
                             onClick={() =>
                               handleCommentDeleteButton(comment.id)
@@ -265,12 +266,10 @@ const CommentInput = ({ answerData }: CommentItemtemProps) => {
               {/* 답글 */}
               {replyingCommentId === comment.id && (
                 <div
-                  className="ml-12 flex flex-col gap-3 rounded-lg bg-gray-50 p-4"
+                  className="flex flex-col gap-3 rounded-lg bg-gray-50 p-4"
                   style={{
-                    marginLeft:
-                      comment.depth > 0
-                        ? `${Math.min(comment.depth * 2, 4)}rem`
-                        : '0',
+                    // 부모 댓글의 depth보다 한 단계 더 들어간 위치에 입력창 표시
+                    marginLeft: `${(comment.depth + 1) * 2}rem`,
                   }}
                 >
                   <textarea

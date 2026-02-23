@@ -1,4 +1,3 @@
-// components/modal/AlertModal.tsx
 import { useAlertModal } from '@/store/modal/alertModal';
 import {
   AlertDialog,
@@ -14,18 +13,18 @@ import {
 import { useEscClose } from '@/hooks/useEscClose';
 
 export const AlertModal = () => {
-  const store = useAlertModal(); // 커스텀 훅 호출
+  const store = useAlertModal();
   useEscClose('AlertModal', store.isOpen, store.actions.close);
 
   if (!store.isOpen) return null;
 
   const handleCancelClick = () => {
-    if (store.onNegative) store.onNegative(); // 콜백 실행
+    if (store.onNegative) store.onNegative();
     store.actions.close();
   };
 
   const hanldeActionClick = () => {
-    if (store.onPositive) store.onPositive(); // 콜백 실행 (PostModal 닫기 등)
+    if (store.onPositive) store.onPositive();
     store.actions.close();
   };
 

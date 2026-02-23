@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { combine, devtools } from 'zustand/middleware';
 import { useModalStackStore } from './modalStack';
 import { MODAL_ID } from '@/constants/modalNames';
-import { CategoryTypeEnums } from '@/types/entity';
+import { CategoryTypeEnums, TechStack } from '@/types/entity';
 
 type CreateMode = {
   isOpen: true;
@@ -16,6 +16,7 @@ type EditMode = {
   title: string;
   category: CategoryTypeEnums;
   tagList: string[];
+  techList: string[];
 };
 
 type OpenState = CreateMode | EditMode;

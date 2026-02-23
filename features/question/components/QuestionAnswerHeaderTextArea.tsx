@@ -2,10 +2,10 @@
 
 import { useEffect, useRef } from 'react';
 import { Textarea } from '@/components/ui/textarea/Textarea';
-import { AnswerQuestionJoinType } from '../services/answer/fetchAnswer';
+import { AnswerEntity } from '../services/answer/fetchAnswer';
 
 interface Props {
-  answerData: AnswerQuestionJoinType | null;
+  answerData: AnswerEntity | null;
   questionId: string;
   answer: string;
   setAnswer: (val: string) => void;

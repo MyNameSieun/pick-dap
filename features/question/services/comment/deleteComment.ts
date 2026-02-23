@@ -1,19 +1,21 @@
-import { supabase } from '@/lib/supabase/supabase';
+// featurs/question/services/comment/deleteComment.ts
 
-export const deleteComment = async ({
-  commentId,
-  userId,
-}: {
-  commentId: string;
-  userId: string;
-}) => {
-  const { error } = await supabase
+'use server';
+import { createClient } from '@/lib/supabase/server';
+
+export const deleteComment = async ({ commentId }: { commentId: string }) => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
     .from('comments')
     .delete()
+    .select('id, answer_id')
     .eq('id', commentId)
-    .eq('user_id', userId);
+    .single();
 
   if (error) {
     throw new Error('댓글을 삭제하는 중 오류가 발생했습니다');
   }
+
+  return data;
 };

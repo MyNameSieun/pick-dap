@@ -9,19 +9,31 @@ import { Button } from '@/components/ui/button/Button';
 import { Input } from '@/components/ui/input/Input';
 import { useDisclosure } from '@/hooks/useClickOutside';
 import { useQuestionEditModalAction } from '@/store/modal/useQuestionEditModal';
-import { QuestionStatus } from '@/types/entity';
 import { useState } from 'react';
+import { StatusEnums } from '@/types/entity';
+import { useSession } from '@/store/session';
 
-const FILTER_OPTIONS: { value: 'ALL' | QuestionStatus; label: string }[] = [
+const FILTER_OPTIONS: { value: 'ALL' | StatusEnums; label: string }[] = [
   { value: 'ALL', label: '전체' },
   { value: 'pending', label: '미답변' },
   { value: 'completed', label: '답변완료' },
 ];
 
 const QuestionToolbar = () => {
+  const user = useSession()?.user;
+
   const router = useRouter();
   const searchParams = useSearchParams();
   const { openCreate } = useQuestionEditModalAction();
+
+  const handleOpenEditModal = () => {
+    if (!user) {
+      const currentPath = window.location.pathname;
+      return router.push(`/login?returnTo=${encodeURIComponent(currentPath)}`);
+    }
+
+    openCreate();
+  };
 
   const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
 
@@ -118,7 +130,11 @@ const QuestionToolbar = () => {
           <Button variant="none" className="h-9.5 px-6">
             질문 담기
           </Button>
-          <Button variant="default" className="h-9.5" onClick={openCreate}>
+          <Button
+            variant="default"
+            className="h-9.5"
+            onClick={handleOpenEditModal}
+          >
             <div className="mx-2 flex items-center gap-1">
               <Plus size={20} /> 질문 등록
             </div>

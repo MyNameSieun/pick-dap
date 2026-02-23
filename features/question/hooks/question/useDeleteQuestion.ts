@@ -15,17 +15,12 @@ export const useDeleteQuestion = (
     onSuccess: (deletedIdx) => {
       // 리스트 캐시에서 제거
       queryClient.setQueryData<QuestionEntity[]>(
-        QUERY_KEYS.question.list,
+        QUERY_KEYS.question.list(),
         (prev) => {
           if (!prev) return prev;
           return prev.filter((q) => q.idx != deletedIdx);
         },
       );
-
-      // 2. 상세 페이지 캐시가 있다면 제거
-      queryClient.removeQueries({
-        queryKey: QUERY_KEYS.question.byIdx(deletedIdx),
-      });
 
       if (callbacks?.onSuccess) callbacks.onSuccess();
     },

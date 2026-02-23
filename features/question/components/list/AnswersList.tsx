@@ -5,31 +5,25 @@ import Image from 'next/image';
 import defaultProfile from '@/public/defaultProfile.png';
 import { Suspense } from 'react';
 import Loader from '@/components/ui/Loader';
-import { useFetchQuestionByIdx } from '../../hooks/question/useFetchQuestionData';
-import { useFetchAnswersData } from '../../hooks/answer/useFetchAnswer';
+import { useFetchAnswersData } from '../../hooks/answer/useFetchAnswerData';
 import CommentInput from './CommentInput';
 import { isUpdateWrite } from '@/lib/isUpdateWrite';
 import { LikeAnswerButton } from './LikeAnswerButton';
-import { useSession } from '@/store/session';
+import { useFetchQuestionByIdxData } from '../../hooks/question/useFetchQuestionData';
 
 interface QuestionListAnswersProps {
   idx: string;
 }
 
 const AnswersList = ({ idx }: QuestionListAnswersProps) => {
-  const user = useSession()?.user;
-  const { data: question } = useFetchQuestionByIdx(
-    Number(idx),
-    String(user?.id),
-  );
-  const { data: answers, isLoading } = useFetchAnswersData(question?.id);
+  const { data: question, isLoading: isQuestionLoading } =
+    useFetchQuestionByIdxData(Number(idx));
 
-  if (isLoading)
-    return (
-      <div className="flex justify-center py-20">
-        <Loader />
-      </div>
-    );
+  const { data: answers, isLoading: isAnswerLoading } = useFetchAnswersData(
+    question?.id ?? '',
+  );
+
+  if (isQuestionLoading || isAnswerLoading || !question) return <Loader />;
 
   return (
     <div className="space-y-6">
@@ -41,7 +35,7 @@ const AnswersList = ({ idx }: QuestionListAnswersProps) => {
         />
       ) : (
         <section className="flex flex-col gap-6">
-          {answers.map((answer) => (
+          {answers?.map((answer) => (
             <article
               key={answer.id}
               className="group rounded-2xl border border-gray-100 bg-white p-6 shadow-sm transition-all hover:shadow-md md:p-8"
@@ -63,11 +57,14 @@ const AnswersList = ({ idx }: QuestionListAnswersProps) => {
                     </p>
                     <div className="flex items-center gap-1 text-[13px] text-gray-500">
                       <time className="c1 text-gray-500">
-                        {new Date(answer.created_at).toLocaleString()}
-                        {isUpdateWrite(
-                          answer.created_at,
-                          answer.updated_at,
-                        ) && <span className="ml-1">(수정됨)</span>}
+                        {isUpdateWrite(answer.created_at, answer.updated_at) ? (
+                          <p>{new Date(answer.created_at).toLocaleString()}</p>
+                        ) : (
+                          <p>
+                            {new Date(answer.updated_at).toLocaleString()}{' '}
+                            (수정됨)
+                          </p>
+                        )}
                       </time>
                     </div>
                   </div>

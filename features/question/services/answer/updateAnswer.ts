@@ -1,6 +1,7 @@
 'use server';
 
 import { createClient } from '@/lib/supabase/server';
+import { AnswerEntity } from './fetchAnswer';
 
 interface UpdateAnswerQuestionProps {
   id: string;
@@ -20,12 +21,15 @@ export const updateAnswer = async (
       updated_at: new Date().toISOString(),
     })
     .eq('id', answers.id)
-    .select('*')
+    .select(
+      `*,
+      author:profiles!user_id (nickname, avatar_url`,
+    )
     .maybeSingle();
 
   if (aError) {
     throw new Error('answer 테이블 수정 중 에러가 발생했습니다');
   }
 
-  return data;
+  return data as unknown as Partial<AnswerEntity>;
 };

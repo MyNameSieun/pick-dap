@@ -132,7 +132,10 @@ const Header = () => {
                       <SideMenuBar isHeader={true} />
                       <div className="-mx-4 -mb-4">
                         <Button
-                          onClick={handleLogout}
+                          onClick={async () => {
+                            await handleLogout(); // 함수 호출
+                            router.push(pathname); // 현재 페이지 유지
+                          }}
                           className={twMerge(
                             'h-11 w-full bg-gray-100 font-medium text-gray-800',
                             'border-0',
@@ -154,7 +157,9 @@ const Header = () => {
                   variant="white"
                   size="sm"
                   onClick={() => {
-                    router.push('/login');
+                    router.push(
+                      `/login?returnTo=${encodeURIComponent(pathname)}`,
+                    );
                   }}
                 >
                   로그인
@@ -162,7 +167,11 @@ const Header = () => {
                 <Button
                   className="px-6"
                   size="sm"
-                  onClick={() => router.push('/signup')}
+                  onClick={() => {
+                    router.push(
+                      `/signup?returnTo=${encodeURIComponent(pathname)}`,
+                    );
+                  }}
                 >
                   회원가입
                 </Button>

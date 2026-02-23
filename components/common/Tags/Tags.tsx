@@ -15,7 +15,6 @@ const Tags = ({
   else if (children === '미완료' || children === '불합격') resultColor = 'red';
   else if (children === '진행중' || children === '답변 대기')
     resultColor = 'yellow';
-  else resultColor = 'purple';
 
   jobCategories.map((jobCategory) => {
     if (jobCategory === children) resultColor = 'blue';

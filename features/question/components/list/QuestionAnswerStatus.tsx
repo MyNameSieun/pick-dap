@@ -6,28 +6,31 @@ import { Crown, PenLine, ChevronRight } from 'lucide-react';
 
 import { useSession } from '@/store/session';
 import Link from 'next/link';
-import { useFetchQuestionByIdx } from '../../hooks/question/useFetchQuestionData';
 import {
   useFetchAnswersData,
   useFetchMyAnswerData,
-} from '../../hooks/answer/useFetchAnswer';
+} from '../../hooks/answer/useFetchAnswerData';
 import QuestionContentHeader from '../common/QuestionContentHeader';
 import Loader from '@/components/ui/Loader';
+import { useFetchQuestionByIdxData } from '../../hooks/question/useFetchQuestionData';
 
 const QuestionAnswerStatus = ({ idx, slug }: { idx: string; slug: string }) => {
   const auth = useSession();
   const userId = auth?.user?.id;
-
-  const { data: question } = useFetchQuestionByIdx(idx, String(userId));
-  const { data: answers } = useFetchAnswersData(question.id);
-
-  const isAuthor = question?.author?.id === userId;
-  const { data: answerData, isLoading: isAnswerLoading } = useFetchMyAnswerData(
-    question.id,
-    userId,
+  const { data: question, isLoading: isQuestionLoading } =
+    useFetchQuestionByIdxData(idx);
+  const { data: answers, isLoading: isAnswersLoading } = useFetchAnswersData(
+    question?.id ?? '',
   );
 
-  if (isAnswerLoading) return <Loader />;
+  const { data: answerData, isLoading: isMyAnswerLoading } =
+    useFetchMyAnswerData(question?.id || '');
+  if (isQuestionLoading || isAnswersLoading || isMyAnswerLoading || !question) {
+    return <Loader />;
+  }
+
+  // question이 존재함이 보장된 후 호출
+  const isAuthor = question.author?.id === userId;
 
   return (
     <div className="flex flex-col gap-6">
@@ -70,7 +73,7 @@ const QuestionAnswerStatus = ({ idx, slug }: { idx: string; slug: string }) => {
       <div className="mt-8">
         <HeaderTitleBox
           icon={Crown}
-          title={'다른 사람 답변 비교'}
+          title={'전체 답변 보기'}
           content={`총 ${answers?.length ?? 0}개의 답변이 있습니다.`}
         />
       </div>

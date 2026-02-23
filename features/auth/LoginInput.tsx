@@ -28,13 +28,11 @@ const LoginInput = () => {
     error,
   } = useSignInWithPassword();
 
-  // useMutation이 반환하는 mutate 함수를 호출할 때 두 번째 인자로 옵션을 넘기면,
-  // 훅 내부에서 굳이 인자로 callbacks를 받지 않아도 자동으로 실행
   const onSubmit = (data: LoginFormData) => {
     signInWithPassword(data, {
       onSuccess: () => {
-        const redirect = searchParams.get('redirect') || '/';
-        router.push(redirect);
+        const returnTo = searchParams.get('returnTo') || '/';
+        router.push(returnTo);
       },
     });
   };
