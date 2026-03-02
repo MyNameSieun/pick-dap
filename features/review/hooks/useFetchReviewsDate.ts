@@ -1,12 +1,17 @@
 import { QUERY_KEYS } from '@/lib/constants';
 import { useQuery } from '@tanstack/react-query';
-import { fetchReviewsDate } from '../services/fetchReviewData';
+import { fetchReviewById, fetchReviewsData } from '../services/fetchReviewData';
 
-const useFetchReviewsDate = () => {
+export const useFetchReviewsData = () => {
   return useQuery({
     queryKey: QUERY_KEYS.review.list(),
-    queryFn: fetchReviewsDate,
+    queryFn: fetchReviewsData,
   });
 };
 
-export default useFetchReviewsDate;
+export const useFetchReviewByIdData = (reviewId: string) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.review.detail(reviewId),
+    queryFn: () => fetchReviewById(reviewId),
+  });
+};

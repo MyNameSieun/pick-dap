@@ -102,6 +102,8 @@ export const QUERY_KEYS = {
     all: ['process'] as const,
 
     list: () => [...QUERY_KEYS.process.all, 'list'] as const,
+    detail: (reviewId: string) =>
+      [...QUERY_KEYS.process.all, 'detail', reviewId] as const,
   },
 
   reviewQuestionType: {
@@ -117,7 +119,5 @@ export const QUERY_KEYS = {
   interview_question: {
     all: ['interview-question'] as const,
     list: () => [...QUERY_KEYS.interview_question.all, 'list'] as const,
-    detail: (id: string) =>
-      [...QUERY_KEYS.interview_question.all, 'detail', id] as const,
   },
 };

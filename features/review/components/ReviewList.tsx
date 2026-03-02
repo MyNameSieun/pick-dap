@@ -2,12 +2,12 @@ import Tags from '@/components/common/Tags/Tags';
 import Link from 'next/link';
 import { ChevronRight, Minus } from 'lucide-react';
 import Line from '@/components/common/Line';
-import useFetchReviewsDate from '../hooks/useFetchReviewsDate';
 import Loader from '@/components/ui/Loader';
 import { useFetchInterviewQuestion } from '../hooks/useFetchInterviewQuestion';
 import { useFetchJobRoleData } from '../hooks/useFetchJobRoleData';
+import { useFetchReviewsData } from '../hooks/useFetchReviewsDate';
 const ReviewList = () => {
-  const { data: reviews, isPending: isReviewPending } = useFetchReviewsDate();
+  const { data: reviews, isPending: isReviewPending } = useFetchReviewsData();
   const { data: interviewQuesties, isPending: isInterviewQuestiesPending } =
     useFetchInterviewQuestion();
   const { data: jobRoles, isPending: isJobRoleData } = useFetchJobRoleData();

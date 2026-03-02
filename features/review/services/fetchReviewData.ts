@@ -6,6 +6,7 @@ import { QueryData } from '@supabase/supabase-js';
 
 const QUERY_JOIN_DATA = `
     *,
+    job_role:job_role(name),
     interview_question (*),
     processes:review_process_map(process:interview_processes(*)),
     review_questions:review_question_type_map(question_type:review_question_type(*))
@@ -18,7 +19,7 @@ const reviewJoinQuery = supabase
 export type RawReviewJoined = QueryData<typeof reviewJoinQuery>[number];
 
 // 리뷰 목록
-export const fetchReviewsDate = async () => {
+export const fetchReviewsData = async () => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
@@ -36,7 +37,7 @@ export const fetchReviewById = async (id: string) => {
 
   const { data, error } = await supabase
     .from('interview_review')
-    .select()
+    .select(QUERY_JOIN_DATA)
     .eq('id', id)
     .single();
 
