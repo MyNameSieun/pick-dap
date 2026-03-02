@@ -9,14 +9,10 @@ const QUERY_JOIN_DATA = `
     job_role:job_role(name),
     interview_question (*),
     processes:review_process_map(process:interview_processes(*)),
-    review_questions:review_question_type_map(question_type:review_question_type(*))
+    review_questions:review_question_type_map(question_type:review_question_type(*)),
+    myLiked:like!review_id (user_id),
+    likes:like!review_id(count)
 `;
-
-const reviewJoinQuery = supabase
-  .from('interview_review')
-  .select(QUERY_JOIN_DATA);
-
-export type RawReviewJoined = QueryData<typeof reviewJoinQuery>[number];
 
 // 리뷰 목록
 export const fetchReviewsData = async () => {
@@ -24,18 +20,23 @@ export const fetchReviewsData = async () => {
 
   const { data, error } = await supabase
     .from('interview_review')
-    .select(QUERY_JOIN_DATA);
+    .select(QUERY_JOIN_DATA)
+    .order('created_at', { ascending: false });
 
   if (error) throw error;
 
-  return data;
+  return data.map((review) => ({
+    ...review,
+    like_count: review.likes?.[0]?.count ?? 0,
+    isLiked: review.myLiked && review.myLiked.length > 0,
+  }));
 };
 
 // 특정 리뷰 조회
-export const fetchReviewById = async (id: string) => {
+export const fetchReviewById = async (id: string, userId: string) => {
   const supabase = await createClient();
 
-  const { data, error } = await supabase
+  const { data: review, error } = await supabase
     .from('interview_review')
     .select(QUERY_JOIN_DATA)
     .eq('id', id)
@@ -43,5 +44,20 @@ export const fetchReviewById = async (id: string) => {
 
   if (error) throw error;
 
-  return data;
+  return {
+    ...review,
+    like_count: review.likes?.[0]?.count ?? 0,
+    isLiked: review.myLiked && review.myLiked.length > 0,
+  };
+};
+
+const reviewJoinQuery = supabase
+  .from('interview_review')
+  .select(QUERY_JOIN_DATA);
+
+export type RawReviewJoined = QueryData<typeof reviewJoinQuery>[number];
+
+export type mapToReviewDetail = RawReviewJoined & {
+  isLiked: boolean;
+  like_count: number;
 };

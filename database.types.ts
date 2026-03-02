@@ -323,6 +323,7 @@ export type Database = {
           created_at: string
           id: string
           post_id: string | null
+          review_id: string | null
           user_id: string
         }
         Insert: {
@@ -331,6 +332,7 @@ export type Database = {
           created_at?: string
           id?: string
           post_id?: string | null
+          review_id?: string | null
           user_id?: string
         }
         Update: {
@@ -339,6 +341,7 @@ export type Database = {
           created_at?: string
           id?: string
           post_id?: string | null
+          review_id?: string | null
           user_id?: string
         }
         Relationships: [
@@ -361,6 +364,13 @@ export type Database = {
             columns: ["post_id"]
             isOneToOne: false
             referencedRelation: "posts"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "like_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "interview_review"
             referencedColumns: ["id"]
           },
           {

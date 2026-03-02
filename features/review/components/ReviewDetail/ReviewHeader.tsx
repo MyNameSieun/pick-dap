@@ -11,15 +11,21 @@ import {
   MoreVertical,
   Trash2,
 } from 'lucide-react';
-import { RawReviewJoined } from '../../services/fetchReviewData';
+import {
+  mapToReviewDetail,
+  RawReviewJoined,
+} from '../../services/fetchReviewData';
 import { useState } from 'react';
 import { useDeleteReview } from '../../hooks/useDeleteReview';
 import Loader from '@/components/ui/Loader';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/store/session';
+import { useToggleReviewLike } from '../../hooks/useToggleReviewLike';
+import { cn } from '@/lib/utils';
 
-const ReviewHeader = ({ review }: { review: RawReviewJoined }) => {
+const ReviewHeader = ({ review }: { review: mapToReviewDetail }) => {
   const {
+    id: reviewId,
     company_name,
     final_status_type,
     interview_year,
@@ -27,6 +33,8 @@ const ReviewHeader = ({ review }: { review: RawReviewJoined }) => {
     employment_type,
     view_count,
     job_role,
+    like_count,
+    isLiked,
   } = review;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
@@ -34,6 +42,9 @@ const ReviewHeader = ({ review }: { review: RawReviewJoined }) => {
 
   const { mutate: deleteMutate, isPending: isDeletePending } =
     useDeleteReview();
+
+  const { mutate: isToggleLikeMutate, isPending: isToggleLikePending } =
+    useToggleReviewLike();
 
   const router = useRouter();
   if (isDeletePending) return <Loader />;
@@ -53,7 +64,10 @@ const ReviewHeader = ({ review }: { review: RawReviewJoined }) => {
       },
     });
   };
-
+  const handleLikeClick = () => {
+    if (isToggleLikePending) return;
+    isToggleLikeMutate({ reviewId });
+  };
   return (
     <section className="mt-8 mb-6">
       <article className="mb-4 flex items-center justify-between">
@@ -63,8 +77,26 @@ const ReviewHeader = ({ review }: { review: RawReviewJoined }) => {
         </div>
 
         <div className="relative flex items-center gap-2">
-          <Button variant={'white'} className="flex gap-2 font-bold shadow-sm">
-            <Heart className="fill-gray-200" />1
+          <Button
+            onClick={handleLikeClick}
+            variant="none"
+            className={cn(
+              'group/like flex h-10 gap-2 rounded-full border-gray-200 text-gray-900 transition-all active:scale-95',
+              isLiked
+                ? 'border-red-100 bg-red-50 text-red-600 hover:bg-red-100'
+                : 'hover:border-gray-300',
+            )}
+          >
+            <Heart
+              size={16}
+              className={cn(
+                'transition-colors',
+                isLiked
+                  ? 'fill-red-500 text-red-500'
+                  : 'text-gray-400 group-hover/like:text-red-400',
+              )}
+            />
+            {like_count}
           </Button>
           {user && (
             <button
