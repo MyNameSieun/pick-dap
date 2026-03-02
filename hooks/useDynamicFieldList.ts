@@ -1,27 +1,31 @@
 'use client';
 
-import { useState } from 'react';
-
-interface IField {
-  id: string;
-  content: string;
-}
-const init = [{ id: '1', content: '' }];
+import { useReviewStore } from '@/features/review/store/reviewStore';
 
 export const useDynamicFieldList = () => {
-  const [fields, setFields] = useState<IField[]>(init);
+  const { formData, setField } = useReviewStore();
+  const questions = formData.questions;
 
+  // 추가
   const addField = () => {
-    const newField: IField = {
-      id: Date.now().toString(),
-      content: '',
-    };
-    setFields((prev) => [...prev, newField]);
+    const newQuestion = { id: crypto.randomUUID(), review_content: '' };
+    setField('questions', [...questions, newQuestion]);
   };
 
+  // 삭제
   const removeField = (targetId: string) => {
-    setFields((prev) => prev.filter((fields) => fields.id !== targetId));
+    if (questions.length == 1) return;
+    const updatedQuestions = questions.filter((q) => q.id !== targetId);
+    setField('questions', updatedQuestions);
   };
 
-  return { fields, addField, removeField };
+  // 수정
+  const updateField = (targetId: string, value: string) => {
+    const updated = questions.map((q) =>
+      q.id === targetId ? { ...q, review_content: value } : q,
+    );
+    setField('questions', updated);
+  };
+
+  return { questions, addField, removeField, updateField };
 };

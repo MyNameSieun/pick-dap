@@ -1,3 +1,4 @@
+'use client';
 import CreateFormLayout from '@/components/common/CreateForm/CreateFormLayout';
 import BasicInfo from '@/features/review/components/ReviewNewPage/BasicInfo';
 import Evaluation from '@/features/review/components/ReviewNewPage/Evaluation';

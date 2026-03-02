@@ -10,11 +10,12 @@ interface DynamicFieldListProps {
 }
 
 const DynamicFieldList = ({ label, placeholder }: DynamicFieldListProps) => {
-  const { fields, addField, removeField } = useDynamicFieldList();
+  const { questions, addField, updateField, removeField } =
+    useDynamicFieldList();
 
   return (
     <div className="flex flex-col gap-4">
-      {fields.map(({ id }, index) => (
+      {questions.map(({ id, review_content }, index) => (
         <div
           key={id}
           className="relative rounded-md border border-gray-300 bg-white p-5"
@@ -31,7 +32,12 @@ const DynamicFieldList = ({ label, placeholder }: DynamicFieldListProps) => {
             </button>
           </div>
 
-          <TextareaField placeholder={placeholder} className="bg-gray-50" />
+          <TextareaField
+            placeholder={placeholder}
+            className="bg-gray-50"
+            value={review_content}
+            onChange={(e) => updateField(id, e.target.value)}
+          />
         </div>
       ))}
 

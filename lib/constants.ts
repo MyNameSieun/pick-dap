@@ -85,4 +85,32 @@ export const QUERY_KEYS = {
     userAnswerComments: (answerId: string, userId: string) =>
       [...QUERY_KEYS.comment.list, 'answer', answerId, 'user', userId] as const,
   },
+
+  review: {
+    all: ['review'] as const,
+
+    list: ['review', 'list'] as const,
+
+    detail: (reviewId: string) =>
+      [...QUERY_KEYS.review.all, 'review', reviewId] as const,
+
+    myReview: (reviewId: string) =>
+      [...QUERY_KEYS.comment.list, 'review', reviewId, 'me'] as const,
+  },
+
+  process: {
+    all: ['process'] as const,
+
+    list: ['process', 'list'] as const,
+  },
+
+  reviewQuestionType: {
+    all: ['review-question-type'] as const,
+    list: () => [...QUERY_KEYS.reviewQuestionType.all, 'list'] as const,
+  },
+
+  jobRole: {
+    all: ['job-role'] as const,
+    list: () => [...QUERY_KEYS.jobRole.all, 'list'] as const,
+  },
 };

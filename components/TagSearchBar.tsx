@@ -15,6 +15,8 @@ const TagSearchBar = () => {
   const { containerRef, onClose, isOpen, onOpen } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState('');
 
+  const { data: techStack = [] } = useTechStackData();
+
   // 1. URL에서 현재 상태 읽기
   const currentCategory = searchParams.get('category') || '전체';
   const currentSort = searchParams.get('sort') || 'popular';
@@ -23,10 +25,7 @@ const TagSearchBar = () => {
     [searchParams],
   );
 
-  // 2. 검색어에 따른 기술 스택 필터링 로직 추가
-  const { data: techStack = [] } = useTechStackData();
-
-  // 3. slug를 기반으로 실제 name을 찾아서 배지에 표시하기 위한 매핑
+  // 2. slug를 기반으로 실제 name을 찾아서 배지에 표시하기 위한 매핑
   const selectedTechNames = useMemo(() => {
     return selectedTechSlugs.map((slug) => {
       const tech = techStack.find((t) => t.slug === slug);
@@ -39,7 +38,7 @@ const TagSearchBar = () => {
     tech.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // 2. URL 업데이트 공통 함수
+  // 3. URL 업데이트 공통 함수
   const updateParams = (updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());
 
@@ -56,7 +55,7 @@ const TagSearchBar = () => {
     router.replace(`?${params.toString()}`, { scroll: false });
   };
 
-  // 기술 스택 선택 (slug를 URL에 저장)
+  // 4. 기술 스택 선택 (slug를 URL에 저장)
   const handleSelectTech = (slug: string) => {
     if (selectedTechSlugs.includes(slug)) return;
     if (selectedTechSlugs.length >= 3)
@@ -68,12 +67,13 @@ const TagSearchBar = () => {
     onClose();
   };
 
-  // 기술 스택 삭제
+  // 5. 기술 스택 삭제
   const handleRemoveTech = (slug: string) => {
     const newTechs = selectedTechSlugs.filter((s) => s !== slug);
     updateParams({ techs: newTechs.length > 0 ? newTechs.join(',') : null });
   };
 
+  // 6. 정렬 필터
   const sortOption = [
     { label: '추천순', value: 'popular' },
     { label: '최신순', value: 'latest' },

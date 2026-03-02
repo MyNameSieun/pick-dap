@@ -91,7 +91,7 @@ const QuestionEditModal = () => {
   };
   useEscClose(MODAL_ID.CREATE_QUESTION, isOpen, handleCloseModal);
 
-  // 수정 훅 
+  // 수정 훅
   const { mutate: updateQuestion, isPending: isUpdateQuestionPending } =
     useUpdateQuestion({
       onSuccess: () => {
@@ -199,6 +199,15 @@ const QuestionEditModal = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const isPending = isCreateQuesionPending || isUpdateQuestionPending;
 
+  const tagStackFilter = techStack.filter((tag) => {
+    const search = searchTerm.toLowerCase().trim();
+
+    return (
+      !seletedTech.includes(tag.slug) &&
+      (tag.slug.toLowerCase().includes(search) ||
+        tag.name.toLowerCase().includes(search))
+    );
+  });
   return (
     <div onClick={handleCloseModal} className="modal-layout">
       <section
@@ -280,27 +289,35 @@ const QuestionEditModal = () => {
 
               {techIsOpen && (
                 <div className="animate-in fade-in zoom-in-95 absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
-                  <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
-                    {techStack.map((tech) => {
-                      const isSelected = seletedTech.includes(tech.slug);
-
-                      return (
-                        <button
-                          key={tech.id}
-                          onClick={() => handleSelectTech(tech.slug)}
-                          className={cn(
-                            'flex items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-all',
-                            isSelected
-                              ? 'bg-main-50 text-main-600 font-semibold'
-                              : 'text-gray-700 hover:bg-gray-100',
-                          )}
-                        >
-                          {tech.name}
-                          {isSelected && <Check size={15} />}
-                        </button>
-                      );
-                    })}
-                  </div>
+                  {tagStackFilter.length > 0 ? (
+                    <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
+                      {tagStackFilter.map((tech) => {
+                        const isSelected = seletedTech.includes(tech.slug);
+                        return (
+                          <button
+                            key={tech.id}
+                            onClick={() => handleSelectTech(tech.slug)}
+                            className={cn(
+                              'flex items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-all',
+                              isSelected
+                                ? 'bg-main-50 text-main-600 font-semibold'
+                                : 'text-gray-700 hover:bg-gray-100',
+                            )}
+                          >
+                            {tech.name}
+                            {isSelected && <Check size={15} />}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  ) : (
+                    <div className="flex flex-col items-center justify-center py-8 text-center">
+                      <p className="b2 text-gray-600">검색 결과가 없습니다.</p>
+                      <p className="c1 mt-1 text-gray-500">
+                        다른 키워드로 검색해 보세요.
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>

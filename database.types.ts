@@ -173,6 +173,149 @@ export type Database = {
           },
         ]
       }
+      interview_processes: {
+        Row: {
+          display_order: number
+          id: string
+          name: string
+        }
+        Insert: {
+          display_order?: number
+          id?: string
+          name: string
+        }
+        Update: {
+          display_order?: number
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      interview_question: {
+        Row: {
+          display_order: number
+          id: string
+          review_content: string
+          review_id: string
+        }
+        Insert: {
+          display_order?: number
+          id?: string
+          review_content: string
+          review_id?: string
+        }
+        Update: {
+          display_order?: number
+          id?: string
+          review_content?: string
+          review_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "Interview_question_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "interview_review"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      interview_review: {
+        Row: {
+          atmosphere_score: number
+          company_name: string
+          created_at: string
+          difficulty: Database["public"]["Enums"]["difficulty_type"]
+          employment_type: Database["public"]["Enums"]["employment_type"]
+          final_status_type: Database["public"]["Enums"]["final_status_type"]
+          id: string
+          interview_personnel_type: Database["public"]["Enums"]["interview_personnel_type"]
+          interview_season: Database["public"]["Enums"]["interview_season_type"]
+          interview_tip: string | null
+          interview_year: number
+          job_role_id: string
+          like_count: number
+          overall_review: string
+          proof_url: string
+          result_wait_time_type: Database["public"]["Enums"]["result_wait_time_type"]
+          updated_at: string
+          user_id: string
+          view_count: number
+        }
+        Insert: {
+          atmosphere_score: number
+          company_name: string
+          created_at?: string
+          difficulty: Database["public"]["Enums"]["difficulty_type"]
+          employment_type: Database["public"]["Enums"]["employment_type"]
+          final_status_type: Database["public"]["Enums"]["final_status_type"]
+          id?: string
+          interview_personnel_type: Database["public"]["Enums"]["interview_personnel_type"]
+          interview_season: Database["public"]["Enums"]["interview_season_type"]
+          interview_tip?: string | null
+          interview_year: number
+          job_role_id?: string
+          like_count?: number
+          overall_review: string
+          proof_url: string
+          result_wait_time_type: Database["public"]["Enums"]["result_wait_time_type"]
+          updated_at?: string
+          user_id?: string
+          view_count?: number
+        }
+        Update: {
+          atmosphere_score?: number
+          company_name?: string
+          created_at?: string
+          difficulty?: Database["public"]["Enums"]["difficulty_type"]
+          employment_type?: Database["public"]["Enums"]["employment_type"]
+          final_status_type?: Database["public"]["Enums"]["final_status_type"]
+          id?: string
+          interview_personnel_type?: Database["public"]["Enums"]["interview_personnel_type"]
+          interview_season?: Database["public"]["Enums"]["interview_season_type"]
+          interview_tip?: string | null
+          interview_year?: number
+          job_role_id?: string
+          like_count?: number
+          overall_review?: string
+          proof_url?: string
+          result_wait_time_type?: Database["public"]["Enums"]["result_wait_time_type"]
+          updated_at?: string
+          user_id?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "interview_review_job_role_id_fkey"
+            columns: ["job_role_id"]
+            isOneToOne: false
+            referencedRelation: "job_role"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "Interview_review_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      job_role: {
+        Row: {
+          id: string
+          name: string
+        }
+        Insert: {
+          id?: string
+          name: string
+        }
+        Update: {
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
       like: {
         Row: {
           answer_id: string | null
@@ -558,6 +701,110 @@ export type Database = {
           },
         ]
       }
+      review_content: {
+        Row: {
+          interview_tip: string | null
+          overall_review: string
+          review_id: string
+        }
+        Insert: {
+          interview_tip?: string | null
+          overall_review: string
+          review_id?: string
+        }
+        Update: {
+          interview_tip?: string | null
+          overall_review?: string
+          review_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_content_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: true
+            referencedRelation: "interview_review"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_process_map: {
+        Row: {
+          processes_id: string
+          review_id: string
+        }
+        Insert: {
+          processes_id?: string
+          review_id?: string
+        }
+        Update: {
+          processes_id?: string
+          review_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_process_map_processes_id_fkey"
+            columns: ["processes_id"]
+            isOneToOne: false
+            referencedRelation: "interview_processes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_process_map_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "interview_review"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_question_type: {
+        Row: {
+          display_order: number
+          id: string
+          name: string
+        }
+        Insert: {
+          display_order?: number
+          id?: string
+          name: string
+        }
+        Update: {
+          display_order?: number
+          id?: string
+          name?: string
+        }
+        Relationships: []
+      }
+      review_question_type_map: {
+        Row: {
+          question_type_id: string
+          review_id: string
+        }
+        Insert: {
+          question_type_id?: string
+          review_id?: string
+        }
+        Update: {
+          question_type_id?: string
+          review_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_question_type_map_question_type_id_fkey"
+            columns: ["question_type_id"]
+            isOneToOne: false
+            referencedRelation: "review_question_type"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "review_question_type_map_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "interview_review"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       tags: {
         Row: {
           id: string
@@ -645,7 +892,20 @@ export type Database = {
         | "AI"
         | "Android"
         | "iOS"
+      difficulty_type: "쉬움" | "보통" | "어려움"
+      employment_type: "신입" | "경력" | "인턴" | "계약직"
+      final_status_type: "합격" | "불합격" | "진행중"
+      interview_personnel_type: "1:1" | "면접관 다수" | "그룹 면접"
+      interview_season_type: "상반기" | "하반기"
       question_type: "pickdap" | "user"
+      result_wait_time_type:
+        | "1일"
+        | "2~3일"
+        | "4~5일"
+        | "1주"
+        | "2~3주"
+        | "한 달 이상"
+        | "결과 대기중"
       social_provider: "email" | "google" | "github" | "kakao"
       status: "pending" | "completed"
       tag_type: "카테고리" | "기술스택" | "상태" | "면접결과" | "인기"
@@ -787,7 +1047,21 @@ export const Constants = {
         "Android",
         "iOS",
       ],
+      difficulty_type: ["쉬움", "보통", "어려움"],
+      employment_type: ["신입", "경력", "인턴", "계약직"],
+      final_status_type: ["합격", "불합격", "진행중"],
+      interview_personnel_type: ["1:1", "면접관 다수", "그룹 면접"],
+      interview_season_type: ["상반기", "하반기"],
       question_type: ["pickdap", "user"],
+      result_wait_time_type: [
+        "1일",
+        "2~3일",
+        "4~5일",
+        "1주",
+        "2~3주",
+        "한 달 이상",
+        "결과 대기중",
+      ],
       social_provider: ["email", "google", "github", "kakao"],
       status: ["pending", "completed"],
       tag_type: ["카테고리", "기술스택", "상태", "면접결과", "인기"],

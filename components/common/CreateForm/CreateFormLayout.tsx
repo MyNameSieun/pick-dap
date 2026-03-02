@@ -1,3 +1,4 @@
+'use client';
 
 import Contents from '@/components/common/CreateForm/Contents';
 import BackButton from '../BackButton';
@@ -6,6 +7,9 @@ import { LucideIcon } from 'lucide-react';
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import { Button } from '@/components/ui/button/Button';
 import { ContentsType } from '@/types/contents';
+import { useReviewStore } from '@/features/review/store/reviewStore';
+import { useCreateReview } from '@/features/review/hooks/useCreateReview';
+import { useRouter } from 'next/navigation';
 
 interface CreateLayoutProps {
   BackButtonLabel: string;
@@ -25,6 +29,32 @@ const CreateFormLayout = ({
   contents,
 }: CreateLayoutProps) => {
   const { title, content, icon } = HeaderTitleBoxObj;
+
+  const { formData, reset } = useReviewStore();
+
+  const router = useRouter();
+  const { mutate } = useCreateReview({
+    onSuccess: () => {
+      reset();
+      alert('후기가 성공적으로 등록되었습니다!');
+      router.push('/review');
+    },
+  });
+
+  const handleCreateReviewButton = () => {
+    // 1. 서버에 보내기 전 데이터 정제
+    const finalData = {
+      ...formData,
+      questions: formData.questions.map((q) => ({
+        review_content: q.review_content,
+      })),
+    };
+
+    // 2. 가공된 데이터를 mutate에 전달
+    mutate(finalData);
+
+    reset();
+  };
   return (
     <main>
       <header>
@@ -42,7 +72,7 @@ const CreateFormLayout = ({
         <Line />
         <div className="flex justify-end gap-1">
           <Button variant={'white'}>취소</Button>
-          <Button>등록하기</Button>
+          <Button onClick={handleCreateReviewButton}>등록하기</Button>
         </div>
       </footer>
     </main>

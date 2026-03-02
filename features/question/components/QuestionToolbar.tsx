@@ -23,7 +23,54 @@ const QuestionToolbar = () => {
   const user = useSession()?.user;
 
   const router = useRouter();
+
+  // 현재 URL의 쿼리스트링 읽어오기
   const searchParams = useSearchParams();
+
+  // 쿼리 값 가져오기
+  const currentType = searchParams.get('type') || 'pickdap';
+  const currentStatus = searchParams.get('status') || 'ALL';
+
+  // updateParams 함수
+  const updateParams = (updates: Record<string, string | null>) => {
+    // 1. 현재 URL 복사
+    const params = new URLSearchParams(searchParams.toString());
+
+    // 2. 전달받은 값만 업데이트
+    Object.entries(updates).forEach(([key, value]) => {
+      // 값이 없거나(ALL 포함) 기본값이면 URL에서 제거
+      if (value === null || value === 'ALL') {
+        params.delete(key);
+      }
+      // 아니면 URL에 해당 값을 세팅
+      else {
+        params.set(key, value);
+      }
+    });
+
+    // 3. 기존 검색어 유지
+    const currentSearch = searchValue.trim();
+    if (currentSearch) {
+      params.set('q', currentSearch);
+    } else {
+      params.delete('q');
+    }
+
+    // 4. 필터 변경 시 항상 1페이지로 초기화
+    params.set('page', '1');
+
+    // 5. URL 반영
+    router.replace(`?${params.toString()}`, { scroll: false });
+  };
+
+  // 검색어는 useState로 따로 관리
+  const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
+
+  // 검색 실행 핸들러
+  const handleSearchSubmit = () => {
+    updateParams({ q: searchValue.trim() });
+  };
+
   const { openCreate } = useQuestionEditModalAction();
 
   const handleOpenEditModal = () => {
@@ -35,51 +82,12 @@ const QuestionToolbar = () => {
     openCreate();
   };
 
-  const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
-
   const {
     isOpen: isFilterOpen,
     onToggle: toggleFilter,
     onClose: closeFilter,
     containerRef,
   } = useDisclosure();
-
-  const updateParams = (updates: Record<string, string | null>) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value === null || value === 'ALL') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-    // 검색 버튼을 누르지 않고 필터(카테고리/상태)만 바꿀 때도
-    // 현재 입력창에 있는 값을 URL에 동기화
-    const currentSearch = searchValue.trim();
-    if (currentSearch) {
-      params.set('q', currentSearch);
-    } else {
-      params.delete('q');
-    }
-
-    params.set('page', '1');
-    router.replace(`?${params.toString()}`, { scroll: false });
-  };
-
-  // 쿼리 값 가져오기
-  const currentType = searchParams.get('type') || 'pickdap';
-  const currentStatus = searchParams.get('status') || 'ALL';
-
-  // 3. 검색 실행 핸들러
-  const handleSearchSubmit = () => {
-    updateParams({ q: searchValue.trim() });
-  };
-
-  // 사용 예시
-  // updateParams({ type: 'pickdap' });
-  // updateParams({ status: value });
-  // updateParams({ q: searchValue.trim() });
 
   return (
     <article className="mx-9">

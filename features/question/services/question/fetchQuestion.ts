@@ -41,14 +41,13 @@ const mapToQuestionDetail = (q: RawQuestionJoined): QuestionWithDetails => ({
 
 // 필터링 옵션 타입
 export type QuestionFilterOptions = {
-  type?: QuestionType; //  'pickdap' | 'user'
-  category?: CategoryTypeEnums | 'ALL';
-  tag?: string;
+  category?: CategoryTypeEnums | 'ALL'; // 전체 조회를 위해 'ALL' 리터럴과 Enum 타입을 합침
   techs?: string;
-  // '전체' 조회를 위해 'ALL' 리터럴과 Enum 타입을 합침
-  status?: 'ALL' | StatusEnums;
-  searchQuery?: string;
   sort?: 'latest' | 'popular';
+
+  type?: QuestionType; //  'pickdap' | 'user'
+  status?: StatusEnums | 'ALL';
+  searchQuery?: string;
 };
 
 // 3. 실제 데이터를 가져오는 함수
@@ -56,12 +55,13 @@ export type QuestionFilterOptions = {
  *  전체 목록 조회
  */
 export const fetchQuestions = async ({
-  type,
   category,
   techs,
+  sort = 'popular', // 정렬 기본값
+
+  type,
   status,
   searchQuery,
-  sort = 'popular', // 정렬 기본값
 }: QuestionFilterOptions = {}) => {
   const supabase = await createClient();
 
@@ -84,8 +84,27 @@ export const fetchQuestions = async ({
   //  필터링 시작 - 태그 존재 여부에 따라 조인 방식 결정
   let query = supabase.from('questions').select(DYNAMIC_QUERY_DATA);
 
-  // --- 필터링 로직 ---
-  // 1. 기술 스택 필터링 로직
+  // 1. 질문 유형 필터
+  if (type) {
+    query = query.eq('question_type', type);
+  }
+
+  // 2. 카테고리 필터
+  if (category && category !== 'ALL') {
+    query = query.eq('question_category.category_type', category);
+  }
+
+  // 3. 상태 필터
+  if (status && status !== 'ALL') {
+    query = query.eq('question_status.status', status);
+  }
+
+  // 4. 제목 검색
+  if (searchQuery) {
+    query = query.ilike('title', `%${searchQuery}%`);
+  }
+
+  // 5. 기술 스택 필터링 로직 (RPC 사용)
   if (techs) {
     const techArray = techs.split(',');
 
@@ -99,27 +118,6 @@ export const fetchQuestions = async ({
     const ids = filteredQuestions.map((q) => q.id);
 
     query = query.in('id', ids);
-  }
-  // 2. 질문 출처 필터
-  if (type) {
-    query = query.eq('question_type', type);
-  }
-
-  // 3. 직무 분야 필터
-  if (category && category !== 'ALL') {
-    query = query.eq('question_category.category_type', category);
-  }
-
-  // 4. 상태 필터
-  if (status && status !== 'ALL') {
-    query = query.eq('question_status.status', status);
-  }
-
-  // 5. 제목 검색
-  // ilike: 대소문자를 구분하지 않고, 특정 문자가 포함된 데이터를 찾을 때 사용
-  // % (와일드카드): 검색어 앞뒤에 어떤 글자가 붙어있어도 상관없이, 단어가 포함만 되어있다면 가져옴 (부분 일치 검색)
-  if (searchQuery) {
-    query = query.ilike('title', `%${searchQuery}%`);
   }
 
   // --- 정렬 로직 ---

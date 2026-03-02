@@ -1,12 +1,21 @@
-import { jobCategories } from '@/constants/jobCategories';
+import {
+  DifficultyType,
+  EmploymentType,
+  FinalStatusType,
+  InterviewPersonnelType,
+  ResultWaitTimeType,
+} from '@/types/entity';
 
-export const PASS_STATUS_OPTIONS = [
+export const PASS_STATUS_OPTIONS: {
+  label: FinalStatusType;
+  value: FinalStatusType;
+}[] = [
   { label: '합격', value: '합격' },
   { label: '불합격', value: '불합격' },
   { label: '진행중', value: '진행중' },
 ];
 
-export const INTERVIEW_PERIOD_OPTIONS = [
+export const SEASON_OPTIONS = [
   { label: '2026 상반기', value: '2026 상반기' },
   { label: '2025 하반기', value: '2025 하반기' },
   { label: '2025 상반기', value: '2025 상반기' },
@@ -14,32 +23,19 @@ export const INTERVIEW_PERIOD_OPTIONS = [
   { label: '2024 상반기', value: '2024 상반기' },
 ];
 
-export const JOB_CATEGORY_OPTIONS = jobCategories.map((jobCategory) => ({
-  label: jobCategory,
-  value: jobCategory,
-}));
-
 // 지원 유형
-export const EMPLOYMENT_TYPE_OPTIONS = [
+export const EMPLOYMENT_TYPE_OPTIONS: {
+  label: EmploymentType;
+  value: EmploymentType;
+}[] = [
   { label: '신입', value: '신입' },
   { label: '경력', value: '경력' },
   { label: '계약직', value: '계약직' },
   { label: '인턴', value: '인턴' },
 ];
 
-export const INTERVIEW_TYPE_OPTIONS = [
-  { label: '인적성', value: '인적성' },
-  { label: '코딩테스트', value: '코딩테스트' },
-  { label: 'PT', value: 'PT' },
-  { label: '과제수행', value: '과제수행' },
-  { label: '토론', value: '토론' },
-  { label: '역량 / 실무진', value: '역량 / 실무진' },
-  { label: '임원 / 최종', value: '임원 / 최종' },
-  { label: 'AI면접', value: 'AI면접' },
-];
-
 // 면접 난이도
-export const INTERVIEW_LEVEL = ['쉬움', '보통', '어려움'];
+export const INTERVIEW_LEVEL: DifficultyType[] = ['쉬움', '보통', '어려움'];
 
 // 질문 유형
 export const INTERVIEW_QUESTION_TYPE = [
@@ -53,9 +49,13 @@ export const INTERVIEW_QUESTION_TYPE = [
   '마지막 질문',
 ];
 
-export const INTERVIEW_PERSONNEL = ['1:1 면접', '면접관 다수', '어려움'];
+export const INTERVIEW_PERSONNEL: InterviewPersonnelType[] = [
+  '1:1',
+  '그룹 면접',
+  '면접관 다수',
+];
 
-export const INTERVIEW_TIME = [
+export const RESULT_WAIT_TIME: ResultWaitTimeType[] = [
   '1일',
   '2~3일',
   '4~5일',
