@@ -1,44 +1,67 @@
 import Tags from '@/components/common/Tags/Tags';
 import Link from 'next/link';
-import interviewReviews from '@/data/interviewReviews.json';
 import { ChevronRight, Minus } from 'lucide-react';
 import Line from '@/components/common/Line';
+import useFetchReviewsDate from '../hooks/useFetchReviewsDate';
+import Loader from '@/components/ui/Loader';
+import { useFetchInterviewQuestion } from '../hooks/useFetchInterviewQuestion';
+import { useFetchJobRoleData } from '../hooks/useFetchJobRoleData';
 const ReviewList = () => {
+  const { data: reviews, isPending: isReviewPending } = useFetchReviewsDate();
+  const { data: interviewQuesties, isPending: isInterviewQuestiesPending } =
+    useFetchInterviewQuestion();
+  const { data: jobRoles, isPending: isJobRoleData } = useFetchJobRoleData();
+
+  if (isReviewPending || isInterviewQuestiesPending || isJobRoleData)
+    return <Loader />;
+
   return (
     <>
-      {interviewReviews.map(({ basicInfo, resultInfo, reviewContent, id }) => (
-        <Link key={id} href={`review/${id}`}>
-          <article className="text-gray-1000 relative mb-5 flex items-center gap-5">
-            <h3 className="h3">{basicInfo.companyName}</h3>
+      {reviews?.map((review) => {
+        const relatedQuestions = interviewQuesties?.filter(
+          (q) => q.review_id === review.id,
+        );
 
-            <div className="b1 flex gap-1">
-              <p>{basicInfo.jobCategory}</p>
-              <Minus className="rotate-90 text-gray-300" />
-              <p>{basicInfo.interviewDate}</p>
-              <Minus className="rotate-90 text-gray-300" />
-              <p>{basicInfo.employmentType}</p>
-            </div>
-            <Tags size="big" className="absolute right-0">
-              {resultInfo.finalStatus}
-            </Tags>
-          </article>
+        const relatedJobs = jobRoles?.filter(
+          (j) => j.id === review.job_role_id,
+        );
 
-          <article className="flex flex-col gap-1">
-            {reviewContent.specificQuestions.map((q) => (
-              <div key={q.id} className="b1 flex gap-1">
-                <p className="text-main-400 font-bold">Q. </p>
-                <p className="text-gray-1000"> {q.question} </p>
+        return (
+          <Link key={review.id} href={`review/${review.id}`}>
+            <article className="text-gray-1000 relative mb-5 flex items-center gap-5">
+              <h3 className="h3">{review.company_name}</h3>
+
+              <div className="b1 flex gap-1">
+                <p>{relatedJobs?.map((j) => j.name)}</p>
+                <Minus className="rotate-90 text-gray-300" />
+                <p>
+                  {review.interview_year} {review.interview_season}
+                </p>
+                <Minus className="rotate-90 text-gray-300" />
+                <p>{review.employment_type}</p>
               </div>
-            ))}
-          </article>
-          <p className="c1 flex items-center justify-end text-gray-700">
-            후기 자세히보기
-            <ChevronRight size={15} className="text-icon-default" />
-          </p>
+              <Tags size="big" className="absolute right-0">
+                {review.final_status_type}
+              </Tags>
+            </article>
 
-          <Line color="gray300" />
-        </Link>
-      ))}
+            <article className="flex flex-col gap-1">
+              {relatedQuestions?.map((q) => (
+                <div key={q.id} className="b1 flex gap-1">
+                  <p className="text-main-400 font-bold">Q. </p>
+                  <p className="text-gray-1000"> {q.review_content} </p>
+                </div>
+              ))}
+            </article>
+            <p className="c1 flex items-center justify-end text-gray-700">
+              후기 자세히보기
+              <ChevronRight size={15} className="text-icon-default" />
+            </p>
+
+            <Line color="gray300" />
+          </Link>
+        );
+      })}
     </>
   );
 };

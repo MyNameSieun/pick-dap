@@ -42,7 +42,6 @@ const CreateFormLayout = ({
   });
 
   const handleCreateReviewButton = () => {
-    // 1. 서버에 보내기 전 데이터 정제
     const finalData = {
       ...formData,
       questions: formData.questions.map((q) => ({
@@ -50,7 +49,6 @@ const CreateFormLayout = ({
       })),
     };
 
-    // 2. 가공된 데이터를 mutate에 전달
     mutate(finalData);
 
     reset();

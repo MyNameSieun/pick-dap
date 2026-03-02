@@ -4,7 +4,7 @@ import { fetchInterviewProcessData } from '../services/fetchInterviewProcessData
 
 export const useFetchInterviewProcessData = () => {
   return useQuery({
-    queryKey: QUERY_KEYS.process.list,
+    queryKey: QUERY_KEYS.process.list(),
     queryFn: fetchInterviewProcessData,
   });
 };

@@ -89,7 +89,7 @@ export const QUERY_KEYS = {
   review: {
     all: ['review'] as const,
 
-    list: ['review', 'list'] as const,
+    list: () => [...QUERY_KEYS.review.all, 'list'] as const,
 
     detail: (reviewId: string) =>
       [...QUERY_KEYS.review.all, 'review', reviewId] as const,
@@ -101,7 +101,7 @@ export const QUERY_KEYS = {
   process: {
     all: ['process'] as const,
 
-    list: ['process', 'list'] as const,
+    list: () => [...QUERY_KEYS.process.all, 'list'] as const,
   },
 
   reviewQuestionType: {
@@ -112,5 +112,12 @@ export const QUERY_KEYS = {
   jobRole: {
     all: ['job-role'] as const,
     list: () => [...QUERY_KEYS.jobRole.all, 'list'] as const,
+  },
+
+  interview_question: {
+    all: ['interview-question'] as const,
+    list: () => [...QUERY_KEYS.interview_question.all, 'list'] as const,
+    detail: (id: string) =>
+      [...QUERY_KEYS.interview_question.all, 'detail', id] as const,
   },
 };

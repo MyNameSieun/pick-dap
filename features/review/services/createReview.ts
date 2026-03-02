@@ -18,7 +18,7 @@ export interface CreateReviewParams {
 
   employment_type: EmploymentType;
   atmosphere_score: number;
-  difficulty: DifficultyType;
+  difficulty:  DifficultyType;
   interview_personnel_type: InterviewPersonnelType;
   overall_review: string;
   interview_tip?: string;

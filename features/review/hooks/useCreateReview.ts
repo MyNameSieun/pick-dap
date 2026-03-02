@@ -13,7 +13,7 @@ export const useCreateReview = (
     mutationFn: createReview,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.review.list,
+        queryKey: QUERY_KEYS.review.list(),
       });
 
       if (callbacks?.onSuccess) {
