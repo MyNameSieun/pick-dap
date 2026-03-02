@@ -1,7 +1,6 @@
 'use client';
 import { Input } from '@/components/ui/input/Input';
 import { Search } from 'lucide-react';
-import { Metadata } from 'next';
 import FormSelect from '@/components/common/SelectCustom';
 
 // export const metadata: Metadata = {

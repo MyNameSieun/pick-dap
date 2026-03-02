@@ -1,7 +1,6 @@
 'use client';
 
 import BackButton from '@/components/common/BackButton';
-import interviewReviews from '@/data/interviewReviews.json';
 import ReviewSummary from '@/features/review/components/ReviewDetail/ReviewSummary';
 import ReviewHeader from '@/features/review/components/ReviewDetail/ReviewHeader';
 import ReviewSummaryBar from '@/features/review/components/ReviewDetail/ReviewSummaryBar';

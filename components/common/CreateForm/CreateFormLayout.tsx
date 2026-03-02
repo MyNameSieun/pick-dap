@@ -50,8 +50,6 @@ const CreateFormLayout = ({
     };
 
     mutate(finalData);
-
-    reset();
   };
   return (
     <main>

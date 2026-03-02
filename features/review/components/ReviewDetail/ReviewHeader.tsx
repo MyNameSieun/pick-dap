@@ -1,9 +1,22 @@
+'use client';
 import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
 
-import { EyeIcon, Heart, Minus } from 'lucide-react';
+import {
+  Edit2,
+  EyeIcon,
+  Heart,
+  Minus,
+  MoreVertical,
+  Trash2,
+} from 'lucide-react';
 import { RawReviewJoined } from '../../services/fetchReviewData';
+import { useState } from 'react';
+import { useDeleteReview } from '../../hooks/useDeleteReview';
+import Loader from '@/components/ui/Loader';
+import { useRouter } from 'next/navigation';
+import { useSession } from '@/store/session';
 
 const ReviewHeader = ({ review }: { review: RawReviewJoined }) => {
   const {
@@ -15,6 +28,31 @@ const ReviewHeader = ({ review }: { review: RawReviewJoined }) => {
     view_count,
     job_role,
   } = review;
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const user = useSession()?.user;
+
+  const { mutate: deleteMutate, isPending: isDeletePending } =
+    useDeleteReview();
+
+  const router = useRouter();
+  if (isDeletePending) return <Loader />;
+
+  const handleDeleteReview = () => {
+    const deleteConfirm = confirm('정말 삭제하시겠습니까?');
+    if (!deleteConfirm) return;
+
+    deleteMutate(review.id, {
+      onSuccess: () => {
+        alert('삭제 완료!');
+        router.push('/review');
+        router.refresh();
+      },
+      onError: () => {
+        alert('삭제 중 오류가 발생했습니다.');
+      },
+    });
+  };
 
   return (
     <section className="mt-8 mb-6">
@@ -23,11 +61,43 @@ const ReviewHeader = ({ review }: { review: RawReviewJoined }) => {
           <h3 className="text-gray-1000 text-2xl font-bold">{company_name}</h3>
           <Tags size="big">{final_status_type}</Tags>
         </div>
-        <Button variant={'white'} className="flex gap-2 font-bold shadow-md">
-          <Heart className="fill-gray-200" />1
-        </Button>
-      </article>
 
+        <div className="relative flex items-center gap-2">
+          <Button variant={'white'} className="flex gap-2 font-bold shadow-sm">
+            <Heart className="fill-gray-200" />1
+          </Button>
+          {user && (
+            <button
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="rounded-full p-2 transition-colors hover:bg-gray-100"
+            >
+              <MoreVertical
+                size={20}
+                className="cursor-pointer text-gray-500"
+              />
+            </button>
+          )}
+
+          {isMenuOpen && (
+            <>
+              <div
+                className="fixed inset-0 z-10"
+                onClick={() => setIsMenuOpen(false)}
+              />
+              <div className="absolute top-14 right-0 z-20 w-32 rounded-md border border-gray-100 bg-white shadow-lg">
+                <div className="py-1">
+                  <button
+                    className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-gray-50"
+                    onClick={handleDeleteReview}
+                  >
+                    <Trash2 size={14} /> 삭제하기
+                  </button>
+                </div>
+              </div>
+            </>
+          )}
+        </div>
+      </article>
       <article className="flex justify-between text-sm text-gray-700">
         <div className="flex items-center gap-2">
           <p>{job_role.name}</p>
