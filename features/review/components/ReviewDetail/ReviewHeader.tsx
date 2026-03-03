@@ -3,25 +3,16 @@ import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
 
-import {
-  Edit2,
-  EyeIcon,
-  Heart,
-  Minus,
-  MoreVertical,
-  Trash2,
-} from 'lucide-react';
-import {
-  mapToReviewDetail,
-  RawReviewJoined,
-} from '../../services/fetchReviewData';
-import { useState } from 'react';
+import { EyeIcon, Heart, Minus, MoreVertical, Trash2 } from 'lucide-react';
+import { mapToReviewDetail } from '../../services/fetchReviewData';
+import { useEffect, useState } from 'react';
 import { useDeleteReview } from '../../hooks/useDeleteReview';
 import Loader from '@/components/ui/Loader';
 import { useRouter } from 'next/navigation';
 import { useSession } from '@/store/session';
 import { useToggleReviewLike } from '../../hooks/useToggleReviewLike';
 import { cn } from '@/lib/utils';
+import { useIncrementReviewViewCount } from '../../hooks/useIncrementReviewViewCount';
 
 const ReviewHeader = ({ review }: { review: mapToReviewDetail }) => {
   const {
@@ -37,6 +28,21 @@ const ReviewHeader = ({ review }: { review: mapToReviewDetail }) => {
     isLiked,
   } = review;
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { mutate: incrementView } = useIncrementReviewViewCount();
+
+  useEffect(() => {
+    const viewed = JSON.parse(sessionStorage.getItem('viewed_review') || '[]');
+
+    if (!viewed.includes(reviewId)) {
+      incrementView(reviewId);
+    }
+
+    sessionStorage.setItem(
+      'viewed_review',
+      JSON.stringify([...viewed, reviewId]),
+    );
+  }, [reviewId, incrementView]);
 
   const user = useSession()?.user;
 
@@ -68,6 +74,7 @@ const ReviewHeader = ({ review }: { review: mapToReviewDetail }) => {
     if (isToggleLikePending) return;
     isToggleLikeMutate({ reviewId });
   };
+
   return (
     <section className="mt-8 mb-6">
       <article className="mb-4 flex items-center justify-between">
