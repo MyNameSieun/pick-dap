@@ -18,6 +18,7 @@ interface FormSelectProps {
   defaultValue?: string;
   placeholder?: string;
   label?: string;
+  allLabel?: string;
   className?: string;
   required?: boolean;
   value?: string;
@@ -28,6 +29,7 @@ const SelectCustom = ({
   defaultValue,
   placeholder,
   label,
+  allLabel,
   className = 'w-[180px]',
   required,
   value,
@@ -47,9 +49,17 @@ const SelectCustom = ({
       <SelectContent position="popper" className="z-[110]">
         <SelectGroup>
           {label && <SelectLabel>{label}</SelectLabel>}
-
+          {allLabel && (
+            <SelectItem value="ALL" className="text-gray-700">
+              {allLabel}
+            </SelectItem>
+          )}
           {options.map((option) => (
-            <SelectItem key={option.value} value={option.value}>
+            <SelectItem
+              key={option.value}
+              value={option.value}
+              className="text-gray-900"
+            >
               {option.label}
             </SelectItem>
           ))}

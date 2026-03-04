@@ -1,4 +1,5 @@
 import { QuestionFilterOptions } from '@/features/question/services/question/fetchQuestion';
+import { ReviewFilterOptions } from '@/features/review/services/fetchReviewData';
 
 export const QUERY_KEYS = {
   question: {
@@ -89,7 +90,8 @@ export const QUERY_KEYS = {
   review: {
     all: ['review'] as const,
 
-    list: () => [...QUERY_KEYS.review.all, 'list'] as const,
+    list: (filters?: ReviewFilterOptions) =>
+      [...QUERY_KEYS.review.all, 'list', filters] as const,
 
     detail: (reviewId: string) =>
       [...QUERY_KEYS.review.all, 'review', reviewId] as const,

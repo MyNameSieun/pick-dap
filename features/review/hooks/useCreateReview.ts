@@ -15,7 +15,9 @@ export const useCreateReview = (
       queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.review.list(),
       });
-
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.interview_question.list(),
+      });
       if (callbacks?.onSuccess) {
         callbacks.onSuccess();
       }

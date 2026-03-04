@@ -2,18 +2,17 @@ import Tags from '@/components/common/Tags/Tags';
 import Link from 'next/link';
 import { ChevronRight, Minus } from 'lucide-react';
 import Line from '@/components/common/Line';
-import Loader from '@/components/ui/Loader';
 import { useFetchInterviewQuestion } from '../hooks/useFetchInterviewQuestion';
 import { useFetchJobRoleData } from '../hooks/useFetchJobRoleData';
-import { useFetchReviewsData } from '../hooks/useFetchReviewsDate';
-const ReviewList = () => {
-  const { data: reviews, isPending: isReviewPending } = useFetchReviewsData();
+import { mapToReviewDetail } from '../services/fetchReviewData';
+import Loader from '@/components/ui/Loader';
+const ReviewList = ({ reviews }: { reviews?: mapToReviewDetail[] }) => {
   const { data: interviewQuesties, isPending: isInterviewQuestiesPending } =
     useFetchInterviewQuestion();
-  const { data: jobRoles, isPending: isJobRoleData } = useFetchJobRoleData();
+  const { data: jobRoles, isPending: isJobRoleDataPending } =
+    useFetchJobRoleData();
 
-  if (isReviewPending || isInterviewQuestiesPending || isJobRoleData)
-    return <Loader />;
+  if (isInterviewQuestiesPending || isJobRoleDataPending) return <Loader />;
 
   return (
     <>

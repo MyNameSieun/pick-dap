@@ -3,7 +3,7 @@
 import Contents from '@/components/common/CreateForm/Contents';
 import BackButton from '../BackButton';
 import Line from '../Line';
-import { LucideIcon } from 'lucide-react';
+import { Loader, LucideIcon } from 'lucide-react';
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import { Button } from '@/components/ui/button/Button';
 import { ContentsType } from '@/types/contents';
@@ -33,13 +33,15 @@ const CreateFormLayout = ({
   const { formData, reset } = useReviewStore();
 
   const router = useRouter();
-  const { mutate } = useCreateReview({
-    onSuccess: () => {
-      reset();
-      alert('후기가 성공적으로 등록되었습니다!');
-      router.push('/review');
-    },
-  });
+  const { mutate: createReviewMutate, isPending: isCreateReviewPending } =
+    useCreateReview({
+      onSuccess: () => {
+        reset();
+        alert('후기가 성공적으로 등록되었습니다!');
+        router.push('/review');
+      },
+    });
+  if (isCreateReviewPending) return <Loader />;
 
   const handleCreateReviewButton = () => {
     const finalData = {
@@ -49,7 +51,7 @@ const CreateFormLayout = ({
       })),
     };
 
-    mutate(finalData);
+    createReviewMutate(finalData);
   };
   return (
     <main>
@@ -67,8 +69,15 @@ const CreateFormLayout = ({
       <footer>
         <Line />
         <div className="flex justify-end gap-1">
-          <Button variant={'white'}>취소</Button>
-          <Button onClick={handleCreateReviewButton}>등록하기</Button>
+          <Button disabled={isCreateReviewPending} variant={'white'}>
+            취소
+          </Button>
+          <Button
+            disabled={isCreateReviewPending}
+            onClick={handleCreateReviewButton}
+          >
+            등록하기
+          </Button>
         </div>
       </footer>
     </main>

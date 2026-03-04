@@ -19,14 +19,50 @@ import {
 import Loader from '@/components/ui/Loader';
 import { useFetchInterviewProcessData } from '@/features/review/hooks/useFetchInterviewProcessData';
 import { useFetchJobRoleData } from '@/features/review/hooks/useFetchJobRoleData';
+import { EmploymentType, FinalStatusType } from '@/types/entity';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useFetchReviewsData } from '@/features/review/hooks/useFetchReviewsDate';
 
 const ReviewPage = () => {
   const { data: interviewProcess, isPending: isInterviewProcessPending } =
     useFetchInterviewProcessData();
+  const searchParams = useSearchParams();
 
   const { data: jobRoles, isPending: isJobRolePending } = useFetchJobRoleData();
+  const dateParam = searchParams.get('date') || 'ALL';
+  const [year, season] = dateParam.split(' ');
 
-  if (isInterviewProcessPending || isJobRolePending) return <Loader />;
+  const filters = {
+    finalStatusType:
+      (searchParams.get('final-status') as FinalStatusType) || 'ALL',
+    // 쪼개진 값을 각각 할당
+    interviewYear: year === 'ALL' ? 'ALL' : Number(year),
+    interviewSeason: season === 'ALL' ? 'ALL' : season,
+
+    jobRole: (searchParams.get('job-role') as string) || 'ALL',
+    employmentType: (searchParams.get('employment') as EmploymentType) || 'ALL',
+    interviewProcesses:
+      searchParams.get('interview-process' as string) || 'ALL',
+    searchQuery: searchParams.get('q') || undefined,
+  };
+  const { data: reviews, isPending: isReviewPending } =
+    useFetchReviewsData(filters);
+
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleFilterChange = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (value === 'ALL') {
+      params.delete(key);
+    } else {
+      params.set(key, value);
+    }
+    router.push(`${pathname}?${params.toString()}`);
+  };
+
+  if (isInterviewProcessPending || isJobRolePending || isReviewPending)
+    return <Loader />;
 
   const INTERVIEW_PROCESS_OPTIONS = interviewProcess?.map((i) => ({
     label: i.name,
@@ -39,26 +75,47 @@ const ReviewPage = () => {
   }));
 
   return (
-    <div className="flex flex-col gap-10">
+    <div className="flex flex-col">
       <ReviewMainHeader />
       <div>
         <div className="flex gap-3">
           <Input placeholder="기업명" rightIcon={Search} />
-          <FormSelect options={PASS_STATUS_OPTIONS} placeholder="합격여부" />
-          <FormSelect options={SEASON_OPTIONS} placeholder="면접시기" />
-          <FormSelect options={JOB_ROLE_OPTIONS ?? []} placeholder="직무" />
+          <FormSelect
+            options={PASS_STATUS_OPTIONS}
+            allLabel="합격 여부"
+            value={filters.finalStatusType}
+            onValueChange={(value) => handleFilterChange('final-status', value)}
+          />
+          <FormSelect
+            options={SEASON_OPTIONS}
+            allLabel="면접 시기"
+            value={dateParam}
+            onValueChange={(val) => handleFilterChange('date', val)}
+          />
+          <FormSelect
+            options={JOB_ROLE_OPTIONS ?? []}
+            allLabel="직무"
+            value={filters.jobRole}
+            onValueChange={(value) => handleFilterChange('job-role', value)}
+          />
           <FormSelect
             options={EMPLOYMENT_TYPE_OPTIONS}
-            placeholder="고용유형"
+            allLabel="고용유형"
+            value={filters.employmentType}
+            onValueChange={(value) => handleFilterChange('employment', value)}
           />
           <FormSelect
             options={INTERVIEW_PROCESS_OPTIONS ?? []}
-            placeholder="면접전형"
+            allLabel="면접전형"
+            value={filters.interviewProcesses}
+            onValueChange={(value) =>
+              handleFilterChange('interview-process', value)
+            }
           />
         </div>
 
         <section className="mt-4 rounded-[12px] border border-gray-300 bg-white p-10 pb-0 shadow-sm">
-          <ReviewList />
+          <ReviewList reviews={reviews} />
           <article className="mb-5">
             <PaginationCustom />
           </article>
