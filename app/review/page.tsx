@@ -19,7 +19,11 @@ import {
 import Loader from '@/components/ui/Loader';
 import { useFetchInterviewProcessData } from '@/features/review/hooks/useFetchInterviewProcessData';
 import { useFetchJobRoleData } from '@/features/review/hooks/useFetchJobRoleData';
-import { EmploymentType, FinalStatusType } from '@/types/entity';
+import {
+  EmploymentType,
+  FinalStatusType,
+  InterviewSeasonType,
+} from '@/types/entity';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useFetchReviewsData } from '@/features/review/hooks/useFetchReviewsDate';
 
@@ -36,8 +40,8 @@ const ReviewPage = () => {
     finalStatusType:
       (searchParams.get('final-status') as FinalStatusType) || 'ALL',
     // 쪼개진 값을 각각 할당
-    interviewYear: year === 'ALL' ? 'ALL' : Number(year),
-    interviewSeason: season === 'ALL' ? 'ALL' : season,
+    interviewYear: (year === 'ALL' ? 'ALL' : Number(year)) as number | 'ALL',
+    interviewSeason: (season === 'ALL' ? 'ALL' : season) as InterviewSeasonType,
 
     jobRole: (searchParams.get('job-role') as string) || 'ALL',
     employmentType: (searchParams.get('employment') as EmploymentType) || 'ALL',

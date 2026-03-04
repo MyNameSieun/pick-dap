@@ -26,8 +26,8 @@ export type ReviewFilterOptions = {
   finalStatusType?: FinalStatusType | 'ALL';
   interviewSeason?: InterviewSeasonType | 'ALL';
   interviewYear?: number | 'ALL';
-  jobRole?: string | 'ALL';
   employmentType?: EmploymentType | 'ALL';
+  jobRole?: string | 'ALL';
   interviewProcesses?: string | 'ALL';
   searchQuery?: string;
 };
@@ -37,10 +37,10 @@ export const fetchReviewsData = async ({
   finalStatusType,
   interviewSeason,
   interviewYear,
-  jobRole,
   employmentType,
-  interviewProcesses,
   searchQuery,
+  jobRole,
+  interviewProcesses,
 }: ReviewFilterOptions = {}) => {
   const supabase = await createClient();
 
@@ -55,7 +55,6 @@ export const fetchReviewsData = async ({
   const hasInterviewProcesses =
     interviewProcesses && interviewProcesses !== 'ALL';
 
-  //
   const DYNAMIC_QUERY_DATA = `
     *,
     job_role:job_role${hasJobRole ? '!inner' : ''}(name),
@@ -79,9 +78,7 @@ export const fetchReviewsData = async ({
   if (hasEmploymentType) query = query.eq('employment_type', employmentType);
 
   // 자식 테이블(Inner Join) 컬럼 필터(별칭이 아닌 원본 관계명 사용해야 함)
-  if (hasJobRole) {
-    query = query.eq('job_role.name', jobRole);
-  }
+  if (hasJobRole) query = query.eq('job_role.name', jobRole);
 
   if (hasInterviewProcesses) {
     // 중간 테이블을 거치는 경우 해당 테이블의 필드로 필터링
