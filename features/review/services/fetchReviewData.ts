@@ -5,9 +5,7 @@ import { supabase } from '@/lib/supabase/supabase';
 import {
   EmploymentType,
   FinalStatusType,
-  InterviewProcessEntity,
   InterviewSeasonType,
-  JobRoleEntity,
 } from '@/types/entity';
 import { QueryData } from '@supabase/supabase-js';
 
@@ -67,9 +65,6 @@ export const fetchReviewsData = async ({
 
   let query = supabase.from('interview_review').select(DYNAMIC_QUERY_DATA);
 
-  // interviewYear나 interviewSeason은 보통 부모 테이블(Review) 자체의 컬럼인 경우,
-  //  쿼리 데이터 문자열을 수정할 필요 없이, 아래와 같이 .eq() 체이닝만 해주면 됨
-  // 부모 테이블 필터
   if (hasFinalStatusType)
     query = query.eq('final_status_type', finalStatusType);
   if (hasInterviewYear) query = query.eq('interview_year', interviewYear);
@@ -77,11 +72,9 @@ export const fetchReviewsData = async ({
 
   if (hasEmploymentType) query = query.eq('employment_type', employmentType);
 
-  // 자식 테이블(Inner Join) 컬럼 필터(별칭이 아닌 원본 관계명 사용해야 함)
   if (hasJobRole) query = query.eq('job_role.name', jobRole);
 
   if (hasInterviewProcesses) {
-    // 중간 테이블을 거치는 경우 해당 테이블의 필드로 필터링
     query = query.eq(
       'review_process_map.interview_processes.name',
       interviewProcesses,

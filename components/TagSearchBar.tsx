@@ -1,61 +1,37 @@
 'use client';
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { Button } from './ui/button/Button';
 import { Input } from './ui/input/Input';
 import { cn } from '@/lib/utils';
 import { Check } from 'lucide-react';
 import { useDisclosure } from '@/hooks/useClickOutside';
-import { useRouter, useSearchParams } from 'next/navigation';
 import { ALL_CATEGORIES } from '@/constants/jobCategories';
 import { useTechStackData } from '@/hooks/useTechStackData';
+import { useQuestionFilters } from '@/features/question/hooks/question/useQuestionFilters';
 
 const TagSearchBar = () => {
-  const router = useRouter();
-  const searchParams = useSearchParams();
   const { containerRef, onClose, isOpen, onOpen } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState('');
 
+  // 1. 커스텀 훅에서 모든 필터 상태와 변경 함수 가져오기
+  const { category, techs, sort, updateParams } = useQuestionFilters();
   const { data: techStack = [] } = useTechStackData();
 
-  // 1. URL에서 현재 상태 읽기
-  const currentCategory = searchParams.get('category') || '전체';
-  const currentSort = searchParams.get('sort') || 'popular';
-  const selectedTechSlugs = useMemo(
-    () => searchParams.get('techs')?.split(',').filter(Boolean) || [],
-    [searchParams],
-  );
+  // 2. techs(string)를 배열로 변환 (URL: "slug1,slug2" -> ["slug1", "slug2"])
+  const selectedTechSlugs = techs ? techs.split(',') : [];
 
-  // 2. slug를 기반으로 실제 name을 찾아서 배지에 표시하기 위한 매핑
-  const selectedTechNames = useMemo(() => {
-    return selectedTechSlugs.map((slug) => {
-      const tech = techStack.find((t) => t.slug === slug);
+  // 3. slug 기반으로 실제 기술명 찾기 (배지 표시용)
+  const selectedTechNames = selectedTechSlugs.map((slug) => {
+    const tech = techStack.find((t) => t.slug === slug);
+    return tech ? tech.name : slug; // 데이터를 못 찾으면 slug라도 표시
+  });
 
-      return tech ? tech.name : slug; // 데이터를 못 찾으면 slug라도 표시
-    });
-  }, [selectedTechSlugs, techStack]);
-
+  // 검색어에 따른 리스트 필터링
   const filteredTech = techStack.filter((tech) =>
     tech.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // 3. URL 업데이트 공통 함수
-  const updateParams = (updates: Record<string, string | null>) => {
-    const params = new URLSearchParams(searchParams.toString());
-
-    // 해당 키가 없을 때 필터를 적용하지 않도록
-    Object.entries(updates).forEach(([key, value]) => {
-      if (value === null || value === 'ALL' || value === '전체') {
-        params.delete(key);
-      } else {
-        params.set(key, value);
-      }
-    });
-
-    params.set('page', '1'); // 필터 변경 시 1페이지로 이동
-    router.replace(`?${params.toString()}`, { scroll: false });
-  };
-
-  // 4. 기술 스택 선택 (slug를 URL에 저장)
+  // 4. 기술 스택 선택 (URL에 추가)
   const handleSelectTech = (slug: string) => {
     if (selectedTechSlugs.includes(slug)) return;
     if (selectedTechSlugs.length >= 3)
@@ -67,9 +43,10 @@ const TagSearchBar = () => {
     onClose();
   };
 
-  // 5. 기술 스택 삭제
+  // 5. 기술 스택 삭제 (URL에서 제거)
   const handleRemoveTech = (slug: string) => {
     const newTechs = selectedTechSlugs.filter((s) => s !== slug);
+    // 남은 게 없으면 null을 보내서 URL에서 삭제
     updateParams({ techs: newTechs.length > 0 ? newTechs.join(',') : null });
   };
 
@@ -78,6 +55,7 @@ const TagSearchBar = () => {
     { label: '추천순', value: 'popular' },
     { label: '최신순', value: 'latest' },
   ];
+
   return (
     <section className="container-col gap-8">
       {/* 카테고리 섹션 */}
@@ -93,7 +71,7 @@ const TagSearchBar = () => {
               variant={'none'}
               className={cn(
                 'h-8.5 transition-colors',
-                currentCategory === job
+                category === job
                   ? 'bg-main-400 border-main-400 hover:bg-main-500400 text-white'
                   : 'border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-100/80 hover:text-gray-700',
               )}
@@ -169,7 +147,7 @@ const TagSearchBar = () => {
               onClick={() => updateParams({ sort: option.value })}
               className={cn(
                 'flex-1 cursor-pointer rounded-md py-2 text-sm font-bold transition-all',
-                currentSort === option.value
+                sort === option.value
                   ? 'text-main-600 text-gray-1000 bg-white shadow-md'
                   : 'text-gray-500 hover:text-gray-700',
               )}

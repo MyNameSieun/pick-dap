@@ -41,11 +41,10 @@ const mapToQuestionDetail = (q: RawQuestionJoined): QuestionWithDetails => ({
 
 // 필터링 옵션 타입
 export type QuestionFilterOptions = {
-  category?: CategoryTypeEnums | 'ALL'; // 전체 조회를 위해 'ALL' 리터럴과 Enum 타입을 합침
+  category?: CategoryTypeEnums | 'ALL';
   techs?: string;
   sort?: 'latest' | 'popular';
-
-  type?: QuestionType; //  'pickdap' | 'user'
+  type?: QuestionType;
   status?: StatusEnums | 'ALL';
   searchQuery?: string;
 };

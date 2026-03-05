@@ -1,6 +1,6 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import clsx from 'clsx';
 import { Plus, Search } from 'lucide-react';
 
@@ -12,6 +12,7 @@ import { useQuestionEditModalAction } from '@/store/modal/useQuestionEditModal';
 import { useState } from 'react';
 import { StatusEnums } from '@/types/entity';
 import { useSession } from '@/store/session';
+import { useQuestionFilters } from '../hooks/question/useQuestionFilters';
 
 const FILTER_OPTIONS: { value: 'ALL' | StatusEnums; label: string }[] = [
   { value: 'ALL', label: '전체' },
@@ -24,49 +25,13 @@ const QuestionToolbar = () => {
 
   const router = useRouter();
 
-  // 현재 URL의 쿼리스트링 읽어오기
-  const searchParams = useSearchParams();
+  // 1. 커스텀 훅 호출
+  const { type, status, searchQuery, updateParams } = useQuestionFilters();
 
-  // 쿼리 값 가져오기
-  const currentType = searchParams.get('type') || 'pickdap';
-  const currentStatus = searchParams.get('status') || 'ALL';
+  // 2. 검색어 로컬 상태의 초기값을 훅에서 가져온 searchQuery로 설정
+  const [searchValue, setSearchValue] = useState(searchQuery);
 
-  // updateParams 함수
-  const updateParams = (updates: Record<string, string | null>) => {
-    // 1. 현재 URL 복사
-    const params = new URLSearchParams(searchParams.toString());
-
-    // 2. 전달받은 값만 업데이트
-    Object.entries(updates).forEach(([key, value]) => {
-      // 값이 없거나(ALL 포함) 기본값이면 URL에서 제거
-      if (value === null || value === 'ALL') {
-        params.delete(key);
-      }
-      // 아니면 URL에 해당 값을 세팅
-      else {
-        params.set(key, value);
-      }
-    });
-
-    // 3. 기존 검색어 유지
-    const currentSearch = searchValue.trim();
-    if (currentSearch) {
-      params.set('q', currentSearch);
-    } else {
-      params.delete('q');
-    }
-
-    // 4. 필터 변경 시 항상 1페이지로 초기화
-    params.set('page', '1');
-
-    // 5. URL 반영
-    router.replace(`?${params.toString()}`, { scroll: false });
-  };
-
-  // 검색어는 useState로 따로 관리
-  const [searchValue, setSearchValue] = useState(searchParams.get('q') || '');
-
-  // 검색 실행 핸들러
+  // 3. 검색 실행 핸들러
   const handleSearchSubmit = () => {
     updateParams({ q: searchValue.trim() });
   };
@@ -97,14 +62,14 @@ const QuestionToolbar = () => {
           <div
             className={clsx(
               'absolute top-2 left-1 h-[calc(100%-12px)] w-[calc(50%-12px)] rounded-full bg-white shadow-sm transition-transform duration-300 ease-out',
-              currentType === 'pickdap' ? 'translate-x-0' : 'translate-x-full',
+              type === 'pickdap' ? 'translate-x-0' : 'translate-x-full',
             )}
           />
           <button
             type="button"
             className={clsx(
               'z-10 flex-1 cursor-pointer px-6.5 py-1.5 transition-colors',
-              currentType === 'pickdap' ? 'text-blue-400' : 'text-gray-1000',
+              type === 'pickdap' ? 'text-blue-400' : 'text-gray-1000',
             )}
             onClick={() => updateParams({ type: 'pickdap' })}
           >
@@ -114,7 +79,7 @@ const QuestionToolbar = () => {
             type="button"
             className={clsx(
               'z-10 flex-1 cursor-pointer px-6.5 py-1.5 transition-colors',
-              currentType === 'user' ? 'text-blue-400' : 'text-gray-1000',
+              type === 'user' ? 'text-blue-400' : 'text-gray-1000',
             )}
             onClick={() => updateParams({ type: 'user' })}
           >
@@ -132,7 +97,7 @@ const QuestionToolbar = () => {
                 closeFilter();
               }}
               isFilterOpen={isFilterOpen}
-              filterType={currentStatus}
+              filterType={status}
             />
           </div>
           <Button variant="none" className="h-9.5 px-6">

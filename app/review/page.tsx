@@ -31,6 +31,8 @@ const ReviewPage = () => {
   const { data: interviewProcess, isPending: isInterviewProcessPending } =
     useFetchInterviewProcessData();
   const searchParams = useSearchParams();
+  const router = useRouter();
+  const pathname = usePathname();
 
   const { data: jobRoles, isPending: isJobRolePending } = useFetchJobRoleData();
   const dateParam = searchParams.get('date') || 'ALL';
@@ -51,9 +53,6 @@ const ReviewPage = () => {
   };
   const { data: reviews, isPending: isReviewPending } =
     useFetchReviewsData(filters);
-
-  const router = useRouter();
-  const pathname = usePathname();
 
   const handleFilterChange = (key: string, value: string) => {
     const params = new URLSearchParams(searchParams.toString());
