@@ -3,6 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/lib/constants';
 import {
   fetchMyQuestions,
+  fetchMySaveQuestions,
   fetchQuestionByIdx,
   fetchQuestions,
   fetchUserQuestions,
@@ -15,9 +16,6 @@ export const useFetchQuestionData = (filters: QuestionFilterOptions) => {
     // 필터 값이 바뀔 때마다 쿼리를 다시 실행
     queryKey: QUERY_KEYS.question.list(filters),
     queryFn: () => fetchQuestions(filters),
-
-    // queryKey: QUERY_KEYS.question.list,
-    // queryFn: () => fetchQuestions(),
   });
 };
 
@@ -34,8 +32,17 @@ export const useFetchQuestionByIdxData = (idx: number | string) => {
 // 내가 작성한 모든 질문 (마이페이지용, 보안 위해 props로 userId를 받지 않음)
 export const useFetchMyQuestionData = (filters: QuestionFilterOptions) => {
   return useQuery({
-    queryKey: QUERY_KEYS.question.myList(),
+    queryKey: QUERY_KEYS.question.myList(filters),
     queryFn: () => fetchMyQuestions(filters),
+    staleTime: 1000 * 60 * 5,
+  });
+};
+
+// 내가 저장한 모든 질문 (마이페이지용)
+export const useFetchMySaveQuestionData = (filters: QuestionFilterOptions) => {
+  return useQuery({
+    queryKey: QUERY_KEYS.question.mySaveList(filters),
+    queryFn: () => fetchMySaveQuestions(filters),
     staleTime: 1000 * 60 * 5,
   });
 };

@@ -23,7 +23,7 @@ export const updateAnswer = async (
     .eq('id', answers.id)
     .select(
       `*,
-      author:profiles!user_id (nickname, avatar_url`,
+      author:profiles!user_id (nickname, avatar_url)`,
     )
     .maybeSingle();
 

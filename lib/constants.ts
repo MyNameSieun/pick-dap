@@ -14,7 +14,12 @@ export const QUERY_KEYS = {
       [...QUERY_KEYS.question.all, 'detail', idx] as const,
 
     // 나의 질문 (마이페이지용, 보안 위해 props로 userId를 받지 않음)
-    myList: () => [...QUERY_KEYS.question.list(), 'me'] as const,
+    myList: (filters?: QuestionFilterOptions) =>
+      [...QUERY_KEYS.question.all, 'list', 'me', filters] as const,
+
+    // 내가 저장한 질문 (마이페이지용, 보안 위해 props로 userId를 받지 않음)
+    mySaveList: (filters?: QuestionFilterOptions) =>
+      [...QUERY_KEYS.question.all, 'list', 'me', 'save', filters] as const,
 
     // 특정 유저가 작성한 질문 목록 조회 (타인 프로필용)
     userList: (userId: string) =>

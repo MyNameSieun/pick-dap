@@ -94,7 +94,7 @@ const Header = () => {
           </div>
           <div className="flex-1"></div>
 
-          <div className="flex w-1/6 min-w-40 flex-none justify-center">
+          <div className="relative flex w-1/6 min-w-40 flex-none justify-center">
             {user ? (
               <div className="flex items-center gap-8">
                 <Bell className="text-icon-default hover:text-gray-1000 cursor-pointer" />
@@ -114,39 +114,46 @@ const Header = () => {
                   </div>
 
                   {isVisible && (
-                    <article className="absolute top-20 right-0 z-50 w-55 rounded-xl border border-gray-300 bg-white p-5 shadow-md">
-                      <div className="ditems-center flex h-8 justify-between">
-                        <p className="b1 font-bold text-gray-800">
-                          <Link href={'/mypage'}>마이페이지</Link>
-                        </p>
+                    <>
+                      <div
+                        className="fixed inset-0 z-10"
+                        onClick={() => setVisible(false)}
+                      />
 
-                        <Settings
-                          className="text-icon-default hover:text-gray-1000 cursor-pointer"
-                          height={20}
-                          width={20}
-                        />
-                      </div>
+                      <article className="absolute top-20 right-0 z-50 w-55 rounded-xl border border-gray-300 bg-white p-5 shadow-md">
+                        <div className="ditems-center flex h-8 justify-between">
+                          <p className="b1 font-bold text-gray-800">
+                            <Link href={'/mypage'}>마이페이지</Link>
+                          </p>
 
-                      <Line my={1} />
+                          <Settings
+                            className="text-icon-default hover:text-gray-1000 cursor-pointer"
+                            height={20}
+                            width={20}
+                          />
+                        </div>
 
-                      <SideMenuBar isHeader={true} />
-                      <div className="-mx-4 -mb-4">
-                        <Button
-                          onClick={async () => {
-                            await handleLogout(); // 함수 호출
-                            router.push(pathname); // 현재 페이지 유지
-                          }}
-                          className={twMerge(
-                            'h-11 w-full bg-gray-100 font-medium text-gray-800',
-                            'border-0',
-                          )}
-                          variant="none"
-                          size="sm"
-                        >
-                          로그아웃
-                        </Button>
-                      </div>
-                    </article>
+                        <Line my={1} />
+
+                        <SideMenuBar isHeader={true} />
+                        <div className="-mx-4 -mb-4">
+                          <Button
+                            onClick={async () => {
+                              await handleLogout(); // 함수 호출
+                              router.push(pathname); // 현재 페이지 유지
+                            }}
+                            className={twMerge(
+                              'h-11 w-full bg-gray-100 font-medium text-gray-800',
+                              'border-0',
+                            )}
+                            variant="none"
+                            size="sm"
+                          >
+                            로그아웃
+                          </Button>
+                        </div>
+                      </article>
+                    </>
                   )}
                 </div>
               </div>

@@ -2,22 +2,13 @@
 import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
-import Loader from '@/components/ui/Loader';
-import { useFetchMyQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
-import { useQuestionFilters } from '@/features/question/hooks/question/useQuestionFilters';
+import { QuestionWithDetails } from '@/features/question/services/question/fetchQuestion';
 import { Bookmark, Dot, Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-const QuestionCard = () => {
+const QuestionCard = ({ questions }: { questions: QuestionWithDetails[] }) => {
   const router = useRouter();
-
-  const filters = useQuestionFilters();
-
-  const { data: questions, isPending: isQuestionPending } =
-    useFetchMyQuestionData(filters);
-
-  if (isQuestionPending) return <Loader />;
 
   const handleButtonClick = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
@@ -28,7 +19,7 @@ const QuestionCard = () => {
   return (
     <section>
       {questions?.map((q) => (
-        <Link key={q.id} href={'/question/3'}>
+        <Link key={q.id} href={`/question/${q.idx}/${q.slug}`}>
           <article className="card-col-no-border">
             <div className="flex">
               <Tags className="mr-1" size="big">

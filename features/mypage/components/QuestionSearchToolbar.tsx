@@ -1,36 +1,31 @@
 'use client';
 
 import Filter from '@/components/common/Filter';
+import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input/Input';
 import { FILTER_OPTIONS } from '@/constants/selectOptions';
+import { useQuestionFilters } from '@/features/question/hooks/question/useQuestionFilters';
+import { QuestionWithDetails } from '@/features/question/services/question/fetchQuestion';
 import { useDisclosure } from '@/hooks/useClickOutside';
 import { Search } from 'lucide-react';
-import { useEffect } from 'react';
+import { useState } from 'react';
 
 interface QuestionSearchToolbarProps {
-  searchRef: React.Ref<HTMLInputElement>;
-  searchQuery: string;
-  handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  focusSearch: () => void;
-
-  filterType: string;
-  handleFilterSelect: (value: string) => void;
-  isFilterOpen: boolean;
+  questions: QuestionWithDetails[];
 }
-const QuestionSearchToolbar = ({
-  focusSearch,
-  searchRef,
-  searchQuery,
-  handleSearch,
-  filterType,
-  handleFilterSelect,
-  isFilterOpen,
-}: QuestionSearchToolbarProps) => {
+const QuestionSearchToolbar = ({ questions }: QuestionSearchToolbarProps) => {
   const { onToggle } = useDisclosure();
 
-  useEffect(() => {
-    focusSearch();
-  }, []);
+  const { updateParams, ...filters } = useQuestionFilters();
+  const [searchValue, setSearchValue] = useState(filters.searchQuery || '');
+
+  const handleSearchSubmit = () => {
+    updateParams({ q: searchValue.trim() });
+  };
+
+  const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(e.target.value);
+  };
 
   return (
     <div className="mb-5 flex items-center gap-3">
@@ -38,17 +33,19 @@ const QuestionSearchToolbar = ({
         className="c1 bg-gray-100"
         placeholder="질문을 검색하세요"
         leftIcon={Search}
-        value={searchQuery}
-        onChange={handleSearch}
-        ref={searchRef}
+        autoFocus
+        value={searchValue}
+        onChange={handleChangeSearchValue}
+        onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
       />
-      <Filter
+      <Button onClick={handleSearchSubmit}>검색</Button>
+      {/* <Filter
         options={FILTER_OPTIONS}
         filterType={filterType}
         handleFilterSelect={(value) => handleFilterSelect(value)}
         isFilterOpen={isFilterOpen}
         handleFilterClick={onToggle}
-      />
+      /> */}
     </div>
   );
 };

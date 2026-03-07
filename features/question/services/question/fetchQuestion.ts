@@ -219,6 +219,64 @@ export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
   return (data as unknown as RawQuestionJoined[]).map(mapToQuestionDetail);
 };
 
+// 내가 저장한 질문
+export const fetchMySaveQuestions = async (
+  filters: QuestionFilterOptions = {},
+) => {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) throw new Error('로그인이 필요합니다.');
+
+  const hasCategory = filters.category && filters.category !== 'ALL';
+  const hasStatus = filters.status && filters.status !== 'ALL';
+
+  const DYNAMIC_QUERY_DATA = `
+    *,
+    author:profiles(*),
+    stats:question_stats(*),
+    status:question_status${hasStatus ? '!inner' : ''}(status), 
+    category:question_category${hasCategory ? '!inner' : ''}(category_type),
+    is_bookmarked:bookmark!inner(user_id),
+    tags:question_tags(tag:tags(label)),
+    tech_stacks:question_tech_stack(
+      tech:tech_stack_id(id, name, slug)
+    )
+  `;
+
+  let query = supabase.from('questions').select(DYNAMIC_QUERY_DATA);
+
+  query = query.eq('is_bookmarked.user_id', user.id);
+
+  if (filters.type) query = query.eq('question_type', filters.type);
+  if (hasCategory)
+    query = query.eq(
+      'question_category.category_type',
+      filters.category as CategoryTypeEnums,
+    );
+  if (hasStatus)
+    query = query.eq('question_status.status', filters.status as StatusEnums);
+  if (filters.searchQuery)
+    query = query.ilike('title', `%${filters.searchQuery}%`);
+
+  // 정렬 로직
+  if (filters.sort === 'popular') {
+    query = query.order('bookmark_count', {
+      referencedTable: 'question_stats',
+      ascending: false,
+    });
+  } else {
+    query = query.order('created_at', { ascending: false });
+  }
+
+  const { data, error } = await query;
+  if (error) throw error;
+
+  return (data as unknown as RawQuestionJoined[]).map(mapToQuestionDetail);
+};
+
 /**
  * 타인 프로필용: 특정 유저의 질문 목록 조회
  * 공개된 프로필 페이지 등에서 사용
