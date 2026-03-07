@@ -2,44 +2,22 @@
 import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
-import { savedQuestions } from '@/data/savedQuestions';
+import Loader from '@/components/ui/Loader';
+import { useFetchMyQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
+import { useQuestionFilters } from '@/features/question/hooks/question/useQuestionFilters';
 import { Bookmark, Dot, Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-interface QuestionCardProps {
-  filterType: FilterType;
-  searchQuery: string;
-}
-
-const QuestionCard = ({ filterType, searchQuery }: QuestionCardProps) => {
-  const filteredQuestions = savedQuestions.filter((q) => {
-    // 1. 필터 조건
-    const filterMap: Record<string, string> = {
-      PENDING: '답변 대기',
-      COMPLETED: '답변 완료',
-    };
-
-    const filterCondition =
-      filterType === 'ALL'
-        ? true
-        : q.tags.some((tag) => tag.label === filterMap[filterType]);
-
-    // 2. 검색 조건
-    const normalizedQuery = searchQuery.trim().toLowerCase();
-    const searchCondition =
-      normalizedQuery === ''
-        ? true
-        : q.title.toLowerCase().includes(normalizedQuery) ||
-          q.tags.some((tag) =>
-            tag.label.toLowerCase().includes(normalizedQuery),
-          );
-
-    // 3. 두 조건 모두 만족해야 함
-    return filterCondition && searchCondition;
-  });
-
+const QuestionCard = () => {
   const router = useRouter();
+
+  const filters = useQuestionFilters();
+
+  const { data: questions, isPending: isQuestionPending } =
+    useFetchMyQuestionData(filters);
+
+  if (isQuestionPending) return <Loader />;
 
   const handleButtonClick = (e: React.MouseEvent, path: string) => {
     e.preventDefault();
@@ -49,35 +27,59 @@ const QuestionCard = ({ filterType, searchQuery }: QuestionCardProps) => {
 
   return (
     <section>
-      {filteredQuestions.map((q) => (
+      {questions?.map((q) => (
         <Link key={q.id} href={'/question/3'}>
           <article className="card-col-no-border">
-            <div className="flex flex-wrap">
-              {q.tags.map((tag) => (
-                <Tags key={tag.label} className="mr-1" size="big">
-                  {tag.label}
-                </Tags>
-              ))}
+            <div className="flex">
+              <Tags className="mr-1" size="big">
+                {q.category?.category_type || ''}
+              </Tags>
+
+              <div className="flex flex-wrap">
+                {q.tech_stacks.map((t) => (
+                  <Tags
+                    key={t.tech.id}
+                    className="mr-1"
+                    color="purple"
+                    size="big"
+                  >
+                    {t.tech.name}
+                  </Tags>
+                ))}
+              </div>
+
+              <div className="flex flex-wrap">
+                {q.tags.map((tag) => (
+                  <Tags
+                    key={tag.tag.label}
+                    className="mr-1"
+                    size="big"
+                    color="green"
+                  >
+                    {tag.tag.label}
+                  </Tags>
+                ))}
+              </div>
             </div>
 
             <h6 className="h6 text-gray-1000">{q.title}</h6>
 
             <div className="text-icon-default c1 flex items-center justify-between">
               <div className="flex gap-2">
-                <time className="">답변일: {q.createdAt}</time>
+                <time className="">답변일: {q.created_at}</time>
                 <Dot size={15} />
                 <div className="flex gap-3">
                   <div className="flex items-center gap-0.5">
                     <Eye size={12} />
-                    <p>{q.stats.views}</p>
+                    <p>{q.stats?.view_count}</p>
                   </div>
                   <div className="flex items-center gap-0.5">
                     <Bookmark size={12} />
-                    <p>{q.stats.bookmarks}</p>
+                    <p>{q.stats?.bookmark_count}</p>
                   </div>
                   <div className="flex items-center gap-0.5">
                     <MessageSquare size={12} />
-                    <p>{q.stats.comments}</p>
+                    <p>{q.stats?.comment_count}</p>
                   </div>
                 </div>
               </div>

@@ -2,6 +2,7 @@
 
 import Filter from '@/components/common/Filter';
 import { Input } from '@/components/ui/input/Input';
+import { FILTER_OPTIONS } from '@/constants/selectOptions';
 import { useDisclosure } from '@/hooks/useClickOutside';
 import { Search } from 'lucide-react';
 import { useEffect } from 'react';
@@ -12,8 +13,8 @@ interface QuestionSearchToolbarProps {
   handleSearch: (e: React.ChangeEvent<HTMLInputElement>) => void;
   focusSearch: () => void;
 
-  filterType: FilterType;
-  handleFilterSelect: (value: FilterType) => void;
+  filterType: string;
+  handleFilterSelect: (value: string) => void;
   isFilterOpen: boolean;
 }
 const QuestionSearchToolbar = ({
@@ -25,11 +26,6 @@ const QuestionSearchToolbar = ({
   handleFilterSelect,
   isFilterOpen,
 }: QuestionSearchToolbarProps) => {
-  const FILTER_OPTIONS: { value: FilterType; label: string }[] = [
-    { value: 'ALL', label: '전체' },
-    { value: 'PENDING', label: '답변 대기' },
-    { value: 'COMPLETED', label: '답변 완료' },
-  ];
   const { onToggle } = useDisclosure();
 
   useEffect(() => {
@@ -49,7 +45,7 @@ const QuestionSearchToolbar = ({
       <Filter
         options={FILTER_OPTIONS}
         filterType={filterType}
-        handleFilterSelect={(value) => handleFilterSelect(value as FilterType)}
+        handleFilterSelect={(value) => handleFilterSelect(value)}
         isFilterOpen={isFilterOpen}
         handleFilterClick={onToggle}
       />

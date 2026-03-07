@@ -10,15 +10,9 @@ import { Input } from '@/components/ui/input/Input';
 import { useDisclosure } from '@/hooks/useClickOutside';
 import { useQuestionEditModalAction } from '@/store/modal/useQuestionEditModal';
 import { useState } from 'react';
-import { StatusEnums } from '@/types/entity';
 import { useSession } from '@/store/session';
 import { useQuestionFilters } from '../hooks/question/useQuestionFilters';
-
-const FILTER_OPTIONS: { value: 'ALL' | StatusEnums; label: string }[] = [
-  { value: 'ALL', label: '전체' },
-  { value: 'pending', label: '미답변' },
-  { value: 'completed', label: '답변완료' },
-];
+import { FILTER_OPTIONS } from '@/constants/selectOptions';
 
 const QuestionToolbar = () => {
   const user = useSession()?.user;
@@ -26,10 +20,10 @@ const QuestionToolbar = () => {
   const router = useRouter();
 
   // 1. 커스텀 훅 호출
-  const { type, status, searchQuery, updateParams } = useQuestionFilters();
+  const { updateParams, ...filters } = useQuestionFilters();
 
   // 2. 검색어 로컬 상태의 초기값을 훅에서 가져온 searchQuery로 설정
-  const [searchValue, setSearchValue] = useState(searchQuery);
+  const [searchValue, setSearchValue] = useState(filters.searchQuery || '');
 
   // 3. 검색 실행 핸들러
   const handleSearchSubmit = () => {
@@ -62,14 +56,14 @@ const QuestionToolbar = () => {
           <div
             className={clsx(
               'absolute top-2 left-1 h-[calc(100%-12px)] w-[calc(50%-12px)] rounded-full bg-white shadow-sm transition-transform duration-300 ease-out',
-              type === 'pickdap' ? 'translate-x-0' : 'translate-x-full',
+              filters.type === 'pickdap' ? 'translate-x-0' : 'translate-x-full',
             )}
           />
           <button
             type="button"
             className={clsx(
               'z-10 flex-1 cursor-pointer px-6.5 py-1.5 transition-colors',
-              type === 'pickdap' ? 'text-blue-400' : 'text-gray-1000',
+              filters.type === 'pickdap' ? 'text-blue-400' : 'text-gray-1000',
             )}
             onClick={() => updateParams({ type: 'pickdap' })}
           >
@@ -79,7 +73,7 @@ const QuestionToolbar = () => {
             type="button"
             className={clsx(
               'z-10 flex-1 cursor-pointer px-6.5 py-1.5 transition-colors',
-              type === 'user' ? 'text-blue-400' : 'text-gray-1000',
+              filters.type === 'user' ? 'text-blue-400' : 'text-gray-1000',
             )}
             onClick={() => updateParams({ type: 'user' })}
           >
@@ -97,7 +91,7 @@ const QuestionToolbar = () => {
                 closeFilter();
               }}
               isFilterOpen={isFilterOpen}
-              filterType={status}
+              filterType={filters.status}
             />
           </div>
           <Button variant="none" className="h-9.5 px-6">

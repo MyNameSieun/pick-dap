@@ -3,11 +3,6 @@ import { Input } from '@/components/ui/input/Input';
 import { Search } from 'lucide-react';
 import FormSelect from '@/components/common/SelectCustom';
 
-// export const metadata: Metadata = {
-//   title: '면접 후기',
-//   description: '면접 후기를 검색하고 공유할 수 있습니다.',
-// };
-
 import PaginationCustom from '@/components/common/PaginationCustom';
 import ReviewList from '@/features/review/components/ReviewList';
 import ReviewMainHeader from '@/features/review/components/ReviewMainHeader';
@@ -19,49 +14,23 @@ import {
 import Loader from '@/components/ui/Loader';
 import { useFetchInterviewProcessData } from '@/features/review/hooks/useFetchInterviewProcessData';
 import { useFetchJobRoleData } from '@/features/review/hooks/useFetchJobRoleData';
-import {
-  EmploymentType,
-  FinalStatusType,
-  InterviewSeasonType,
-} from '@/types/entity';
-import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import { useFetchReviewsData } from '@/features/review/hooks/useFetchReviewsDate';
+import { useState } from 'react';
+import { useReviewFilters } from '@/features/review/hooks/useReviewFilters';
 
 const ReviewPage = () => {
   const { data: interviewProcess, isPending: isInterviewProcessPending } =
     useFetchInterviewProcessData();
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const pathname = usePathname();
 
   const { data: jobRoles, isPending: isJobRolePending } = useFetchJobRoleData();
-  const dateParam = searchParams.get('date') || 'ALL';
-  const [year, season] = dateParam.split(' ');
 
-  const filters = {
-    finalStatusType:
-      (searchParams.get('final-status') as FinalStatusType) || 'ALL',
-    // 쪼개진 값을 각각 할당
-    interviewYear: (year === 'ALL' ? 'ALL' : Number(year)) as number | 'ALL',
-    interviewSeason: (season === 'ALL' ? 'ALL' : season) as InterviewSeasonType,
-
-    jobRole: (searchParams.get('job-role') as string) || 'ALL',
-    employmentType: (searchParams.get('employment') as EmploymentType) || 'ALL',
-    interviewProcesses:
-      searchParams.get('interview-process' as string) || 'ALL',
-    searchQuery: searchParams.get('q') || undefined,
-  };
+  const { updateParams, dateParam, ...filters } = useReviewFilters();
   const { data: reviews, isPending: isReviewPending } =
     useFetchReviewsData(filters);
 
-  const handleFilterChange = (key: string, value: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (value === 'ALL') {
-      params.delete(key);
-    } else {
-      params.set(key, value);
-    }
-    router.push(`${pathname}?${params.toString()}`);
+  const [searchValue, setSearchValue] = useState(filters.searchQuery || '');
+  const handleSearchSubmit = () => {
+    updateParams({ q: searchValue.trim() });
   };
 
   if (isInterviewProcessPending || isJobRolePending || isReviewPending)
@@ -82,37 +51,43 @@ const ReviewPage = () => {
       <ReviewMainHeader />
       <div>
         <div className="flex gap-3">
-          <Input placeholder="기업명" rightIcon={Search} />
+          <Input
+            placeholder="기업명"
+            rightIcon={Search}
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
+          />
           <FormSelect
             options={PASS_STATUS_OPTIONS}
             allLabel="합격 여부"
             value={filters.finalStatusType}
-            onValueChange={(value) => handleFilterChange('final-status', value)}
+            onValueChange={(val) => updateParams({ 'final-status': val })}
           />
           <FormSelect
             options={SEASON_OPTIONS}
             allLabel="면접 시기"
             value={dateParam}
-            onValueChange={(val) => handleFilterChange('date', val)}
+            onValueChange={(val) => updateParams({ date: val })}
           />
           <FormSelect
             options={JOB_ROLE_OPTIONS ?? []}
             allLabel="직무"
             value={filters.jobRole}
-            onValueChange={(value) => handleFilterChange('job-role', value)}
+            onValueChange={(val) => updateParams({ 'job-role': val })}
           />
           <FormSelect
             options={EMPLOYMENT_TYPE_OPTIONS}
             allLabel="고용유형"
             value={filters.employmentType}
-            onValueChange={(value) => handleFilterChange('employment', value)}
+            onValueChange={(value) => updateParams({ employment: value })}
           />
           <FormSelect
             options={INTERVIEW_PROCESS_OPTIONS ?? []}
             allLabel="면접전형"
             value={filters.interviewProcesses}
             onValueChange={(value) =>
-              handleFilterChange('interview-process', value)
+              updateParams({ 'interview-process': value })
             }
           />
         </div>

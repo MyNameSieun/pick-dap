@@ -81,7 +81,7 @@ export const fetchReviewsData = async ({
     );
   }
 
-  if (searchQuery) query = query.ilike('title', `%${searchQuery}%`);
+  if (searchQuery) query = query.ilike('company_name', `%${searchQuery}%`);
   query = query.order('created_at', { ascending: false });
 
   const { data, error } = await query;

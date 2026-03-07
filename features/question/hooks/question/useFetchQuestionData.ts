@@ -32,10 +32,10 @@ export const useFetchQuestionByIdxData = (idx: number | string) => {
 };
 
 // 내가 작성한 모든 질문 (마이페이지용, 보안 위해 props로 userId를 받지 않음)
-export const useFetchMyQuestionData = () => {
+export const useFetchMyQuestionData = (filters: QuestionFilterOptions) => {
   return useQuery({
     queryKey: QUERY_KEYS.question.myList(),
-    queryFn: () => fetchMyQuestions(),
+    queryFn: () => fetchMyQuestions(filters),
     staleTime: 1000 * 60 * 5,
   });
 };

@@ -163,7 +163,7 @@ export const fetchQuestionByIdx = async (idx: number) => {
  * 내 마이페이지용: 현재 로그인한 세션의 질문만 조회
  * userId를 인자로 받지 않아 보안상 안전
  */
-export const fetchMyQuestions = async () => {
+export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
   const supabase = await createClient();
 
   const {
@@ -171,15 +171,52 @@ export const fetchMyQuestions = async () => {
   } = await supabase.auth.getUser();
   if (!user) throw new Error('로그인이 필요합니다.');
 
-  const { data, error } = await supabase
-    .from('questions')
-    .select(QUERY_JOIN_DATA)
-    .eq('author_id', user.id) // 서버에서 가져온 유저 ID 사용
-    .order('created_at', { ascending: false });
+  const hasCategory = filters.category && filters.category !== 'ALL';
+  const hasStatus = filters.status && filters.status !== 'ALL';
 
+  const DYNAMIC_QUERY_DATA = `
+    *,
+    author:profiles(*),
+    stats:question_stats(*),
+    status:question_status${hasStatus ? '!inner' : ''}(status), 
+    category:question_category${hasCategory ? '!inner' : ''}(category_type),
+    is_bookmarked:bookmark!question_id(user_id),
+    tags:question_tags(tag:tags(label)),
+    tech_stacks:question_tech_stack(
+      tech:tech_stack_id(id, name, slug)
+    )
+  `;
+
+  let query = supabase.from('questions').select(DYNAMIC_QUERY_DATA);
+
+  // 작성자 본인의 데이터만 가져오도록 필터
+  query = query.eq('user_id', user.id);
+
+  if (filters.type) query = query.eq('question_type', filters.type);
+  if (hasCategory)
+    query = query.eq(
+      'question_category.category_type',
+      filters.category as CategoryTypeEnums,
+    );
+  if (hasStatus)
+    query = query.eq('question_status.status', filters.status as StatusEnums);
+  if (filters.searchQuery)
+    query = query.ilike('title', `%${filters.searchQuery}%`);
+
+  // 정렬 로직
+  if (filters.sort === 'popular') {
+    query = query.order('bookmark_count', {
+      referencedTable: 'question_stats',
+      ascending: false,
+    });
+  } else {
+    query = query.order('created_at', { ascending: false });
+  }
+
+  const { data, error } = await query;
   if (error) throw error;
 
-  return data.map(mapToQuestionDetail);
+  return (data as unknown as RawQuestionJoined[]).map(mapToQuestionDetail);
 };
 
 /**

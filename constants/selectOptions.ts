@@ -4,6 +4,7 @@ import {
   FinalStatusType,
   InterviewPersonnelType,
   ResultWaitTimeType,
+  StatusEnums,
 } from '@/types/entity';
 
 export const PASS_STATUS_OPTIONS: {
@@ -63,4 +64,10 @@ export const RESULT_WAIT_TIME: ResultWaitTimeType[] = [
   '2~3주',
   '한 달 이상',
   '결과 대기중',
+];
+
+export const FILTER_OPTIONS: { value: 'ALL' | StatusEnums; label: string }[] = [
+  { value: 'ALL', label: '전체' },
+  { value: 'pending', label: '미답변' },
+  { value: 'completed', label: '답변완료' },
 ];

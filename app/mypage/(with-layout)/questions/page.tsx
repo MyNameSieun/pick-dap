@@ -10,7 +10,7 @@ const MypageQuestionsPage = () => {
       <TagSearchBar />
 
       <section className="container-col">
-        <QuestionSearchToolbar />
+        {/* <QuestionSearchToolbar /> */}
 
         <Line my={4} />
         <div className="mb-4" />

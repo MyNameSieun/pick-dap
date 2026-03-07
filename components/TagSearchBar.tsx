@@ -63,7 +63,6 @@ const TagSearchBar = () => {
         <h5 className="h6 text-gray-1000">카테고리</h5>
 
         <div className="c1 flex gap-3">
-          {/* 전체 버튼 추가 */}
           {ALL_CATEGORIES.map((job) => (
             <Button
               key={job}
@@ -76,7 +75,7 @@ const TagSearchBar = () => {
                   : 'border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-100/80 hover:text-gray-700',
               )}
             >
-              {job}
+              {job === 'ALL' ? '전체' : job}
             </Button>
           ))}
         </div>
@@ -95,7 +94,7 @@ const TagSearchBar = () => {
             onChange={(e) => setSearchTerm(e.target.value)}
           />
 
-          {/* 4. 선택된 배지들 (URL 상태 기반) */}
+          {/* 선택된 배지들 (URL 상태 기반) */}
           <div className="mt-3 flex flex-wrap gap-2">
             {selectedTechSlugs.map((slug, index) => (
               <span
@@ -108,7 +107,7 @@ const TagSearchBar = () => {
             ))}
           </div>
 
-          {/* 5. 드롭다운 리스트 */}
+          {/* 드롭다운 리스트 */}
           {isOpen && (
             <div className="animate-in fade-in zoom-in-95 absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
               <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
