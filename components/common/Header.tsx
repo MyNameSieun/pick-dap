@@ -120,7 +120,10 @@ const Header = () => {
                         onClick={() => setVisible(false)}
                       />
 
-                      <article className="absolute top-20 right-0 z-50 w-55 rounded-xl border border-gray-300 bg-white p-5 shadow-md">
+                      <article
+                        className="absolute top-20 right-0 z-50 w-55 rounded-xl border border-gray-300 bg-white p-5 shadow-md"
+                        onClick={() => setVisible(!isVisible)}
+                      >
                         <div className="ditems-center flex h-8 justify-between">
                           <p className="b1 font-bold text-gray-800">
                             <Link href={'/mypage'}>마이페이지</Link>

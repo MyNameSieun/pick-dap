@@ -525,6 +525,233 @@ export type Database = {
         }
         Relationships: []
       }
+      project: {
+        Row: {
+          created_at: string
+          deploy_url: string | null
+          description: string | null
+          end_date: string | null
+          github_url: string | null
+          id: string
+          project_type: Database["public"]["Enums"]["project_type_enum"]
+          service_purpose: string
+          slug: string
+          start_date: string | null
+          title: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          deploy_url?: string | null
+          description?: string | null
+          end_date?: string | null
+          github_url?: string | null
+          id?: string
+          project_type: Database["public"]["Enums"]["project_type_enum"]
+          service_purpose: string
+          slug: string
+          start_date?: string | null
+          title: string
+          user_id?: string
+        }
+        Update: {
+          created_at?: string
+          deploy_url?: string | null
+          description?: string | null
+          end_date?: string | null
+          github_url?: string | null
+          id?: string
+          project_type?: Database["public"]["Enums"]["project_type_enum"]
+          service_purpose?: string
+          slug?: string
+          start_date?: string | null
+          title?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_function: {
+        Row: {
+          description: string | null
+          id: string
+          project_id: string
+          sort_order: number
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_function_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_performance: {
+        Row: {
+          description: string | null
+          id: string
+          project_id: string
+          sort_order: number
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_performance_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_retrospective: {
+        Row: {
+          description: string | null
+          id: string
+          project_id: string
+          sort_order: number
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_retrospective_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_role: {
+        Row: {
+          description: string | null
+          id: string
+          project_id: string
+          sort_order: number
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_role_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_tech_stack: {
+        Row: {
+          description: string | null
+          id: string
+          project_id: string
+          sort_order: number
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_tech_stack_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      project_troubleshooting: {
+        Row: {
+          description: string | null
+          id: string
+          project_id: string
+          sort_order: number
+        }
+        Insert: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Update: {
+          description?: string | null
+          id?: string
+          project_id?: string
+          sort_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "project_troubleshooting_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       question_category: {
         Row: {
           category_type: Database["public"]["Enums"]["category_type_enum"]
@@ -908,6 +1135,7 @@ export type Database = {
       final_status_type: "합격" | "불합격" | "진행중"
       interview_personnel_type: "1:1" | "면접관 다수" | "그룹 면접"
       interview_season_type: "상반기" | "하반기"
+      project_type_enum: "team" | "personal"
       question_type: "pickdap" | "user"
       result_wait_time_type:
         | "1일"
@@ -1063,6 +1291,7 @@ export const Constants = {
       final_status_type: ["합격", "불합격", "진행중"],
       interview_personnel_type: ["1:1", "면접관 다수", "그룹 면접"],
       interview_season_type: ["상반기", "하반기"],
+      project_type_enum: ["team", "personal"],
       question_type: ["pickdap", "user"],
       result_wait_time_type: [
         "1일",

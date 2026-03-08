@@ -127,4 +127,19 @@ export const QUERY_KEYS = {
     all: ['interview-question'] as const,
     list: () => [...QUERY_KEYS.interview_question.all, 'list'] as const,
   },
+
+  project: {
+    all: ['project'] as const,
+    // 목록
+    list: ['project', 'list'] as const,
+    myList: ['project', 'list', 'me'] as const,
+    userList: (userId: string) =>
+      [...QUERY_KEYS.project.list, 'user', userId] as const,
+
+    // 상세
+    myDetail: (projectId: string) =>
+      [...QUERY_KEYS.project.all, 'detail', 'me', projectId] as const,
+    userDetail: (projectId: string) =>
+      [...QUERY_KEYS.project.all, 'detail', 'user', projectId] as const,
+  },
 };

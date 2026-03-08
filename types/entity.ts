@@ -25,6 +25,14 @@ export type QuestionStatusEntity = Tables<'question_status'>;
 export type InterviewProcessEntity = Tables<'interview_processes'>;
 export type ReviewQuestionTypeEntity = Tables<'review_question_type'>;
 
+export type ProjectEntity = Tables<'project'>;
+export type ProjectRetrospectiveEntity = Tables<'project_retrospective'>;
+export type ProjectTroubleshootingEntity = Tables<'project_troubleshooting'>;
+export type ProjectPerformancEntity = Tables<'project_performance'>;
+export type ProjectRoleEntity = Tables<'project_role'>;
+export type ProjectFunctionEntity = Tables<'project_function'>;
+export type ProjectTechStackEntity = Tables<'project_tech_stack'>;
+
 // ==========================================
 // 중간 테이블
 // ==========================================
@@ -54,3 +62,4 @@ export type DifficultyType = Enums<'difficulty_type'>;
 export type InterviewPersonnelType = Enums<'interview_personnel_type'>;
 export type ResultWaitTimeType = Enums<'result_wait_time_type'>;
 export type FinalStatusType = Enums<'final_status_type'>;
+export type ProjectType = Enums<'project_type_enum'>;
