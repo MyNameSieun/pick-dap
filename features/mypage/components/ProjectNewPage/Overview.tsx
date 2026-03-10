@@ -9,28 +9,16 @@ import { useCreateProjectStore } from '../../store/useCreateProjectStore';
 import { ProjectType } from '@/types/entity';
 
 const projectOptions = [
-  { label: '개인', value: 'person' },
+  { label: '개인', value: 'personal' },
   { label: '팀', value: 'team' },
 ];
 
-interface OverviewProps {
-  titleRef: React.RefObject<HTMLInputElement | null>;
-  descriptionRef: React.RefObject<HTMLInputElement | null>;
-  projectTypeRef: React.RefObject<HTMLButtonElement | null>;
-  purposeRef: React.RefObject<HTMLTextAreaElement | null>;
-}
-const Overview = ({
-  titleRef,
-  descriptionRef,
-  projectTypeRef,
-  purposeRef,
-}: OverviewProps) => {
+const Overview = () => {
   const { formData, setField } = useCreateProjectStore();
   return (
     <FormSection title="1. 프로젝트 개요" id="overview">
       <FormItemLayout label="프로젝트명" isRequired>
         <Input
-          ref={titleRef}
           value={formData.title}
           onChange={(e) => setField('title', e.target.value)}
           placeholder="프로젝트명"
@@ -40,7 +28,6 @@ const Overview = ({
 
       <FormItemLayout label="한 줄 설명" isRequired>
         <Input
-          ref={descriptionRef}
           value={formData.description}
           onChange={(e) => setField('description', e.target.value)}
           placeholder="한 줄 설명"
@@ -49,7 +36,6 @@ const Overview = ({
 
       <FormItemLayout label="프로젝트 유형" isRequired>
         <SelectCustom
-          ref={projectTypeRef}
           value={formData.project_type}
           onValueChange={(val) => setField('project_type', val as ProjectType)}
           options={projectOptions}
@@ -81,7 +67,6 @@ const Overview = ({
       <FormItemLayout label="서비스 목적" isRequired>
         <TextareaField
           placeholder="34"
-          ref={purposeRef}
           value={formData.service_purpose}
           onChange={(e) => setField('service_purpose', e.target.value)}
         />

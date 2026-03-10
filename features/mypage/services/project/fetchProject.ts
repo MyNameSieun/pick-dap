@@ -40,8 +40,9 @@ export type RawProjectDetailJoined = QueryData<
   typeof projectDetailJoinQuery
 >[number];
 
-export const fetchProjectMyDetail = async (projectId: string) => {
+export const fetchProjectMyDetail = async (slug: string) => {
   const supabase = await createClient();
+  const decodedSlug = decodeURIComponent(slug);
 
   const {
     data: { user },
@@ -52,10 +53,11 @@ export const fetchProjectMyDetail = async (projectId: string) => {
     .from('project')
     .select(PROJECT_DETAIL_QUERY)
     .eq('user_id', user?.id)
-    .eq('id', projectId)
-    .single();
+    .eq('slug', decodedSlug)
+    .maybeSingle();
 
   if (error) {
+    console.log(error?.message);
     throw new Error('프로젝트 데이터를 불러오지 못했습니다.');
   }
 

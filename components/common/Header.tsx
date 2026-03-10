@@ -142,8 +142,8 @@ const Header = () => {
                         <div className="-mx-4 -mb-4">
                           <Button
                             onClick={async () => {
-                              await handleLogout(); // 함수 호출
-                              router.push(pathname); // 현재 페이지 유지
+                              await handleLogout();
+                              router.push(pathname);
                             }}
                             className={twMerge(
                               'h-11 w-full bg-gray-100 font-medium text-gray-800',

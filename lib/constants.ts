@@ -137,9 +137,9 @@ export const QUERY_KEYS = {
       [...QUERY_KEYS.project.list, 'user', userId] as const,
 
     // 상세
-    myDetail: (projectId: string) =>
-      [...QUERY_KEYS.project.all, 'detail', 'me', projectId] as const,
-    userDetail: (projectId: string) =>
-      [...QUERY_KEYS.project.all, 'detail', 'user', projectId] as const,
+    myDetail: (slug: string) =>
+      [...QUERY_KEYS.project.all, 'detail', 'me', slug] as const,
+    userDetail: (slug: string) =>
+      [...QUERY_KEYS.project.all, 'detail', 'user', slug] as const,
   },
 };

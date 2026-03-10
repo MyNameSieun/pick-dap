@@ -4,7 +4,7 @@ import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import { Button } from '@/components/ui/button/Button';
 import Loader from '@/components/ui/Loader';
 import { useFetchProjectMyList } from '@/features/mypage/hooks/project/useFetchProject';
-import { FolderOpen, Pen, Plus } from 'lucide-react';
+import { FolderOpen, Plus } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const MypageProjectsPage = () => {
@@ -21,13 +21,9 @@ const MypageProjectsPage = () => {
           title="프로젝트"
           content="2개의 프로젝트가 등록되어 있습니다"
           icon={FolderOpen}
-        />
+        />  
 
         <div className="flex items-center gap-3">
-          <Button variant={'white'} className="h-10 rounded-full">
-            <Pen />
-            수정
-          </Button>
           <Button
             className="h-10 rounded-full"
             onClick={() => router.push('/mypage/project/new')}
@@ -49,8 +45,9 @@ const MypageProjectsPage = () => {
           />
         ) : (
           <div className="grid grid-cols-2 gap-4">
-            {projects?.map(({ id, title, description, created_at }) => (
+            {projects?.map(({ id, title, description, created_at, slug }) => (
               <article
+                onClick={() => router.push(`/mypage/project/${slug}`)}
                 key={id}
                 className="flex cursor-pointer flex-col justify-between rounded-sm border border-gray-300 bg-white p-5 shadow-sm transition-colors hover:border-gray-400"
               >

@@ -21,6 +21,8 @@ interface CreateLayoutProps {
   // 공통화를 위해 추가된 props
   onSubmit: () => void;
   isLoading?: boolean;
+  type: 'EDIT' | 'CREATE';
+  isSubmittable?: boolean;
 }
 
 const CreateFormLayout = ({
@@ -30,6 +32,8 @@ const CreateFormLayout = ({
   contents,
   onSubmit,
   isLoading = false,
+  type,
+  isSubmittable,
 }: CreateLayoutProps) => {
   const { title, content, icon } = HeaderTitleBoxObj;
 
@@ -54,8 +58,8 @@ const CreateFormLayout = ({
           <Button disabled={isLoading} variant={'white'}>
             취소
           </Button>
-          <Button disabled={isLoading} onClick={onSubmit}>
-            등록하기
+          <Button disabled={isLoading || !isSubmittable} onClick={onSubmit}>
+            {type === 'CREATE' ? '등록하기' : '수정완료'}
           </Button>
         </div>
       </footer>

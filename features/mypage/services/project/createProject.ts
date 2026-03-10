@@ -36,6 +36,26 @@ export const createProject = async (values: createProjectProps) => {
   if (!user || authError)
     throw new Error(`사용자 인증에 실패했습니다. : ${authError?.message}`);
 
+  // 슬러그 중복 처리
+  const baseSlug = generateSlug(values.title);
+  let finalSlug = baseSlug;
+
+  const { data: existingSlugs } = await supabase
+    .from('project')
+    .select('slug')
+    .eq('user_id', user.id)
+    .ilike('slug', `${baseSlug}%`);
+
+  if (existingSlugs && existingSlugs.length > 0) {
+    const slugList = existingSlugs.map((s) => s.slug);
+    let counter = 1;
+
+    while (slugList.includes(finalSlug)) {
+      finalSlug = `${baseSlug}-${counter}`;
+      counter++;
+    }
+  }
+
   // 1. 부모 생성
   const { data: project, error: pError } = await supabase
     .from('project')
@@ -49,7 +69,7 @@ export const createProject = async (values: createProjectProps) => {
       service_purpose: values.service_purpose,
       deploy_url: values.deploy_url || null,
       github_url: values.github_url || null,
-      slug: slug,
+      slug: finalSlug,
     })
     .select()
     .single();

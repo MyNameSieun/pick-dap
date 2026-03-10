@@ -18,7 +18,7 @@ export const MYPAGE_MENUS_ITEMS = [
     icon: Users,
   },
   {
-    link: '/mypage/projects',
+    link: '/mypage/project',
     name: '프로젝트',
     icon: FolderOpen,
   },

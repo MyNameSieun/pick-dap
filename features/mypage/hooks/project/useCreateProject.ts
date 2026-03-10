@@ -16,6 +16,7 @@ export const useCreateProject = (
       await queryClient.invalidateQueries({
         queryKey: QUERY_KEYS.project.myList,
       });
+
       if (callbacks?.onSuccess) {
         callbacks.onSuccess(newProject);
       }

@@ -24,9 +24,9 @@ const Features = () => {
   };
 
   // 3. 수정
-  const handleUpdate = (id: string, functions: string) => {
+  const handleUpdate = (id: string, description: string) => {
     const newList = formData.functions.map((item) =>
-      item.id === id ? { ...item, functions } : item,
+      item.id === id ? { ...item, description } : item,
     );
     setField('functions', newList);
   };

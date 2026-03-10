@@ -7,14 +7,13 @@ import { combine } from 'zustand/middleware';
 const initialState = {
   title: '',
   description: '',
-  project_type: '' as ProjectType,
+  project_type: 'personal' as ProjectType,
   start_date: '',
   end_date: '',
   service_purpose: '',
   deploy_url: '',
   github_url: '',
 
-  // 관계형 데이터는 빈 배열로 초기화
   tech_stacks: [] as { id: string; description: string }[],
   retrospectives: [] as { id: string; description: string }[],
   performance: [] as { id: string; description: string }[],
@@ -36,7 +35,10 @@ export const useCreateProjectStore = create(
             [field]: value,
           },
         })),
-
+      setAllFields: (data: typeof initialState) =>
+        set((state) => {
+          state.formData = data;
+        }),
       reset: () =>
         set((state) => {
           state.formData = initialState;

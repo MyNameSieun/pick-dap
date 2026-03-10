@@ -12,9 +12,9 @@ export const useFetchProjectMyList = () => {
   });
 };
 
-export const useFetchProjectMyDetail = (projectId: string) => {
+export const useFetchProjectMyDetail = (slug: string) => {
   return useQuery({
-    queryKey: QUERY_KEYS.project.myDetail(projectId),
-    queryFn: () => fetchProjectMyDetail(projectId),
+    queryKey: QUERY_KEYS.project.myDetail(slug),
+    queryFn: () => fetchProjectMyDetail(slug),
   });
 };
