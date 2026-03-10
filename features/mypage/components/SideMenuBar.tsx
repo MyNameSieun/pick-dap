@@ -14,7 +14,12 @@ const SideMenuBar = ({ isHeader }: SideMenuBarProps) => {
   return (
     <nav className="b1 flex cursor-pointer flex-col gap-2 py-4">
       {MYPAGE_MENUS_ITEMS.map((menu) => {
-        const isActive = !isHeader && pathname === menu.link;
+        const isActive =
+          !isHeader &&
+          ((menu.link as string) === '/mypage'
+            ? pathname === '/mypage'
+            : pathname.startsWith(menu.link));
+
         return (
           <Link href={menu.link} key={menu.link}>
             <div

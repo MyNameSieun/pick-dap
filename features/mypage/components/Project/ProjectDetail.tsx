@@ -1,9 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import {
   Pen,
-  Check,
   ChevronLeft,
   Github,
   Globe,
@@ -13,6 +12,8 @@ import {
   Lightbulb,
   Trophy,
   LucideIcon,
+  Trash2,
+  MoreVertical,
 } from 'lucide-react';
 
 import { useRouter } from 'next/navigation';
@@ -21,6 +22,8 @@ import Loader from '@/components/ui/Loader';
 import { useFetchProjectMyDetail } from '../../hooks/project/useFetchProject';
 import { Button } from '@/components/ui/button/Button';
 import Line from '@/components/common/Line';
+import { useDeleteProject } from '../../hooks/project/useDeleteProject';
+import { toast } from 'sonner';
 
 interface ProjectDetailProps {
   slug: string;
@@ -55,11 +58,15 @@ const ItemBox = ({ children }: { children: React.ReactNode }) => {
 
 const ProjectDetail = ({ slug }: ProjectDetailProps) => {
   const router = useRouter();
-  const [isEditMode, setIsEditMode] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const menuRef = useRef<HTMLDivElement>(null);
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
-  const { data: project, isPending } = useFetchProjectMyDetail(slug);
+  const { data: project, isPending: isProjectPending } =
+    useFetchProjectMyDetail(slug);
+  const { mutate: deleteProject } = useDeleteProject();
 
-  if (isPending) return <Loader />;
+  if (isProjectPending) return <Loader />;
 
   if (!project)
     return (
@@ -68,9 +75,25 @@ const ProjectDetail = ({ slug }: ProjectDetailProps) => {
       </div>
     );
 
+  const handleDeleteProject = () => {
+    setIsMenuOpen(false);
+    if (confirm('정말 삭제하시겠습니까?')) {
+      deleteProject(slug, {
+        onSuccess: () => {
+          toast.success('프로젝트가 삭제되었습니다.');
+
+          router.replace('/mypage/project');
+        },
+        onError: (error) => {
+          toast.error('삭제 중 문제가 발생했습니다. 다시 시도해 주세요.');
+          console.error(error);
+        },
+      });
+    }
+  };
+
   return (
     <div className="space-y-8 px-10 py-10">
-      {/* 상단 */}
       <div className="flex justify-between">
         <div>
           <button
@@ -81,25 +104,52 @@ const ProjectDetail = ({ slug }: ProjectDetailProps) => {
             뒤로가기
           </button>
         </div>
-
-        <div className="flex items-center">
-          <Button
-            variant={isEditMode ? 'default' : 'white'}
-            onClick={() => router.push(`/mypage/project/${slug}/edit`)}
-          >
-            {isEditMode ? (
-              <Check className="mr-2 h-4 w-4" />
-            ) : (
-              <Pen className="mr-2 h-4 w-4" />
-            )}
-            {isEditMode ? '수정완료' : '수정'}
-          </Button>
-        </div>
       </div>
 
-      {/* 헤더 */}
       <section className="space-y-4">
-        <h1 className="text-3xl font-bold text-gray-900">{project.title}</h1>
+        <div className="flex items-start justify-between">
+          <h1 className="text-3xl leading-tight font-bold text-gray-900">
+            {project.title}
+          </h1>
+
+          <div className="relative ml-4" ref={menuRef}>
+            <button
+              onClick={toggleMenu}
+              className="rounded-full p-2 text-gray-500 transition-colors hover:bg-gray-100 hover:text-gray-900"
+            >
+              <MoreVertical className="h-5 w-5" />
+            </button>
+
+            {isMenuOpen && (
+              <>
+                <div
+                  className="fixed inset-0 z-10"
+                  onClick={() => setIsMenuOpen(false)}
+                />
+
+                <div className="animate-in fade-in zoom-in-95 absolute right-0 z-20 mt-2 w-36 origin-top-right rounded-xl border border-gray-100 bg-white py-1.5 shadow-lg">
+                  <button
+                    onClick={() => {
+                      setIsMenuOpen(false);
+                      router.push(`/mypage/project/${slug}/edit`);
+                    }}
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100"
+                  >
+                    <Pen size={14} className="text-icon-default" />
+                    수정하기
+                  </button>
+                  <button
+                    onClick={handleDeleteProject}
+                    className="flex w-full items-center gap-2 px-4 py-2.5 text-sm text-gray-700 transition-colors hover:bg-gray-100"
+                  >
+                    <Trash2 size={14} className="text-icon-default" />
+                    삭제하기
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
 
         <p className="text-lg text-gray-600">{project.description}</p>
 

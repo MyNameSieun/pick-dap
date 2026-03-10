@@ -13,7 +13,6 @@ import Achievements from './ProjectNewPage/Achievements';
 import Retrospective from './ProjectNewPage/Retrospective';
 import Deliverables from './ProjectNewPage/Deliverables';
 import { UpdateProjectParams } from '../services/project/updateProject';
-import { RefObject } from 'react';
 
 interface Props {
   onSubmit: () => void;

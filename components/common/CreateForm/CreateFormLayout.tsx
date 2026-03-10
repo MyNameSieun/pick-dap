@@ -8,6 +8,7 @@ import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import { Button } from '@/components/ui/button/Button';
 import { ContentsType } from '@/types/contents';
 import Loader from '@/components/ui/Loader';
+import { useRouter } from 'next/navigation';
 
 interface CreateLayoutProps {
   BackButtonLabel: string;
@@ -36,6 +37,7 @@ const CreateFormLayout = ({
   isSubmittable,
 }: CreateLayoutProps) => {
   const { title, content, icon } = HeaderTitleBoxObj;
+  const router = useRouter();
 
   if (isLoading) return <Loader />;
 
@@ -55,7 +57,11 @@ const CreateFormLayout = ({
       <footer>
         <Line />
         <div className="flex justify-end gap-1">
-          <Button disabled={isLoading} variant={'white'}>
+          <Button
+            onClick={() => router.push('/mypage/project')}
+            disabled={isLoading}
+            variant={'white'}
+          >
             취소
           </Button>
           <Button disabled={isLoading || !isSubmittable} onClick={onSubmit}>

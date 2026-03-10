@@ -4,7 +4,7 @@ import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import { Button } from '@/components/ui/button/Button';
 import Loader from '@/components/ui/Loader';
 import { useFetchProjectMyList } from '@/features/mypage/hooks/project/useFetchProject';
-import { FolderOpen, Plus } from 'lucide-react';
+import { FolderOpen, Plus, Calendar, ArrowRight } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 const MypageProjectsPage = () => {
@@ -15,23 +15,20 @@ const MypageProjectsPage = () => {
   if (isProjectPending) return <Loader />;
 
   return (
-    <div>
-      <div className="flex justify-between">
+    <div className="mx-auto max-w-5xl">
+      <div className="flex flex-col items-start justify-between border-gray-100 pb-6 sm:flex-row sm:items-center">
         <HeaderTitleBox
           title="프로젝트"
-          content="2개의 프로젝트가 등록되어 있습니다"
+          content={`${projects?.length || 0}개의 프로젝트가 등록되어 있습니다`}
           icon={FolderOpen}
-        />  
-
-        <div className="flex items-center gap-3">
-          <Button
-            className="h-10 rounded-full"
-            onClick={() => router.push('/mypage/project/new')}
-          >
-            <Plus />
-            프로젝트 추가
-          </Button>
-        </div>
+        />
+        <Button
+          className="h-11 gap-2 rounded-full px-6 shadow-sm transition-all hover:shadow-md"
+          onClick={() => router.push('/mypage/project/new')}
+        >
+          <Plus size={18} />
+          프로젝트 추가
+        </Button>
       </div>
 
       <section>
@@ -44,22 +41,43 @@ const MypageProjectsPage = () => {
             onClick={() => router.push('/mypage/project/new')}
           />
         ) : (
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
             {projects?.map(({ id, title, description, created_at, slug }) => (
               <article
-                onClick={() => router.push(`/mypage/project/${slug}`)}
                 key={id}
-                className="flex cursor-pointer flex-col justify-between rounded-sm border border-gray-300 bg-white p-5 shadow-sm transition-colors hover:border-gray-400"
+                onClick={() => router.push(`/mypage/project/${slug}`)}
+                className="group hover:border-main-200 relative flex cursor-pointer flex-col justify-between rounded-2xl border border-gray-200 bg-white p-6 shadow-[0_2px_8px_rgba(0,0,0,0.04)] transition-all hover:-translate-y-1 hover:shadow-[0_8px_20px_rgba(0,0,0,0.08)]"
               >
-                <div className="flex flex-col gap-1">
-                  <h6 className="text-gray-1000 font-bold">{title}</h6>
-                  <div className="b2 line-clamp-2 break-all text-gray-700">
-                    {description}
+                <div className="space-y-3">
+                  <div className="flex items-start justify-between">
+                    <h3 className="group-hover:text-main-500 text-lg font-bold text-gray-900 transition-colors">
+                      {title}
+                    </h3>
+                    <div className="group-hover:bg-main-50 group-hover:text-main-500 rounded-full bg-gray-50 p-1.5 text-gray-400 transition-colors">
+                      <ArrowRight size={16} />
+                    </div>
                   </div>
+
+                  <p className="line-clamp-2 h-10 text-sm leading-relaxed break-all text-gray-700">
+                    {description || '상세 설명이 없습니다.'}
+                  </p>
                 </div>
-                <time className="c1 mt-9 text-gray-600">
-                  등록일: {new Date(created_at).toLocaleString('ko-KR')}
-                </time>
+
+                <div className="mt-4 flex items-center justify-between border-t border-gray-50">
+                  <div className="mt-4 flex items-center gap-1.5 text-gray-500">
+                    <Calendar size={14} />
+                    <span className="text-xs">
+                      {new Date(created_at).toLocaleDateString('ko-KR', {
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                      })}
+                    </span>
+                  </div>
+                  <span className="text-main-400 text-xs font-medium opacity-0 transition-opacity group-hover:opacity-100">
+                    상세보기
+                  </span>
+                </div>
               </article>
             ))}
           </div>
