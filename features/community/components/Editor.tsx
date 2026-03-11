@@ -1,14 +1,20 @@
 'use client';
 
 import { useEditor, EditorContent } from '@tiptap/react';
+import { Editor as TipTapEditor } from '@tiptap/core';
 import StarterKit from '@tiptap/starter-kit';
 import Toolbar from './Toolbar';
 import TextAlign from '@tiptap/extension-text-align';
 import Image from '@tiptap/extension-image';
 import Link from '@tiptap/extension-link';
 import Highlight from '@tiptap/extension-highlight';
+import { useEffect } from 'react';
 
-const Editor = () => {
+interface EditorProps {
+  setEditor: (editor: TipTapEditor | null) => void;
+}
+
+const Editor = ({ setEditor }: EditorProps) => {
   const editor = useEditor({
     extensions: [
       StarterKit,
@@ -32,6 +38,9 @@ const Editor = () => {
       },
     },
   });
+  useEffect(() => {
+    if (setEditor) setEditor(editor);
+  }, [editor, setEditor]);
 
   return (
     <div className="relative min-h-100 w-full rounded-xl border border-gray-500 p-1">
