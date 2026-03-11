@@ -161,7 +161,7 @@ export type Database = {
             foreignKeyName: "comments_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
-            referencedRelation: "posts"
+            referencedRelation: "post"
             referencedColumns: ["id"]
           },
           {
@@ -363,7 +363,7 @@ export type Database = {
             foreignKeyName: "like_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
-            referencedRelation: "posts"
+            referencedRelation: "post"
             referencedColumns: ["id"]
           },
           {
@@ -381,6 +381,90 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      post: {
+        Row: {
+          bookmark_count: number
+          category_id: string
+          comment_count: number
+          content: string
+          create_at: string
+          id: string
+          idx: number
+          image_urls: string[] | null
+          slug: string
+          title: string
+          update_at: string
+          user_id: string
+          view_count: number
+        }
+        Insert: {
+          bookmark_count: number
+          category_id?: string
+          comment_count: number
+          content: string
+          create_at?: string
+          id?: string
+          idx?: number
+          image_urls?: string[] | null
+          slug: string
+          title: string
+          update_at?: string
+          user_id?: string
+          view_count: number
+        }
+        Update: {
+          bookmark_count?: number
+          category_id?: string
+          comment_count?: number
+          content?: string
+          create_at?: string
+          id?: string
+          idx?: number
+          image_urls?: string[] | null
+          slug?: string
+          title?: string
+          update_at?: string
+          user_id?: string
+          view_count?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "posts_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "tags"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "posts_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      post_category: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+          sort_order: number
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+          sort_order?: number
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+          sort_order?: number
+        }
+        Relationships: []
       }
       post_stats: {
         Row: {
@@ -406,7 +490,7 @@ export type Database = {
             foreignKeyName: "post_stats_id_fkey"
             columns: ["id"]
             isOneToOne: true
-            referencedRelation: "posts"
+            referencedRelation: "post"
             referencedColumns: ["id"]
           },
         ]
@@ -429,7 +513,7 @@ export type Database = {
             foreignKeyName: "post_tags_post_id_fkey"
             columns: ["post_id"]
             isOneToOne: false
-            referencedRelation: "posts"
+            referencedRelation: "post"
             referencedColumns: ["id"]
           },
           {
@@ -437,57 +521,6 @@ export type Database = {
             columns: ["tag_id"]
             isOneToOne: false
             referencedRelation: "tags"
-            referencedColumns: ["id"]
-          },
-        ]
-      }
-      posts: {
-        Row: {
-          category_id: string
-          content: string
-          create_at: string
-          id: string
-          image_urls: string[] | null
-          slug: string
-          title: string
-          update_at: string
-          user_id: string
-        }
-        Insert: {
-          category_id?: string
-          content: string
-          create_at?: string
-          id?: string
-          image_urls?: string[] | null
-          slug: string
-          title: string
-          update_at?: string
-          user_id?: string
-        }
-        Update: {
-          category_id?: string
-          content?: string
-          create_at?: string
-          id?: string
-          image_urls?: string[] | null
-          slug?: string
-          title?: string
-          update_at?: string
-          user_id?: string
-        }
-        Relationships: [
-          {
-            foreignKeyName: "posts_category_id_fkey"
-            columns: ["category_id"]
-            isOneToOne: false
-            referencedRelation: "tags"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "posts_user_id_fkey"
-            columns: ["user_id"]
-            isOneToOne: false
-            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

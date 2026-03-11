@@ -3,7 +3,9 @@ import type { Tables, TablesInsert, Enums } from '@/database.types';
 // ==========================================
 // 조회용 (Entity)
 // ==========================================
-export type PostEntity = Tables<'posts'>;
+export type PostEntity = Tables<'post'>;
+export type PostCategoryEntity = Tables<'post_category'>;
+
 export type ProfileEntity = Tables<'profiles'>;
 export type AnswerEntity = Tables<'answers'>;
 export type CommentEntity = Tables<'comments'>;
