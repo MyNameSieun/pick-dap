@@ -103,7 +103,10 @@ const CommunityCreate = () => {
 
           <Button
             disabled={
-              isPostPending || !editorInstance || !title.trim() || !categoryId
+              isPostPending ||
+              !title.trim() ||
+              !categoryId ||
+              editorInstance?.isEmpty
             }
             onClick={handleSave}
             className="w-22"
@@ -117,7 +120,7 @@ const CommunityCreate = () => {
       {showPreview && editorInstance && (
         <CommunityPreview
           title={title}
-          category={categoryId}
+          categoryId={categoryId}
           content={editorInstance.getHTML()}
           onClose={() => setShowPreview(false)}
         />
