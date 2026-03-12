@@ -9,10 +9,14 @@ export const useFetchPostData = (categorySlug: string) => {
     queryKey: QUERY_KEYS.post.categoryList(categorySlug),
   });
 };
-export const useFetchPostDetail = (categorySlug: string, postSlug: string) => {
+export const useFetchPostDetail = (
+  categorySlug: string,
+  postSlug: string,
+  userId?: string,
+) => {
   return useQuery({
-    queryKey: QUERY_KEYS.post.detail(postSlug),
-    queryFn: () => fetchPostDetail(categorySlug, postSlug),
+    queryKey: QUERY_KEYS.post.detail(postSlug, userId),
+    queryFn: () => fetchPostDetail(categorySlug, postSlug, userId),
     enabled: !!categorySlug && !!postSlug,
   });
 };

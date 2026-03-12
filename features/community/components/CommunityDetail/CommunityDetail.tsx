@@ -14,6 +14,8 @@ import { useFetchPostDetail } from '../../hooks/useFetchPostsData';
 import Loader from '@/components/ui/Loader';
 import { useIncrementPostViewCount } from '../../hooks/useIncrementPostViewCount';
 import { useSession } from '@/store/session';
+import { useTogglePostLike } from '../../hooks/useTogglePostLike';
+import { cn } from '@/lib/utils';
 
 const CommunityDetail = ({
   categorySlug,
@@ -22,15 +24,22 @@ const CommunityDetail = ({
   categorySlug: string;
   slug: string;
 }) => {
+  const user = useSession()?.user;
+
   const { data: post, isPending: isPostPending } = useFetchPostDetail(
     categorySlug,
     slug,
+    user?.id,
   );
   const { mutate: incrementView } = useIncrementPostViewCount();
+  const { mutate: togglePostLikeMutation, isPending: isTogglePostLikePending } =
+    useTogglePostLike({
+      onError: () => {
+        toast.error('좋아요 요청에 실패했습니다', { position: 'top-center' });
+      },
+    });
 
-  const [isHeart, setHeart] = useState(false);
   const [isManage, setManage] = useState(false);
-  const user = useSession()?.user;
 
   useEffect(() => {
     if (!post?.id) return;
@@ -44,16 +53,12 @@ const CommunityDetail = ({
     sessionStorage.setItem('viewed_post', JSON.stringify([...viewed, post.id]));
   }, [post?.id, incrementView]);
 
-  if (!post) return <div>게시글을 찾을 수 없습니다.</div>;
-
-  if (isPostPending) return <Loader />;
+  if (isPostPending || !post) return <Loader />;
 
   const heartHandler = () => {
-    setHeart(!isHeart);
-    toast[isHeart ? 'info' : 'success'](
-      isHeart ? '좋아요를 해제했습니다.' : '좋아요를 눌렀습니다.',
-      { position: 'top-center' },
-    );
+    if (isTogglePostLikePending) return;
+
+    togglePostLikeMutation({ postId: post.id, slug: post.slug });
   };
   return (
     <>
@@ -65,18 +70,26 @@ const CommunityDetail = ({
           <div className="flex items-center gap-4">
             {post?.view_count || 0}
             <Button
-              variant="white"
               onClick={heartHandler}
-              className="h-10.5 rounded-[12px] text-gray-800"
+              variant="white"
+              className={cn(
+                'group/like flex h-10 gap-2 rounded-full border-gray-200 text-gray-900 transition-all active:scale-95',
+                post.isLiked
+                  ? 'border-red-100 bg-red-50 text-red-600 hover:bg-red-100'
+                  : 'hover:border-gray-300',
+              )}
             >
               <Heart
-                className={twMerge(
-                  'text-point-heart',
-                  isHeart ? 'fill-point-heart' : '',
+                size={16}
+                className={cn(
+                  'transition-colors',
+                  post.isLiked
+                    ? 'fill-red-500 text-red-500'
+                    : 'text-gray-400 group-hover/like:text-red-400',
                 )}
               />
 
-              {/* {post?.view_count || 0} */}
+              {post.like_count}
             </Button>
 
             {post.user_id === user?.id && (
@@ -91,7 +104,10 @@ const CommunityDetail = ({
                 </Button>
                 {isManage && (
                   <div className="absolute top-12 right-0">
-                    <CommunityManageButton postId={post.id}categorySlug={categorySlug} />
+                    <CommunityManageButton
+                      postId={post.id}
+                      categorySlug={categorySlug}
+                    />
                   </div>
                 )}
               </div>

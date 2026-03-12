@@ -152,7 +152,8 @@ export const QUERY_KEYS = {
     userList: (userId: string) =>
       [...QUERY_KEYS.post.list, 'user', userId] as const,
 
-    detail: (slug: string) => [...QUERY_KEYS.post.all, 'detail', slug] as const,
+    detail: (slug: string, userId?: string) =>
+      [...QUERY_KEYS.post.all, 'detail', slug, userId] as const,
 
     myDetail: (slug: string) =>
       [...QUERY_KEYS.post.all, 'detail', 'me', slug] as const,
