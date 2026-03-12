@@ -25,7 +25,7 @@ const CommunityMain = () => {
           }
         />
       </div>
-      <div className="flex w-full items-center gap-4">
+      <div className="mt-[-2rem] flex w-full items-center gap-4">
         <Input placeholder="검색어를 입력하세요" rightIcon={Search} />
       </div>
     </>

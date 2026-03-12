@@ -1,7 +1,7 @@
 // CommunityPreview.tsx
 'use client';
 
-import { X } from 'lucide-react'; // 닫기 아이콘
+import { X } from 'lucide-react';
 
 interface PreviewProps {
   title: string;

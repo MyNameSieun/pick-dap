@@ -6,36 +6,37 @@ import InfoComment from '@/components/common/Comments/InfoComment';
 import InfoAuthor from '@/components/common/Info/InfoAuthor';
 import Line from '@/components/common/Line';
 import { Button } from '@/components/ui/button/Button';
-import { commentData, communityData } from '@/data/communityData';
+import { commentData } from '@/data/communityData';
 import { EllipsisVertical, Heart } from 'lucide-react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 import CommunityManageButton from './CommunityManageButton';
+import { useFetchPostDetail } from '../../hooks/useFetchPostsData';
+import Loader from '@/components/ui/Loader';
 
 const CommunityDetail = ({
-  categoryId,
-  postId,
+  categorySlug,
+  slug,
 }: {
-  categoryId: string;
-  postId: string;
+  categorySlug: string;
+  slug: string;
 }) => {
-  const post = communityData.find(
-    (v) => v.id === postId && v.categoryId === categoryId,
-  );
+  const { data: post, isPending } = useFetchPostDetail(categorySlug, slug);
   const [isHeart, setHeart] = useState(false);
   const [isManage, setManage] = useState(false);
 
+  if (isPending) return <Loader />;
+  if (!post) return <div>게시글을 찾을 수 없습니다.</div>;
+
   const heartHandler = () => {
     setHeart(!isHeart);
-    if (isHeart)
-      toast.info('좋아요를 해제했습니다.', { position: 'top-center' });
-    else {
-      toast.success('좋아요를 눌렀습니다.', { position: 'top-center' });
-    }
+    toast[isHeart ? 'info' : 'success'](
+      isHeart ? '좋아요를 해제했습니다.' : '좋아요를 눌렀습니다.',
+      { position: 'top-center' },
+    );
   };
-
   return (
     <>
       <BackButton label={<p className="font-bold">뒤로가기</p>} />
@@ -55,7 +56,7 @@ const CommunityDetail = ({
                   isHeart ? 'fill-point-heart' : '',
                 )}
               />
-              {post?.stats.likeCount || 0}
+              {/* {post?.stats.likeCount || 0} */}
             </Button>
             <div className="relative">
               <Button
@@ -76,19 +77,22 @@ const CommunityDetail = ({
         </div>
         <div className="flex">
           <InfoAuthor
-            image={post?.author.profileImage || '/profile.jpg'}
-            author={post?.author.username || ''}
-            createdAt={post?.createdAt || ''}
+            image={post?.profiles.avatar_url || '/profile.jpg'}
+            author={post?.profiles.nickname || ''}
+            createdAt={post?.create_at || ''}
           />
         </div>
         <Line my={1} />
         <div className="flex flex-col gap-2">
-          <p className="b1 whitespace-pre-wrap text-black">
-            {post?.content || ''}
-          </p>
-          {post?.stats.postImage && (
+          {/* 1. 태그가 포함된 문자열을 HTML로 렌더링 */}
+          <div
+            className="b1 prose max-w-none whitespace-pre-wrap text-black"
+            dangerouslySetInnerHTML={{ __html: post?.content || '' }}
+          />
+
+          {post?.image_urls?.[0] && (
             <Image
-              src={post?.stats.postImage || '/example1.jpg'}
+              src={post.image_urls[0]}
               alt="게시글 이미지"
               height={180}
               width={200}

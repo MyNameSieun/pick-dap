@@ -2,37 +2,36 @@
 
 import Tabs from '@/components/common/Tabs/Tabs';
 import { useRouter } from 'next/navigation';
-import { twMerge } from 'tailwind-merge';
 import { useFetchPostCategory } from '../hooks/useFetchPostCategory';
 import Loader from '@/components/ui/Loader';
+import CommunityContents from './CommunityContents';
 
-const CommunitySub = ({ categoryId }: { categoryId: string }) => {
+const CommunitySub = ({ categorySlug }: { categorySlug: string }) => {
   const router = useRouter();
-  const handleTabChange = (id: string) => {
-    router.push(`/community/${id}`);
-  };
-
   const { data: categories, isPending: isCategoryPending } =
     useFetchPostCategory();
+
+  const handleTabChange = (slug: string) => {
+    const path = `/community/${slug}`;
+    router.push(path);
+  };
+  if (isCategoryPending) return <Loader />;
+
   const dynamicTabs =
     categories?.map((cat) => ({
-      id: cat.id,
+      id: cat.slug,
       label: cat.name,
-      content: cat.name,
+      content: <CommunityContents categorySlug={cat.slug} />,
     })) || [];
 
   if (isCategoryPending) return <Loader />;
   return (
     <>
-      <div
-        className={twMerge('container-row', 'w-full rounded-[6px] px-16 py-4')}
-      >
-        <Tabs
-          tabs={dynamicTabs}
-          setId={categoryId}
-          onTabChange={handleTabChange}
-        />
-      </div>
+      <Tabs
+        tabs={dynamicTabs}
+        setId={categorySlug}
+        onTabChange={handleTabChange}
+      />
     </>
   );
 };
