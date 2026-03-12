@@ -399,9 +399,9 @@ export type Database = {
           view_count: number
         }
         Insert: {
-          bookmark_count: number
+          bookmark_count?: number
           category_id?: string
-          comment_count: number
+          comment_count?: number
           content: string
           create_at?: string
           id?: string
@@ -411,7 +411,7 @@ export type Database = {
           title: string
           update_at?: string
           user_id?: string
-          view_count: number
+          view_count?: number
         }
         Update: {
           bookmark_count?: number
@@ -430,10 +430,10 @@ export type Database = {
         }
         Relationships: [
           {
-            foreignKeyName: "posts_category_id_fkey"
+            foreignKeyName: "post_category_id_fkey"
             columns: ["category_id"]
             isOneToOne: false
-            referencedRelation: "tags"
+            referencedRelation: "post_category"
             referencedColumns: ["id"]
           },
           {

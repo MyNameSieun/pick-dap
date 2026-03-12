@@ -28,7 +28,6 @@ const Editor = ({ setEditor }: EditorProps) => {
         autolink: true,
       }),
     ],
-    content: '<p>최적화된 에디터</p>',
     immediatelyRender: false,
     shouldRerenderOnTransaction: false,
     editorProps: {

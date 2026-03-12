@@ -37,7 +37,6 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
 
   if (!editor) return null;
 
-  // 초기 로딩 시 기본값
   const safeState = editorState ?? {
     isHeading1: false,
     isHeading2: false,
@@ -55,7 +54,6 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
 
   return (
     <section className="bg-background flex flex-wrap items-center gap-2 border-b p-2">
-      {/* 1. 제목 그룹 (H1, H2, H3) */}
       <ToolbarGroup>
         {headingOptions.map((option) => (
           <ToolbarButton
@@ -70,7 +68,6 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
 
       <ToolbarLine />
 
-      {/* 2. 텍스트 스타일 그룹 (B, I, S) */}
       <ToolbarGroup>
         {markOptions.map((option) => (
           <ToolbarButton
@@ -85,7 +82,6 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
 
       <ToolbarLine />
 
-      {/* 3. 정렬 그룹 (왼쪽, 중앙, 오른쪽) */}
       <ToolbarGroup>
         {alignOptions.map((option) => (
           <ToolbarButton
@@ -106,7 +102,6 @@ const Toolbar = ({ editor }: { editor: Editor | null }) => {
 
       <ToolbarLine />
 
-      {/* 4. 이미지, 링크 및 리스트 그룹 */}
       <ToolbarGroup>
         <ToolbarButton
           icon="Image"

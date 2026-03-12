@@ -1,21 +1,9 @@
-export const COMMUNITY_CATEGORY = {
-  '1': '전체',
-  '2': '자유게시판',
-  '3': '면접정보',
-  '4': '스터디',
-  '5': '질의 응답',
-  '6': '프로젝트',
-} as const;
-
-export type CommunityCategoryType =
-  (typeof COMMUNITY_CATEGORY)[keyof typeof COMMUNITY_CATEGORY];
-
 export const COMMUNITY_TAG = {
-  '2': 'blue',
-  '3': 'red',
-  '4': 'yellow',
-  '5': 'green',
-  '6': 'purple',
+  'd6e54710-1a6a-4ea2-a1b2-0ee38111a3d3': 'blue',
+  'a8b921f6-ef0d-4cb0-8ca3-36af8138ba26': 'green',
+  '64909e8b-f3c5-462d-bf69-77de4294896e': 'yellow',
+  '41a4492b-b33f-4dbc-8b60-ada8b1bd12e4': 'red',
+  '55ae44aa-820e-4322-81a8-8ea9a5866274': 'purple',
 } as const;
 
 export type CommunityTagType =

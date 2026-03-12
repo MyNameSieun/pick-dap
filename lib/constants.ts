@@ -130,13 +130,26 @@ export const QUERY_KEYS = {
 
   project: {
     all: ['project'] as const,
-    // 목록
+
     list: ['project', 'list'] as const,
     myList: ['project', 'list', 'me'] as const,
     userList: (userId: string) =>
       [...QUERY_KEYS.project.list, 'user', userId] as const,
 
-    // 상세
+    myDetail: (slug: string) =>
+      [...QUERY_KEYS.project.all, 'detail', 'me', slug] as const,
+    userDetail: (slug: string) =>
+      [...QUERY_KEYS.project.all, 'detail', 'user', slug] as const,
+  },
+
+  post: {
+    all: ['post'] as const,
+    list: ['post', 'list'] as const,
+
+    myList: ['post', 'list', 'me'] as const,
+    userList: (userId: string) =>
+      [...QUERY_KEYS.post.list, 'user', userId] as const,
+
     myDetail: (slug: string) =>
       [...QUERY_KEYS.project.all, 'detail', 'me', slug] as const,
     userDetail: (slug: string) =>

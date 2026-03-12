@@ -12,40 +12,39 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/Select';
-import { communityMenuData } from '@/data/menuData';
 import { Button } from '@/components/ui/button/Button';
 import Editor from '../Editor';
 import CommunityPreview from './CommunityPreview';
+import { Monitor } from 'lucide-react';
+import { useCreatePost } from '../../hooks/useCreatePost';
+import Loader from '@/components/ui/Loader';
+import { useFetchPostCategory } from '../../hooks/useFetchPostCategory';
 
 const CommunityCreate = () => {
-  const displayData = communityMenuData.filter((v) => v.id != '1');
-
-  // 상태 관리
   const [editorInstance, setEditorInstance] = useState<TipTapEditor | null>(
     null,
   );
   const [showPreview, setShowPreview] = useState(false);
 
   const [title, setTitle] = useState('');
-  const [category, setCategory] = useState('');
+  const [categoryId, setCategoryId] = useState('');
+  const { data: categories, isPending: isCategoryPending } =
+    useFetchPostCategory();
+  const { mutate: createPost, isPending: isPostPending } = useCreatePost();
+
+  if (isPostPending || isCategoryPending) return <Loader />;
 
   const handleSave = () => {
     if (!editorInstance) return;
-    if (!title.trim()) return alert('제목을 입력해주세요.');
-    if (!category) return alert('게시판을 선택해주세요.');
 
-    const htmlContent = editorInstance.getHTML(); // 본문 HTML
-    const textContent = editorInstance.getText(); // 순수 텍스트(요약용)
+    const htmlContent = editorInstance.getHTML();
 
-    const postPayload = {
-      category,
+    createPost({
       title,
       content: htmlContent,
-      summary: textContent.slice(0, 100),
-    };
-
-    console.log('서버로 전송할 데이터:', postPayload);
-    // 여기서 서버로 전송하면 된다.
+      image_urls: [],
+      category_id: categoryId,
+    });
   };
 
   return (
@@ -55,56 +54,61 @@ const CommunityCreate = () => {
       </div>
 
       {/* 게시판 선택 */}
-      <Select onValueChange={setCategory}>
+      <Select onValueChange={setCategoryId}>
         <SelectTrigger className="h-9 w-40 cursor-pointer">
           <SelectValue placeholder="게시판 선택" />
         </SelectTrigger>
         <SelectContent>
           <SelectGroup>
             <SelectLabel>커뮤니티</SelectLabel>
-            {displayData.map((v) => (
-              <SelectItem className="cursor-pointer" key={v.id} value={v.label}>
-                {v.label}
+            {categories?.map((c) => (
+              <SelectItem className="cursor-pointer" key={c.id} value={c.id}>
+                {c.name}
               </SelectItem>
             ))}
           </SelectGroup>
         </SelectContent>
       </Select>
 
-      {/* 제목 입력 */}
       <input
-        placeholder="제목을 입력하세요..."
+        placeholder="제목을 입력하세요"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         className="text-gray-1000 selection:bg-main-400 mb-2 w-full border-b border-b-gray-500 py-2 text-[28px] font-bold outline-0 selection:text-white placeholder:text-gray-600"
       />
 
-      {/* 에디터 - setEditor 프롭 전달 */}
       <Editor setEditor={setEditorInstance} />
 
-      <div className="flex w-full items-center justify-end gap-5">
-        <Button
-          variant="white"
-          className="h-9 w-25"
-          onClick={() => window.history.back()}
-        >
-          취소
-        </Button>
+      <div className="flex">
         <button
-          onClick={() => setShowPreview(true)} // 미리보기 열기
-          className="h-9 w-25"
+          onClick={() => setShowPreview(true)}
+          className="text-icon-default flex h-9 w-25 items-center gap-2 text-sm"
         >
+          <Monitor className="h-5 w-5" />
           미리보기
         </button>
-        <Button onClick={handleSave} className="h-9 w-25">
-          저장
-        </Button>
+        <div className="flex w-full items-center justify-end gap-5 font-bold">
+          <Button variant="white" onClick={() => window.history.back()}>
+            취소
+          </Button>
+
+          <Button
+            disabled={
+              isPostPending || !editorInstance || !title.trim() || !categoryId
+            }
+            onClick={handleSave}
+            className="w-22"
+          >
+            저장
+          </Button>
+        </div>
       </div>
+
       {/* 미리보기 모달 표시 */}
       {showPreview && editorInstance && (
         <CommunityPreview
           title={title}
-          category={category}
+          category={categoryId}
           content={editorInstance.getHTML()}
           onClose={() => setShowPreview(false)}
         />

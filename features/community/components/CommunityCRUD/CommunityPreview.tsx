@@ -18,7 +18,6 @@ const CommunityPreview = ({
 }: PreviewProps) => {
   return (
     <div className="animate-in fade-in slide-in-from-bottom-4 fixed inset-0 z-[100] overflow-y-auto bg-white duration-300 dark:bg-gray-950">
-      {/* 상단 헤더: 고정 스티키 */}
       <div className="sticky top-0 z-10 flex items-center justify-between border-b bg-white/80 px-6 py-4 backdrop-blur-md dark:bg-gray-950/80">
         <div className="flex items-center gap-2">
           <span className="bg-main-100 text-main-600 rounded-full px-3 py-1 text-xs font-bold">
@@ -35,9 +34,7 @@ const CommunityPreview = ({
         </button>
       </div>
 
-      {/* 본문 영역: 실제 블로그 가독성 폭(max-w-3xl) 적용 */}
       <article className="mx-auto max-w-3xl px-6 py-16">
-        {/* 포스트 헤더 */}
         <header className="mb-12 text-center">
           <p className="text-main-500 mb-4 text-lg font-medium">
             {category || '카테고리 미선택'}
@@ -56,7 +53,6 @@ const CommunityPreview = ({
           </div>
         </header>
 
-        {/* 본문 HTML 렌더링 */}
         <div
           className="prose prose-lg dark:prose-invert prose-headings:scroll-mt-20 prose-img:rounded-2xl prose-pre:bg-gray-900 max-w-none"
           dangerouslySetInnerHTML={{ __html: content }}

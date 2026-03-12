@@ -2,7 +2,7 @@ import CommunityCreate from '@/features/community/components/CommunityCRUD/Commu
 
 const CommunityPagePostNewPage = () => {
   return (
-    <div className="mx-auto mt-8 flex w-full max-w-214 flex-col items-start gap-4">
+    <div className="">
       <CommunityCreate />
     </div>
   );
