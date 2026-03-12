@@ -19,6 +19,8 @@ import { Monitor } from 'lucide-react';
 import { useCreatePost } from '../../hooks/useCreatePost';
 import Loader from '@/components/ui/Loader';
 import { useFetchPostCategory } from '../../hooks/useFetchPostCategory';
+import { toast } from 'sonner';
+import { useRouter } from 'next/navigation';
 
 const CommunityCreate = () => {
   const [editorInstance, setEditorInstance] = useState<TipTapEditor | null>(
@@ -30,7 +32,14 @@ const CommunityCreate = () => {
   const [categoryId, setCategoryId] = useState('');
   const { data: categories, isPending: isCategoryPending } =
     useFetchPostCategory();
-  const { mutate: createPost, isPending: isPostPending } = useCreatePost();
+
+  const router = useRouter();
+  const { mutate: createPost, isPending: isPostPending } = useCreatePost({
+    onSuccess: (data) => {
+      toast.success('게시글이 등록되었습니다.', { position: 'top-center' });
+      router.push(`/community/${data?.post_category.slug}/${data?.slug}`);
+    },
+  });
 
   if (isPostPending || isCategoryPending) return <Loader />;
 

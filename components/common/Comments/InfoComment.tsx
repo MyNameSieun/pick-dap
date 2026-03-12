@@ -1,6 +1,5 @@
 'use client';
 
-import { commentData } from '@/data/communityData';
 import Image from 'next/image';
 
 const InfoComment = ({
@@ -10,12 +9,9 @@ const InfoComment = ({
   commentId: string;
   postId: string;
 }) => {
-  const comment = commentData.find(
-    (v) => v.id === commentId && v.postId === postId,
-  );
   return (
     <div className="flex h-fit w-full items-start gap-4">
-      <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gray-400">
+      {/* <div className="relative h-8 w-8 overflow-hidden rounded-full bg-gray-400">
         <Image
           className="object-cover"
           alt="댓글 작성자 프로필"
@@ -37,7 +33,7 @@ const InfoComment = ({
         <p className="c1 whitespace-pre-wrap text-black">
           {comment?.content || '내용 없음'}
         </p>
-      </div>
+      </div> */}
     </div>
   );
 };

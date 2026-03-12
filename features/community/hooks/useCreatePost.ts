@@ -4,7 +4,15 @@ import { PostEntity } from '@/types/entity';
 import { UseMutationCallback } from '@/types/useMutationCallback';
 import { QUERY_KEYS } from '@/lib/constants';
 
-export const useCreatePost = (callbacks?: UseMutationCallback<PostEntity>) => {
+export const useCreatePost = (
+  callbacks?: UseMutationCallback<
+    PostEntity & {
+      post_category: {
+        slug: string;
+      };
+    }
+  >,
+) => {
   const queryClient = useQueryClient();
 
   return useMutation({

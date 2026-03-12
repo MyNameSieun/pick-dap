@@ -11,6 +11,7 @@ import { useCreateReview } from '@/features/review/hooks/useCreateReview';
 import { useReviewStore } from '@/features/review/store/reviewStore';
 import { Pen } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
 
 const ReviewNewPage = () => {
   const { formData, reset } = useReviewStore();
@@ -18,7 +19,7 @@ const ReviewNewPage = () => {
   const { mutate: createReview, isPending } = useCreateReview({
     onSuccess: () => {
       reset();
-      alert('후기가 성공적으로 등록되었습니다!');
+      toast('후기가 성공적으로 등록되었습니다!', { position: 'top-center' });
       router.push('/review');
     },
   });
@@ -44,6 +45,7 @@ const ReviewNewPage = () => {
         content: '실제 면접 경험을 공유해주세요',
         icon: Pen,
       }}
+      type="CREATE"
       contents={REVIEW_CONTENTS}
     >
       <BasicInfo />

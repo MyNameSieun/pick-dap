@@ -2,19 +2,18 @@
 
 import BackButton from '@/components/common/BackButton';
 import CommentEditor from '@/components/common/Comments/CommentEditor';
-import InfoComment from '@/components/common/Comments/InfoComment';
 import InfoAuthor from '@/components/common/Info/InfoAuthor';
-import Line from '@/components/common/Line';
 import { Button } from '@/components/ui/button/Button';
-import { commentData } from '@/data/communityData';
 import { EllipsisVertical, Heart } from 'lucide-react';
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { toast } from 'sonner';
 import { twMerge } from 'tailwind-merge';
 import CommunityManageButton from './CommunityManageButton';
 import { useFetchPostDetail } from '../../hooks/useFetchPostsData';
 import Loader from '@/components/ui/Loader';
+import { useIncrementPostViewCount } from '../../hooks/useIncrementPostViewCount';
+import { useSession } from '@/store/session';
 
 const CommunityDetail = ({
   categorySlug,
@@ -23,12 +22,31 @@ const CommunityDetail = ({
   categorySlug: string;
   slug: string;
 }) => {
-  const { data: post, isPending } = useFetchPostDetail(categorySlug, slug);
+  const { data: post, isPending: isPostPending } = useFetchPostDetail(
+    categorySlug,
+    slug,
+  );
+  const { mutate: incrementView } = useIncrementPostViewCount();
+
   const [isHeart, setHeart] = useState(false);
   const [isManage, setManage] = useState(false);
+  const user = useSession()?.user;
 
-  if (isPending) return <Loader />;
+  useEffect(() => {
+    if (!post?.id) return;
+
+    const viewed = JSON.parse(sessionStorage.getItem('viewed_post') || '[]');
+
+    if (!viewed.includes(post.id)) {
+      incrementView(post.id);
+    }
+
+    sessionStorage.setItem('viewed_post', JSON.stringify([...viewed, post.id]));
+  }, [post?.id, incrementView]);
+
   if (!post) return <div>게시글을 찾을 수 없습니다.</div>;
+
+  if (isPostPending) return <Loader />;
 
   const heartHandler = () => {
     setHeart(!isHeart);
@@ -45,6 +63,7 @@ const CommunityDetail = ({
           <h2 className="h2 text-black">{post?.title || ''}</h2>
           <div className="flex-1" />
           <div className="flex items-center gap-4">
+            {post?.view_count || 0}
             <Button
               variant="white"
               onClick={heartHandler}
@@ -56,23 +75,27 @@ const CommunityDetail = ({
                   isHeart ? 'fill-point-heart' : '',
                 )}
               />
-              {/* {post?.stats.likeCount || 0} */}
+
+              {/* {post?.view_count || 0} */}
             </Button>
-            <div className="relative">
-              <Button
-                onClick={() => setManage(!isManage)}
-                size="icon"
-                variant="white"
-                className="text-icon-default h-10.5 w-10.5 rounded-[12px]"
-              >
-                <EllipsisVertical />
-              </Button>
-              {isManage && (
-                <div className="absolute top-12 right-0">
-                  <CommunityManageButton />
-                </div>
-              )}
-            </div>
+
+            {post.user_id === user?.id && (
+              <div className="relative">
+                <Button
+                  onClick={() => setManage(!isManage)}
+                  size="icon"
+                  variant="white"
+                  className="text-icon-default h-10.5 w-10.5 rounded-[12px]"
+                >
+                  <EllipsisVertical />
+                </Button>
+                {isManage && (
+                  <div className="absolute top-12 right-0">
+                    <CommunityManageButton postId={post.id}categorySlug={categorySlug} />
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
         <div className="flex">
@@ -82,7 +105,6 @@ const CommunityDetail = ({
             createdAt={post?.create_at || ''}
           />
         </div>
-        <Line my={1} />
         <div className="flex flex-col gap-2">
           {/* 1. 태그가 포함된 문자열을 HTML로 렌더링 */}
           <div
@@ -99,14 +121,10 @@ const CommunityDetail = ({
             />
           )}
         </div>
-        <Line my={1} />
-        {commentData
-          .filter((v) => v.postId === post?.id)
-          .map((v) => (
-            <InfoComment key={v.id} commentId={v.id} postId={v.postId} />
-          ))}
-        <div className="mt-2">
-          <CommentEditor />
+
+        {/* <InfoComment key={v.id} commentId={v.} postId={v.postId} /> */}
+        <div className="mt-10">
+          <CommentEditor postId={post.id} />
         </div>
       </div>
     </>

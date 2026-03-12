@@ -17,11 +17,11 @@ import { useUpdateComment } from '../../hooks/comment/useUpdateComment';
 import { isUpdateWrite } from '@/lib/isUpdateWrite';
 import LikeCommentButton from './LikeCommentButton';
 
-interface CommentItemtemProps {
+interface CommentItemProps {
   answerData: AnswerEntity;
 }
 
-const CommentInput = ({ answerData }: CommentItemtemProps) => {
+const CommentInput = ({ answerData }: CommentItemProps) => {
   const [content, setContent] = useState('');
   const [replyingCommentId, setReplyingCommentId] = useState<string | null>(
     null,

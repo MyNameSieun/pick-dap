@@ -37,7 +37,14 @@ export const createPost = async ({
       image_urls,
       slug: generateSlug(title),
     })
-    .select()
+    .select(
+      `
+      *,
+      post_category (
+        slug
+      )
+    `,
+    )
     .single();
 
   if (error) {

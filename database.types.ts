@@ -1135,6 +1135,7 @@ export type Database = {
           isSetofReturn: true
         }
       }
+      increment_post_view: { Args: { target_id: string }; Returns: undefined }
       increment_review_view: { Args: { target_id: string }; Returns: undefined }
       increment_view_count: { Args: { target_idx: number }; Returns: undefined }
       toggle_bookmark: { Args: { p_question_id: string }; Returns: boolean }
