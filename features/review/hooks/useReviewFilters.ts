@@ -21,11 +21,9 @@ export const useReviewFilters = () => {
 
     jobRole: (searchParams.get('job-role') as string) || 'ALL',
     employmentType: (searchParams.get('employment') as EmploymentType) || 'ALL',
-    interviewProcesses:
-      searchParams.get('interview-process' as string) || 'ALL',
+    processes: searchParams.get('process') || 'ALL',
     searchQuery: searchParams.get('q') || undefined,
   };
-
   // 필터를 어떻게 바꿀 것인지(쓰기)
   const updateParams = (updates: Record<string, string | null>) => {
     const params = new URLSearchParams(searchParams.toString());

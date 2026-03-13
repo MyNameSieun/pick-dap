@@ -13,10 +13,8 @@ const Proof = () => {
     if (!file) return;
 
     try {
-      // 업로드 실행 후 URL 받기
       const url = await uploadProofImage(file);
 
-      // Zustand 스토어에 string으로 저장
       setField('proof_url', url);
 
       alert('증빙 자료가 성공적으로 등록되었습니다.');

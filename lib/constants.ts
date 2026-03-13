@@ -1,3 +1,4 @@
+import { PostFilterOptions } from '@/features/community/services/fetchPostsData';
 import { QuestionFilterOptions } from '@/features/question/services/question/fetchQuestion';
 import { ReviewFilterOptions } from '@/features/review/services/fetchReviewData';
 
@@ -144,13 +145,15 @@ export const QUERY_KEYS = {
 
   post: {
     all: ['post'] as const,
-    list: ['post', 'list'] as const,
-    categoryList: (categorySlug: string) =>
-      [...QUERY_KEYS.post.list, categorySlug] as const,
+    list: (filters?: PostFilterOptions) =>
+      [...QUERY_KEYS.post.all, 'list', filters] as const,
+
+    categoryList: (filters?: PostFilterOptions) =>
+      [...QUERY_KEYS.post.list(), filters] as const,
 
     myList: ['post', 'list', 'me'] as const,
     userList: (userId: string) =>
-      [...QUERY_KEYS.post.list, 'user', userId] as const,
+      [...QUERY_KEYS.post.list(), 'user', userId] as const,
 
     detail: (slug: string, userId?: string) =>
       [...QUERY_KEYS.post.all, 'detail', slug, userId] as const,

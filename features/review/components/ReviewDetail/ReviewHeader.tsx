@@ -3,7 +3,15 @@ import Line from '@/components/common/Line';
 import Tags from '@/components/common/Tags/Tags';
 import { Button } from '@/components/ui/button/Button';
 
-import { EyeIcon, Heart, Minus, MoreVertical, Trash2 } from 'lucide-react';
+import {
+  Briefcase,
+  CalendarDays,
+  EyeIcon,
+  Heart,
+  Minus,
+  MoreVertical,
+  Trash2,
+} from 'lucide-react';
 import { mapToReviewDetail } from '../../services/fetchReviewData';
 import { useEffect, useState } from 'react';
 import { useDeleteReview } from '../../hooks/useDeleteReview';
@@ -76,88 +84,86 @@ const ReviewHeader = ({ review }: { review: mapToReviewDetail }) => {
   };
 
   return (
-    <section className="mt-8 mb-6">
-      <article className="mb-4 flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <h3 className="text-gray-1000 text-2xl font-bold">{company_name}</h3>
-          <Tags size="big">{final_status_type}</Tags>
+    <section className="mt-10 mb-8 flex flex-col gap-6">
+      <div className="flex items-start justify-between">
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center gap-3">
+            <h1 className="text-3xl font-bold tracking-tight text-gray-900">
+              {company_name}
+            </h1>
+            <Tags size="big">{final_status_type}</Tags>
+          </div>
+
+          <div className="flex items-center gap-3 text-sm font-medium text-gray-600">
+            <span className="flex items-center gap-1.5">
+              <Briefcase size={16} className="text-gray-600" /> {job_role.name}
+            </span>
+            <span className="text-gray-200">|</span>
+            <span className="flex items-center gap-1.5">
+              <CalendarDays size={16} className="text-gray-600" />{' '}
+              {interview_season} {interview_year}
+            </span>
+            <span className="text-gray-200">|</span>
+            <span className="rounded bg-gray-100 px-2 py-0.5 text-[11px] font-bold uppercase">
+              {employment_type}
+            </span>
+          </div>
         </div>
 
-        <div className="relative flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <Button
             onClick={handleLikeClick}
-            variant="none"
+            variant="ghost"
             className={cn(
-              'group/like flex h-10 gap-2 rounded-full border-gray-200 text-gray-900 transition-all active:scale-95',
+              'group flex h-11 items-center gap-2 rounded-full border border-gray-200 px-5 transition-all active:scale-95',
               isLiked
-                ? 'border-red-100 bg-red-50 text-red-600 hover:bg-red-100'
-                : 'hover:border-gray-300',
+                ? 'border-red-100 bg-red-50 text-red-600'
+                : 'border-gray-200 hover:bg-gray-50',
             )}
           >
             <Heart
-              size={16}
+              size={18}
               className={cn(
                 'transition-colors',
                 isLiked
                   ? 'fill-red-500 text-red-500'
-                  : 'text-gray-400 group-hover/like:text-red-400',
+                  : 'text-gray-500 group-hover:text-red-400',
               )}
             />
-            {like_count}
+            <span className="font-bold">{like_count}</span>
           </Button>
-          {user && (
-            <button
-              onClick={() => setIsMenuOpen(!isMenuOpen)}
-              className="rounded-full p-2 transition-colors hover:bg-gray-100"
-            >
-              <MoreVertical
-                size={20}
-                className="cursor-pointer text-gray-500"
-              />
-            </button>
-          )}
 
-          {isMenuOpen && (
-            <>
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setIsMenuOpen(false)}
-              />
-              <div className="absolute top-14 right-0 z-20 w-32 rounded-md border border-gray-100 bg-white shadow-lg">
-                <div className="py-1">
+          {user && (
+            <div className="relative">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                className="rounded-full"
+              >
+                <MoreVertical size={20} className="text-gray-600" />
+              </Button>
+              {isMenuOpen && (
+                <div className="absolute top-12 right-0 z-20 w-36 overflow-hidden rounded-xl border border-gray-100 bg-white shadow-lg">
                   <button
-                    className="flex w-full items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-gray-50"
                     onClick={handleDeleteReview}
+                    className="flex w-full items-center gap-2 px-4 py-3 text-sm font-medium text-red-500 hover:bg-red-50"
                   >
                     <Trash2 size={14} /> 삭제하기
                   </button>
                 </div>
-              </div>
-            </>
+              )}
+            </div>
           )}
         </div>
-      </article>
-      <article className="flex justify-between text-sm text-gray-700">
-        <div className="flex items-center gap-2">
-          <p>{job_role.name}</p>
-          <Minus className="rotate-90 text-gray-400" size={16} />
-          <p>{employment_type}</p>
-        </div>
-        <div className="flex items-center gap-4">
-          <p>
-            {interview_season} {interview_year}
-          </p>
-          <p className="flex items-center gap-1">
-            <EyeIcon size={15} />
-            {view_count}
-          </p>
-        </div>
-      </article>
-      <div className="mt-5">
-        <Line />
       </div>
+
+      <div className="flex items-center justify-end gap-2 text-[13px] text-gray-600">
+        <EyeIcon size={14} />
+        <span>조회수 {view_count.toLocaleString()}</span>
+      </div>
+      <div className="h-px w-full bg-gray-200" />
     </section>
   );
 };
-
 export default ReviewHeader;

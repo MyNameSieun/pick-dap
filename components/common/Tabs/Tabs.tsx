@@ -1,16 +1,24 @@
 'use client';
 
 import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { twMerge } from 'tailwind-merge';
+
+interface TabsProps {
+  tabs: { id: string; label: string; content?: React.ReactNode }[];
+  setId?: string;
+  className?: string;
+  onTabChange?: (id: string) => void;
+}
 
 const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
   const [isMenu, setMenu] = useState(setId || tabs[0].id);
   const [prevId, setPrevId] = useState(setId);
 
+  // 외부에서 setId가 바뀔 때 동기화
   if (setId !== prevId) {
-    setPrevId(setId || tabs[0].id);
+    setPrevId(setId);
     setMenu(setId || tabs[0].id);
   }
 
@@ -24,46 +32,61 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
 
   return (
     <div className={twMerge('w-full', className)}>
-      <div className="relative flex border-b border-gray-300">
-        {tabs.map((v) => (
-          <button
-            key={v.id}
-            onClick={() => handleTabClick(v.id)}
-            className={cn(
-              'b1 text-gray-1000 relative cursor-pointer px-6 py-3 transition-colors outline-none',
-              isMenu === v.id
-                ? 'text-gray-1000 font-bold'
-                : 'hover:text-gray-1000 font-normal text-gray-800',
-            )}
-          >
-            {v.label}
+      {/* 탭 헤더 영역 */}
+      <div className="relative flex items-center border-b border-gray-100 px-2">
+        {tabs.map((v) => {
+          const isActive = isMenu === v.id;
 
-            {isMenu === v.id && (
-              <motion.div
-                layoutId="isMenu"
-                className="bg-main-400 absolute right-0 bottom-0 left-0 h-0.5"
-                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
-              />
-              // layoutId가 같으면, 자연스럽게 이동해줌
-              // spring은 탄성 옵션, stiffness가 높을수록 빠르게 튀어나감, damping은 마찰력
-            )}
-          </button>
-        ))}
+          return (
+            <button
+              key={v.id}
+              onClick={() => handleTabClick(v.id)}
+              className={cn(
+                'relative flex cursor-pointer items-center justify-center px-6 py-4 transition-colors duration-200 outline-none',
+                isActive
+                  ? 'font-bold text-blue-600'
+                  : 'font-medium text-gray-500 hover:text-gray-800',
+              )}
+            >
+              <span className="relative z-10 text-[15px] tracking-tight">
+                {v.label}
+              </span>
+
+              {/* 활성화 바 애니메이션 (LayoutId 유지) */}
+              {isActive && (
+                <motion.div
+                  layoutId="activeTab"
+                  className="absolute right-0 bottom-[-1px] left-0 z-20 h-[3px] rounded-t-full bg-blue-600"
+                  transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                />
+              )}
+
+              {/* 호버 시 은은한 배경 효과 (선택 사항) */}
+              <div className="absolute inset-x-1 inset-y-2 rounded-lg bg-gray-100 opacity-0 transition-opacity group-hover:opacity-100" />
+            </button>
+          );
+        })}
       </div>
-      <div className="my-6 overflow-hidden">
-        <motion.div
-          key={isMenu}
-          initial={{ opacity: 0, x: 30 }} // 처음에는 x가 30인 값(오른쪽)에서
-          animate={{ opacity: 1, x: 0 }} // x가 0인 값으로 이동
-          exit={{ opacity: 0, x: -30 }} // 끝에는 x가 -30인 값(왼쪽)으로 나감
-          transition={{ duration: 0.2 }}
-        >
-          {tabs.find((v) => isMenu === v.id)?.content || (
-            <div>항목을 찾을 수 없습니다.</div>
-          )}
-        </motion.div>
+
+      {/* 탭 콘텐츠 영역 */}
+      <div className="relative mt-8 min-h-[200px] w-full px-1">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={isMenu}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.2, ease: 'easeInOut' }}
+          >
+            {tabs.find((v) => isMenu === v.id)?.content || (
+              <div className="flex flex-col items-center justify-center py-20 text-gray-400">
+                <p>표시할 내용이 없습니다.</p>
+              </div>
+            )}
+          </motion.div>
+        </AnimatePresence>
       </div>
     </div>
   );
 };
+
 export default Tabs;

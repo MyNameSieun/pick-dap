@@ -19,7 +19,6 @@ interface CreateLayoutProps {
   };
   children: React.ReactNode;
   contents: ContentsType;
-  // 공통화를 위해 추가된 props
   onSubmit: () => void;
   isLoading?: boolean;
   type: 'EDIT' | 'CREATE';
@@ -58,7 +57,7 @@ const CreateFormLayout = ({
         <Line />
         <div className="flex justify-end gap-1">
           <Button
-            onClick={() => router.push('/mypage/project')}
+            onClick={() => router.back()}
             disabled={isLoading}
             variant={'white'}
           >

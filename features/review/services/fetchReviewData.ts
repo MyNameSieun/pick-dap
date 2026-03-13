@@ -26,7 +26,7 @@ export type ReviewFilterOptions = {
   interviewYear?: number | 'ALL';
   employmentType?: EmploymentType | 'ALL';
   jobRole?: string | 'ALL';
-  interviewProcesses?: string | 'ALL';
+  processes?: string | 'ALL';
   searchQuery?: string;
 };
 
@@ -38,7 +38,7 @@ export const fetchReviewsData = async ({
   employmentType,
   searchQuery,
   jobRole,
-  interviewProcesses,
+  processes,
 }: ReviewFilterOptions = {}) => {
   const supabase = await createClient();
 
@@ -50,18 +50,19 @@ export const fetchReviewsData = async ({
 
   const hasEmploymentType = employmentType && employmentType !== 'ALL';
   const hasJobRole = jobRole && jobRole !== 'ALL';
-  const hasInterviewProcesses =
-    interviewProcesses && interviewProcesses !== 'ALL';
+  const hasInterviewProcesses = processes && processes !== 'ALL';
 
   const DYNAMIC_QUERY_DATA = `
     *,
     job_role:job_role${hasJobRole ? '!inner' : ''}(name),
     interview_question (*),
-    processes:review_process_map${hasInterviewProcesses ? '!inner' : ''}(process:interview_processes(*)),
+    processes:review_process_map${hasInterviewProcesses ? '!inner' : ''}(
+      interview_processes${hasInterviewProcesses ? '!inner' : ''}(*)
+    ),
     review_questions:review_question_type_map(question_type:review_question_type(*)),
     myLiked:like!review_id (user_id),
     likes:like!review_id(count)
-`;
+    `;
 
   let query = supabase.from('interview_review').select(DYNAMIC_QUERY_DATA);
 
@@ -73,12 +74,8 @@ export const fetchReviewsData = async ({
   if (hasEmploymentType) query = query.eq('employment_type', employmentType);
 
   if (hasJobRole) query = query.eq('job_role.name', jobRole);
-
   if (hasInterviewProcesses) {
-    query = query.eq(
-      'review_process_map.interview_processes.name',
-      interviewProcesses,
-    );
+    query = query.eq('processes.interview_processes.name', processes);
   }
 
   if (searchQuery) query = query.ilike('company_name', `%${searchQuery}%`);

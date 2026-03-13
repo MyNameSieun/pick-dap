@@ -35,6 +35,22 @@ const ReviewNewPage = () => {
     createReview(finalData);
   };
 
+  const isSubmittable =
+    !!formData.company_name.trim() &&
+    !!formData.job_role_id &&
+    !!formData.interview_season &&
+    !!formData.employment_type &&
+    !!formData.atmosphere_score &&
+    !!formData.difficulty &&
+    !!formData.processIds &&
+    !!formData.interview_personnel_type &&
+    !!formData.overall_review &&
+    !!formData.questionTypeIds &&
+    !!formData.questions &&
+    !!formData.result_wait_time_type &&
+    !!formData.final_status_type &&
+    !!formData.proof_url;
+
   return (
     <CreateFormLayout
       onSubmit={handleSubmit}
@@ -47,6 +63,7 @@ const ReviewNewPage = () => {
       }}
       type="CREATE"
       contents={REVIEW_CONTENTS}
+      isSubmittable={isSubmittable}
     >
       <BasicInfo />
       <Evaluation />

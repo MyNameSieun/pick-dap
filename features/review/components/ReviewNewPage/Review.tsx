@@ -9,11 +9,42 @@ import { useFetchReviewQuestionTypeData } from '../../hooks/useFetchReviewQuesti
 import Loader from '@/components/ui/Loader';
 
 const Review = () => {
-  const { formData, setField, toggleId } = useReviewStore();
+  const { formData, setField, toggleId, setQuestions } = useReviewStore();
 
   const { data: interviewQuestionTypes, isPending } =
     useFetchReviewQuestionTypeData();
   if (isPending) return <Loader />;
+
+  const handleAddQuestion = () => {
+    const newQuestion = {
+      id: crypto.randomUUID(),
+      review_content: '',
+    };
+
+    const currentQuestions = formData.questions as {
+      id: string;
+      review_content: string;
+    }[];
+
+    setQuestions([...currentQuestions, newQuestion]);
+  };
+
+  // 삭제
+  const handleRemoveQuestion = (id: string) => {
+    if (formData.questions.length <= 1) return;
+
+    const filteredQuestions = formData.questions.filter((q) => q.id !== id);
+
+    setQuestions(filteredQuestions as { id: string; review_content: string }[]);
+  };
+
+  // 수정
+  const handleUpdateQuestion = (id: string, content: string) => {
+    const updated = formData.questions.map((q) =>
+      q.id === id ? { ...q, review_content: content } : q,
+    );
+    setQuestions(updated as { id: string; review_content: string }[]);
+  };
 
   const QUESTION_TYPE_OPTIONS = interviewQuestionTypes?.map((type) => ({
     label: type.name,
@@ -44,7 +75,17 @@ const Review = () => {
       </FormItemLayout>
 
       <FormItemLayout label="기억에 남는 면접 질문" isRequired>
-        <DynamicFieldList label="질문" placeholder="질문을 입력해주세요" />
+        <DynamicFieldList
+          label="질문"
+          placeholder="질문을 입력해주세요"
+          value={formData.questions.map((q) => ({
+            id: q.id as string,
+            description: q.review_content,
+          }))}
+          onAdd={handleAddQuestion}
+          onRemove={handleRemoveQuestion}
+          onUpdate={handleUpdateQuestion}
+        />
       </FormItemLayout>
     </FormSection>
   );

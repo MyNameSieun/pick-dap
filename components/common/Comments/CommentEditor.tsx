@@ -68,20 +68,18 @@ const CommentEditor = ({ postId }: CommentEditorProps) => {
 
   return (
     <div className="flex flex-col gap-6">
-      {/* 1. 댓글 헤더 (배경 없이 깔끔하게) */}
-      <div className="flex items-center justify-between border-b border-gray-100 pb-4">
+      <div className="flex items-center justify-between ">
         <div className="flex items-center gap-2">
-          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-50/50">
-            <MessageSquare size={16} className="text-blue-600" />
+          <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100/50">
+            <MessageSquare size={16} className="text-main-500" />
           </div>
           <div className="flex items-center gap-1.5 font-bold">
             <span className="text-gray-900">댓글</span>
-            <span className="text-blue-600">{comments?.length ?? 0}</span>
+            <span className="text-main-500">{comments?.length ?? 0}</span>
           </div>
         </div>
       </div>
 
-      {/* 2. 댓글 입력창 (하얀색 배경 유지) */}
       <div className="group relative flex flex-col overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm transition-all focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-400/20">
         <textarea
           rows={3}
@@ -102,7 +100,6 @@ const CommentEditor = ({ postId }: CommentEditorProps) => {
         </div>
       </div>
 
-      {/* 3. 댓글 목록 */}
       <div className="mt-2 flex flex-col gap-3">
         {comments?.map((comment) => {
           const isReply = comment.depth > 0;

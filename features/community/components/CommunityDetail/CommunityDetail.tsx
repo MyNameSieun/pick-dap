@@ -17,6 +17,7 @@ import { useIncrementPostViewCount } from '../../hooks/useIncrementPostViewCount
 import { useTogglePostLike } from '../../hooks/useTogglePostLike';
 import { useSession } from '@/store/session';
 import { cn } from '@/lib/utils';
+import { displayDate } from '@/lib/displayDate';
 
 const CommunityDetail = ({
   categorySlug,
@@ -35,12 +36,11 @@ const CommunityDetail = ({
   );
 
   const { mutate: incrementView } = useIncrementPostViewCount();
-  const { mutate: togglePostLikeMutation, isPending: isTogglePostLikePending } =
-    useTogglePostLike({
-      onError: () => {
-        toast.error('좋아요 요청에 실패했습니다', { position: 'top-center' });
-      },
-    });
+  const { mutate: togglePostLikeMutation } = useTogglePostLike({
+    onError: () => {
+      toast.error('좋아요 요청에 실패했습니다', { position: 'top-center' });
+    },
+  });
 
   useEffect(() => {
     if (!post?.id) return;
@@ -57,27 +57,17 @@ const CommunityDetail = ({
   if (isPostPending || !post) return <Loader />;
 
   const heartHandler = () => {
-    if (isTogglePostLikePending) return;
-    togglePostLikeMutation({ postId: post.id, slug: post.slug });
+    togglePostLikeMutation({ postId: post.id, slug: slug });
   };
 
   return (
     <div className="flex w-full flex-col">
       <div className="mb-4">
-        <BackButton
-          label={
-            <span className="text-sm font-bold text-gray-500 transition-colors hover:text-gray-900">
-              뒤로가기
-            </span>
-          }
-        />
+        <BackButton label={<span>뒤로가기</span>} />
       </div>
 
-      {/* 메인 컨테이너 (그림자 제거) */}
       <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white">
-        {/* 상단 본문 영역 */}
         <div className="flex flex-col gap-8 p-8 md:p-10">
-          {/* 헤더: 제목 및 메타 정보 */}
           <div className="flex flex-col gap-6">
             <div className="flex items-start justify-between gap-4">
               <h1 className="text-2xl leading-snug font-bold tracking-tight text-gray-900 md:text-3xl">
@@ -85,7 +75,7 @@ const CommunityDetail = ({
               </h1>
 
               <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1.5 text-[13px] font-medium text-gray-400">
+                <div className="flex items-center gap-1.5 text-[13px] font-medium text-gray-600">
                   <Eye size={16} />
                   <span>{post.view_count?.toLocaleString()}</span>
                 </div>
@@ -98,7 +88,7 @@ const CommunityDetail = ({
                       variant="ghost"
                       className="h-9 w-9 rounded-full hover:bg-gray-100"
                     >
-                      <EllipsisVertical size={18} className="text-gray-500" />
+                      <EllipsisVertical size={18} className="text-gray-600" />
                     </Button>
                     {isManage && (
                       <div className="absolute top-11 right-0 z-20">
@@ -117,12 +107,11 @@ const CommunityDetail = ({
               <InfoAuthor
                 image={post?.profiles.avatar_url || '/profile.jpg'}
                 author={post?.profiles.nickname || '익명'}
-                createdAt={post?.create_at || ''}
+                createdAt={displayDate(post?.create_at) || ''}
               />
             </div>
           </div>
 
-          {/* 본문 내용 */}
           <div className="flex flex-col gap-8">
             <div
               className="prose max-w-none text-[16px] leading-[1.8] text-gray-800"
@@ -143,7 +132,6 @@ const CommunityDetail = ({
             )}
           </div>
 
-          {/* 좋아요 버튼 (가운데 정렬) */}
           <div className="mt-4 flex justify-center border-t border-gray-50 pt-10">
             <Button
               onClick={heartHandler}
@@ -169,7 +157,6 @@ const CommunityDetail = ({
           </div>
         </div>
 
-        {/* 하단 댓글 영역 (배경색 다르게 적용) */}
         <div className="border-t border-gray-100 bg-gray-50/80 p-8 md:p-10">
           <div className="mb-6"></div>
           <CommentEditor postId={post.id} />

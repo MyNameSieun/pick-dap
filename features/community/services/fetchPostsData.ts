@@ -12,10 +12,20 @@ const QUERY_JOIN_DATA = `
       likes:like!post_id (count)
     `;
 
+export type PostFilterOptions = {
+  categorySlug?: string;
+  sort?: 'latest' | 'likes' | 'views';
+  searchQuery?: string;
+};
+
 const postJoinQuery = supabase.from('post').select(QUERY_JOIN_DATA);
 export type RawPostJoined = QueryData<typeof postJoinQuery>[number];
 
-export const fetchPostsData = async (categorySlug?: string) => {
+export const fetchPostsData = async ({
+  categorySlug,
+  sort = 'latest',
+  searchQuery,
+}: PostFilterOptions) => {
   const supabase = await createClient();
 
   const {
@@ -25,11 +35,23 @@ export const fetchPostsData = async (categorySlug?: string) => {
   let query = supabase
     .from('post')
     .select(QUERY_JOIN_DATA)
-    .eq('myLiked.user_id', user?.id || '')
-    .order('create_at', { ascending: false });
+    .eq('myLiked.user_id', user?.id || '');
 
-  if (categorySlug) {
+  if (categorySlug && categorySlug !== 'all') {
     query = query.eq('post_category.slug', decodeURIComponent(categorySlug));
+  }
+  if (searchQuery) {
+    query = query.or(
+      `title.ilike.%${searchQuery}%,content.ilike.%${searchQuery}%`,
+    );
+  }
+
+  if (sort === 'views') {
+    query = query.order('view_count', { ascending: false });
+  } else if (sort === 'likes') {
+    query = query.order('bookmark_count', { ascending: false });
+  } else {
+    query = query.order('create_at', { ascending: false });
   }
 
   const { data, error } = await query;

@@ -15,7 +15,7 @@ const InfoAuthor = ({
   return (
     <>
       <div className="flex h-fit w-fit items-center gap-4">
-        <div className="relative h-12 w-12 overflow-hidden rounded-full">
+        <div className="relative h-12 w-12 overflow-hidden rounded-full border border-gray-200">
           <Image
             className="object-cover"
             alt="작성자 프로필"

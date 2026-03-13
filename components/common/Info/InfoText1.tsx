@@ -1,8 +1,9 @@
 'use client';
 
-import { Bookmark, Heart, MessageSquare } from 'lucide-react';
+import { Bookmark, Dot, Heart, MessageSquare } from 'lucide-react';
 import infoData from '@/data/infoData.json';
 import Image from 'next/image';
+import { displayDate } from '@/lib/displayDate';
 
 const InfoText1 = ({
   image,
@@ -21,25 +22,28 @@ const InfoText1 = ({
 }) => {
   return (
     <>
-      <div className="text-icon-default c1 flex h-fit w-fit gap-2">
+      <div className="c1 flex h-fit w-fit gap-2 text-gray-600">
         <div className="flex items-center gap-1">
-          <div className="relative h-5 w-5 overflow-hidden rounded-full">
+          <div className="relative h-5 w-5 rounded-full">
             <Image
-              className="object-cover"
+              className="rounded-full border border-gray-200 object-cover"
               alt="작성자 프로필"
               src={`${image && (image || infoData.author.profileImage)}`}
               fill
               priority
             />
           </div>
-          {author && (author || infoData.author.username)}
+          <p className="text-gray-600">
+            {author && (author || infoData.author.username)}
+          </p>
         </div>
-        <div className="mx-2 flex items-center">
-          <p className="text-gray-700">·</p>
-        </div>
+
         {createdAt && (
-          <div className="flex items-center gap-0.5">
-            <p className="text-gray-700">{createdAt || infoData.createdAt}</p>
+          <div className="flex items-center gap-2 text-[13px] text-gray-600">
+            <span className="text-[10px]">
+              <Dot height={14} className="text-gray-400" />
+            </span>
+            <span className="text-gray-600">{displayDate(createdAt)}</span>
           </div>
         )}
         {bookmarkCount && (

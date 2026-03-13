@@ -5,6 +5,7 @@ import {
   fetchReviewsData,
   ReviewFilterOptions,
 } from '../services/fetchReviewData';
+import { useSession } from '@/store/session';
 
 export const useFetchReviewsData = (filters: ReviewFilterOptions) => {
   return useQuery({
@@ -14,8 +15,9 @@ export const useFetchReviewsData = (filters: ReviewFilterOptions) => {
 };
 
 export const useFetchReviewByIdData = (reviewId: string) => {
+  const user = useSession()?.user;
   return useQuery({
     queryKey: QUERY_KEYS.review.detail(reviewId),
-    queryFn: () => fetchReviewById(reviewId),
+    queryFn: () => fetchReviewById(reviewId, user?.id ?? ''),
   });
 };
