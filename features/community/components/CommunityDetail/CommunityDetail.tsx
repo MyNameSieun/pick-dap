@@ -63,7 +63,10 @@ const CommunityDetail = ({
   return (
     <div className="flex w-full flex-col">
       <div className="mb-4">
-        <BackButton label={<span>뒤로가기</span>} />
+        <BackButton
+          path={`/community/${categorySlug}`}
+          label={<span>뒤로가기</span>}
+        />
       </div>
 
       <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white">
@@ -86,17 +89,32 @@ const CommunityDetail = ({
                       onClick={() => setManage(!isManage)}
                       size="icon"
                       variant="ghost"
-                      className="h-9 w-9 rounded-full hover:bg-gray-100"
+                      className={cn(
+                        'h-9 w-9 rounded-full transition-colors',
+                        isManage ? 'bg-gray-100' : 'hover:bg-gray-100',
+                      )}
                     >
                       <EllipsisVertical size={18} className="text-gray-600" />
                     </Button>
+
                     {isManage && (
-                      <div className="absolute top-11 right-0 z-20">
-                        <CommunityManageButton
-                          postId={post.id}
-                          categorySlug={categorySlug}
+                      <>
+                        {/* 메뉴 바깥 클릭 시 닫히게 하는 투명 오버레이 */}
+                        <div
+                          className="fixed inset-0 z-40 cursor-default"
+                          onClick={() => setManage(false)}
                         />
-                      </div>
+
+                        {/* 실제 메뉴 위치: 버튼 우하단 정렬 */}
+                        <div className="absolute top-full right-0 z-50 mt-2">
+                          <CommunityManageButton
+                            postId={post.id}
+                            categorySlug={categorySlug}
+                            postSlug={slug} // slug 전달
+                            onClose={() => setManage(false)}
+                          />
+                        </div>
+                      </>
                     )}
                   </div>
                 )}

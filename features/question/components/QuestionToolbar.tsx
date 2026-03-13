@@ -19,13 +19,10 @@ const QuestionToolbar = () => {
 
   const router = useRouter();
 
-  // 1. 커스텀 훅 호출
   const { updateParams, ...filters } = useQuestionFilters();
 
-  // 2. 검색어 로컬 상태의 초기값을 훅에서 가져온 searchQuery로 설정
   const [searchValue, setSearchValue] = useState(filters.searchQuery || '');
 
-  // 3. 검색 실행 핸들러
   const handleSearchSubmit = () => {
     updateParams({ q: searchValue.trim() });
   };
@@ -49,39 +46,42 @@ const QuestionToolbar = () => {
   } = useDisclosure();
 
   return (
-    <article className="mx-9">
+    <article className="mx-9 mt-[-20px] flex flex-col gap-4">
       <section className="flex items-center justify-between">
-        {/* 상단 카테고리 & 필터 영역 */}
-        <div className="text-button-md relative flex h-12 gap-6 rounded-[12px] border border-gray-200 bg-gray-100 p-2 font-bold">
+        <div className="relative flex h-11 w-[320px] items-center rounded-xl bg-gray-100 p-1 font-bold">
           <div
             className={clsx(
-              'absolute top-2 left-1 h-[calc(100%-12px)] w-[calc(50%-12px)] rounded-full bg-white shadow-sm transition-transform duration-300 ease-out',
+              'absolute h-[calc(100%-8px)] w-[calc(50%-4px)] rounded-lg bg-white shadow-sm transition-all duration-300 ease-out',
               filters.type === 'pickdap' ? 'translate-x-0' : 'translate-x-full',
             )}
           />
           <button
             type="button"
             className={clsx(
-              'z-10 flex-1 cursor-pointer px-6.5 py-1.5 transition-colors',
-              filters.type === 'pickdap' ? 'text-blue-400' : 'text-gray-1000',
+              'z-10 flex-1 cursor-pointer text-sm transition-colors duration-200',
+              filters.type === 'pickdap'
+                ? 'text-blue-500'
+                : 'text-gray-600 hover:text-gray-700',
             )}
             onClick={() => updateParams({ type: 'pickdap' })}
           >
-            픽답 추천 질문
+            픽답 추천
           </button>
           <button
             type="button"
             className={clsx(
-              'z-10 flex-1 cursor-pointer px-6.5 py-1.5 transition-colors',
-              filters.type === 'user' ? 'text-blue-400' : 'text-gray-1000',
+              'z-10 flex-1 cursor-pointer text-sm transition-colors duration-200',
+              filters.type === 'user'
+                ? 'text-blue-500'
+                : 'text-gray-600 hover:text-gray-700',
             )}
             onClick={() => updateParams({ type: 'user' })}
           >
-            유저 등록 질문
+            유저 등록
           </button>
         </div>
 
-        <div className="text-button-sm relative flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <div ref={containerRef}>
             <Filter
               options={FILTER_OPTIONS}
@@ -94,27 +94,29 @@ const QuestionToolbar = () => {
               filterType={filters.status}
             />
           </div>
-          <Button variant="none" className="h-9.5 px-6">
+
+          {/* <Button
+            variant="ghost"
+            className="h-10 px-4 text-gray-600 hover:bg-gray-100"
+          >
             질문 담기
-          </Button>
+          </Button> */}
+
           <Button
             variant="default"
-            className="h-9.5"
+            className="h-10 bg-blue-500 px-5 shadow-sm transition-transform hover:bg-blue-600 active:scale-95"
             onClick={handleOpenEditModal}
           >
-            <div className="mx-2 flex items-center gap-1">
-              <Plus size={20} /> 질문 등록
-            </div>
+            <Plus size={18} className="mr-1" />
+            <span className="text-sm">질문 등록</span>
           </Button>
         </div>
       </section>
-
-      <section className="relative mt-2 flex items-center">
+      <section className="group relative">
         <Input
-          className="c1 text-gray-1000 h-11 w-full rounded-[8px] border-gray-200 pr-24 focus:border-blue-400"
+          className="h-12 w-full rounded-xl border-gray-200 bg-white pr-28 text-sm shadow-sm transition-all focus:border-blue-400 focus:ring-4 focus:ring-blue-50"
           type="text"
-          autoFocus
-          placeholder="검색어를 입력하세요"
+          placeholder="관심 있는 면접 질문을 검색해보세요"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
@@ -122,15 +124,14 @@ const QuestionToolbar = () => {
         <div className="absolute top-1/2 right-1.5 -translate-y-1/2">
           <Button
             onClick={handleSearchSubmit}
-            size="sm"
-            className="gap-1 rounded-[6px] bg-blue-400 text-white hover:bg-blue-500"
+            className="h-9 rounded-lg bg-blue-500 px-4 text-white hover:bg-blue-600"
           >
-            <Search size={16} />
+            <Search size={18} className="mr-1.5" />
+            검색
           </Button>
         </div>
       </section>
     </article>
   );
 };
-
 export default QuestionToolbar;

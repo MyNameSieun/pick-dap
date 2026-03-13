@@ -17,14 +17,7 @@ const CommunityContents = ({ categorySlug }: { categorySlug: string }) => {
     searchQuery,
   });
 
-  if (isPending) {
-    return (
-      <div className="flex min-h-[400px] w-full items-center justify-center">
-        <Loader />
-      </div>
-    );
-  }
-
+  if (isPending) <Loader />;
   return (
     <section className="flex w-full flex-col gap-6 py-4">
       {posts && posts.length > 0 ? (

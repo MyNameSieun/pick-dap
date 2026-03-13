@@ -3,6 +3,7 @@ import Tags from '@/components/common/Tags/Tags';
 import { Bookmark, Eye } from 'lucide-react';
 import { QuestionWithDetails } from '../services/question/fetchQuestion';
 import Image from 'next/image';
+import { displayDate } from '@/lib/displayDate';
 
 interface QuestionCardItemProps {
   question: QuestionWithDetails;
@@ -26,17 +27,14 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
       <Link href={`/question/${idx}/${slug}`}>
         <article className="hover:text-highlight-deep flex h-full flex-col justify-between rounded-[6px] border border-gray-300 p-4 transition-all duration-200">
           <div>
-            {/* 상단 태그 & 통계 영역 */}
             <div className="flex items-start justify-between gap-2">
               <div className="flex min-h-[32px] flex-wrap gap-2">
-                {/* 카테고리 */}
                 {category && (
                   <Tags key={category.category_type} color="blue" size="small">
                     {category.category_type}
                   </Tags>
                 )}
 
-                {/* 기술스택 태그 */}
                 {tech_stacks?.map(
                   (tech) =>
                     tech.tech && (
@@ -46,7 +44,6 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
                     ),
                 )}
 
-                {/* 추가 태그 */}
                 {tags?.map(({ tag }) => {
                   if (!tag?.label) return null;
                   return (
@@ -89,17 +86,7 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
               <p className="text-gray-900">{author.nickname}</p>
             </div>
 
-            <time className="text-gray-500">
-              {new Date(created_at).toLocaleString('ko-KR', {
-                year: 'numeric',
-                month: '2-digit',
-                day: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit',
-                hour12: false,
-              })}
-            </time>
+            <time className="text-gray-600">{displayDate(created_at)}</time>
           </div>
         </article>
       </Link>

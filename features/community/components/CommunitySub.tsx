@@ -24,7 +24,6 @@ const CommunitySub = ({ categorySlug }: { categorySlug: string }) => {
       content: <CommunityContents categorySlug={cat.slug} />,
     })) || [];
 
-  if (isCategoryPending) return <Loader />;
   return (
     <>
       <Tabs

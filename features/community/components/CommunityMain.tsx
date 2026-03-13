@@ -30,7 +30,7 @@ const CommunityMain = () => {
     updateParams({ q: searchValue.trim() });
   };
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col">
       <HeaderTitleBox
         icon={Activity}
         title={<h4 className="text-2xl font-bold text-gray-900">커뮤니티</h4>}

@@ -16,7 +16,6 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
   const [isMenu, setMenu] = useState(setId || tabs[0].id);
   const [prevId, setPrevId] = useState(setId);
 
-  // 외부에서 setId가 바뀔 때 동기화
   if (setId !== prevId) {
     setPrevId(setId);
     setMenu(setId || tabs[0].id);
@@ -32,7 +31,6 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
 
   return (
     <div className={twMerge('w-full', className)}>
-      {/* 탭 헤더 영역 */}
       <div className="relative flex items-center border-b border-gray-100 px-2">
         {tabs.map((v) => {
           const isActive = isMenu === v.id;
@@ -52,7 +50,6 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
                 {v.label}
               </span>
 
-              {/* 활성화 바 애니메이션 (LayoutId 유지) */}
               {isActive && (
                 <motion.div
                   layoutId="activeTab"
@@ -61,14 +58,12 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
                 />
               )}
 
-              {/* 호버 시 은은한 배경 효과 (선택 사항) */}
               <div className="absolute inset-x-1 inset-y-2 rounded-lg bg-gray-100 opacity-0 transition-opacity group-hover:opacity-100" />
             </button>
           );
         })}
       </div>
 
-      {/* 탭 콘텐츠 영역 */}
       <div className="relative mt-8 min-h-[200px] w-full px-1">
         <AnimatePresence mode="wait">
           <motion.div

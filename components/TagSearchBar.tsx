@@ -1,9 +1,10 @@
 'use client';
+
 import { useState } from 'react';
 import { Button } from './ui/button/Button';
 import { Input } from './ui/input/Input';
 import { cn } from '@/lib/utils';
-import { Check } from 'lucide-react';
+import { Check, Search, X, Hash, Layers, LayoutGrid } from 'lucide-react';
 import { useDisclosure } from '@/hooks/useClickOutside';
 import { ALL_CATEGORIES } from '@/constants/jobCategories';
 import { useTechStackData } from '@/hooks/useTechStackData';
@@ -13,25 +14,19 @@ const TagSearchBar = () => {
   const { containerRef, onClose, isOpen, onOpen } = useDisclosure();
   const [searchTerm, setSearchTerm] = useState('');
 
-  // 1. 커스텀 훅에서 모든 필터 상태와 변경 함수 가져오기
   const { category, techs, sort, updateParams } = useQuestionFilters();
   const { data: techStack = [] } = useTechStackData();
 
-  // 2. techs(string)를 배열로 변환 (URL: "slug1,slug2" -> ["slug1", "slug2"])
   const selectedTechSlugs = techs ? techs.split(',') : [];
-
-  // 3. slug 기반으로 실제 기술명 찾기 (배지 표시용)
   const selectedTechNames = selectedTechSlugs.map((slug) => {
     const tech = techStack.find((t) => t.slug === slug);
-    return tech ? tech.name : slug; // 데이터를 못 찾으면 slug라도 표시
+    return tech ? tech.name : slug;
   });
 
-  // 검색어에 따른 리스트 필터링
   const filteredTech = techStack.filter((tech) =>
     tech.name.toLowerCase().includes(searchTerm.toLowerCase()),
   );
 
-  // 4. 기술 스택 선택 (URL에 추가)
   const handleSelectTech = (slug: string) => {
     if (selectedTechSlugs.includes(slug)) return;
     if (selectedTechSlugs.length >= 3)
@@ -43,112 +38,140 @@ const TagSearchBar = () => {
     onClose();
   };
 
-  // 5. 기술 스택 삭제 (URL에서 제거)
   const handleRemoveTech = (slug: string) => {
     const newTechs = selectedTechSlugs.filter((s) => s !== slug);
-    // 남은 게 없으면 null을 보내서 URL에서 삭제
     updateParams({ techs: newTechs.length > 0 ? newTechs.join(',') : null });
   };
 
-  // 6. 정렬 필터
   const sortOption = [
     { label: '추천순', value: 'popular' },
     { label: '최신순', value: 'latest' },
   ];
 
   return (
-    <section className="container-col gap-8">
-      {/* 카테고리 섹션 */}
-      <article className="flex flex-col gap-3">
-        <h5 className="h6 text-gray-1000">카테고리</h5>
+    <section className="flex flex-col gap-10 rounded-3xl border border-gray-100 bg-white p-8 shadow-sm">
+      <article className="flex flex-col gap-4">
+        <div className="flex items-center gap-2 text-gray-900">
+          <LayoutGrid size={18} className="text-blue-500" />
+          <h5 className="text-sm font-bold tracking-tight">카테고리</h5>
+        </div>
 
-        <div className="c1 flex gap-3">
-          {ALL_CATEGORIES.map((job) => (
-            <Button
-              key={job}
-              onClick={() => updateParams({ category: job })}
-              variant={'none'}
-              className={cn(
-                'h-8.5 transition-colors',
-                category === job
-                  ? 'bg-main-400 border-main-400 hover:bg-main-500400 text-white'
-                  : 'border-gray-200 bg-gray-100 text-gray-600 hover:bg-gray-100/80 hover:text-gray-700',
-              )}
-            >
-              {job === 'ALL' ? '전체' : job}
-            </Button>
-          ))}
+        <div className="flex flex-wrap gap-2">
+          {ALL_CATEGORIES.map((job) => {
+            const isActive = category === job;
+            return (
+              <Button
+                key={job}
+                onClick={() => updateParams({ category: job })}
+                variant="none"
+                className={cn(
+                  'h-9 rounded-full px-5 text-[13px] font-bold transition-all active:scale-95',
+                  isActive
+                    ? 'bg-blue-600 text-white hover:bg-blue-600'
+                    : 'bg-gray-50 text-gray-500 hover:bg-gray-100',
+                )}
+              >
+                {job === 'ALL' ? '전체' : job}
+              </Button>
+            );
+          })}
         </div>
       </article>
 
-      {/* 기술 스택 섹션 */}
-      <article className="flex flex-col gap-3">
-        <h5 className="h6 text-gray-1000">기술 스택</h5>
-        <div className="relative" ref={containerRef}>
-          <Input
-            className="c1 text-gray-1000 focus:ring-main-400 border-gray-200 bg-gray-100"
-            type="text"
-            placeholder="기술 스택을 입력해주세요"
-            value={searchTerm} // state와 연결
-            onClick={onOpen}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
+      <article className="flex flex-col gap-4">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2 text-gray-900">
+            <Hash size={18} className="text-main-500" />
+            <h5 className="text-sm font-bold">기술 스택</h5>
+          </div>
+          <span className="text-[11px] font-medium text-gray-600">
+            최대 3개 선택
+          </span>
+        </div>
 
-          {/* 선택된 배지들 (URL 상태 기반) */}
-          <div className="mt-3 flex flex-wrap gap-2">
-            {selectedTechSlugs.map((slug, index) => (
-              <span
-                key={slug}
-                className="bg-main-400 flex items-center gap-2 rounded-full px-3 py-1 text-xs text-white"
-              >
-                {selectedTechNames[index]}
-                <button onClick={() => handleRemoveTech(slug)}>×</button>
-              </span>
-            ))}
+        <div className="relative" ref={containerRef}>
+          <div className="relative">
+            <Input
+              className="h-12 w-full rounded-2xl border-gray-100 bg-gray-50 pl-11 text-sm text-gray-900 transition-all focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-50"
+              type="text"
+              placeholder="관심 있는 기술을 검색하고 추가해보세요"
+              value={searchTerm}
+              onClick={onOpen}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <Search
+              className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-400"
+              size={18}
+            />
           </div>
 
-          {/* 드롭다운 리스트 */}
-          {isOpen && (
-            <div className="animate-in fade-in zoom-in-95 absolute z-50 mt-2 max-h-72 w-full overflow-y-auto rounded-xl border border-gray-100 bg-white p-2 shadow-xl">
-              <div className="grid grid-cols-2 gap-1 sm:grid-cols-3">
-                {filteredTech.map((tech) => {
-                  const isSelected = selectedTechSlugs.includes(tech.slug);
+          {selectedTechSlugs.length > 0 && (
+            <div className="animate-in fade-in slide-in-from-top-1 mt-4 flex flex-wrap gap-2">
+              {selectedTechSlugs.map((slug, index) => (
+                <div
+                  key={slug}
+                  className="flex items-center gap-1.5 rounded-lg border border-blue-100 bg-blue-50/50 py-1.5 pr-2 pl-3 text-[12px] font-bold text-blue-700"
+                >
+                  {selectedTechNames[index]}
+                  <button
+                    onClick={() => handleRemoveTech(slug)}
+                    className="flex h-4 w-4 items-center justify-center rounded-md transition-colors hover:bg-blue-200/50"
+                  >
+                    <X size={12} />
+                  </button>
+                </div>
+              ))}
+            </div>
+          )}
 
-                  return (
-                    <button
-                      key={tech.id}
-                      onClick={() => handleSelectTech(tech.slug)}
-                      className={cn(
-                        'flex items-center justify-between rounded-lg px-3 py-2 text-left text-sm transition-all',
-                        isSelected
-                          ? 'bg-main-50 text-main-600 font-semibold'
-                          : 'text-gray-700 hover:bg-gray-100',
-                      )}
-                    >
-                      {tech.name}
-                      {isSelected && <Check size={15} />}
-                    </button>
-                  );
-                })}
+          {isOpen && (
+            <div className="animate-in fade-in zoom-in-95 absolute z-50 mt-3 max-h-64 w-full overflow-y-auto rounded-2xl border border-gray-100 bg-white p-3 shadow-2xl duration-200">
+              <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
+                {filteredTech.length > 0 ? (
+                  filteredTech.map((tech) => {
+                    const isSelected = selectedTechSlugs.includes(tech.slug);
+                    return (
+                      <button
+                        key={tech.id}
+                        onClick={() => handleSelectTech(tech.slug)}
+                        className={cn(
+                          'flex items-center justify-between rounded-xl px-4 py-2.5 text-left text-[13px] transition-all',
+                          isSelected
+                            ? 'text-main-400 bg-blue-50 font-bold'
+                            : 'text-gray-600 hover:bg-gray-50',
+                        )}
+                      >
+                        {tech.name}
+                        {isSelected && <Check size={14} strokeWidth={3} />}
+                      </button>
+                    );
+                  })
+                ) : (
+                  <div className="col-span-full py-10 text-center text-sm font-medium text-gray-400">
+                    일치하는 기술이 없습니다.
+                  </div>
+                )}
               </div>
             </div>
           )}
         </div>
       </article>
 
-      {/* 정렬 섹션 */}
-      <article className="flex flex-col gap-3">
-        <h5 className="h6 text-gray-1000 mb-3">정렬</h5>
-        <div className="flex w-full rounded-lg border border-gray-200 bg-gray-100 p-1">
+      <article className="flex flex-col gap-4">
+        <div className="flex items-center gap-2 text-gray-900">
+          <Layers size={18} className="text-blue-500" />
+          <h5 className="text-sm font-bold tracking-tight">정렬</h5>
+        </div>
+        <div className="flex w-full rounded-2xl border border-gray-100 bg-gray-50 p-1.5">
           {sortOption.map((option) => (
             <button
               key={option.value}
               onClick={() => updateParams({ sort: option.value })}
               className={cn(
-                'flex-1 cursor-pointer rounded-md py-2 text-sm font-bold transition-all',
+                'flex-1 rounded-xl py-2.5 text-[13px] font-bold transition-all duration-200',
                 sort === option.value
-                  ? 'text-main-600 text-gray-1000 bg-white shadow-md'
-                  : 'text-gray-500 hover:text-gray-700',
+                  ? 'bg-white text-gray-900 shadow-sm'
+                  : 'text-gray-400 hover:text-gray-600',
               )}
             >
               {option.label}

@@ -9,7 +9,8 @@ const QUERY_JOIN_DATA = `
       profiles (nickname, avatar_url),
       post_category!inner (name, slug),
       myLiked: like!post_id (*),
-      likes:like!post_id (count)
+      likes:like!post_id (count),
+      comments:comments!post_id (count)
     `;
 
 export type PostFilterOptions = {
@@ -32,11 +33,10 @@ export const fetchPostsData = async ({
     data: { user },
   } = await supabase.auth.getUser();
 
-  let query = supabase
-    .from('post')
-    .select(QUERY_JOIN_DATA)
-    .eq('myLiked.user_id', user?.id || '');
-
+  let query = supabase.from('post').select(QUERY_JOIN_DATA);
+  if (user?.id) {
+    query = query.eq('myLiked.user_id', user.id);
+  }
   if (categorySlug && categorySlug !== 'all') {
     query = query.eq('post_category.slug', decodeURIComponent(categorySlug));
   }
@@ -58,10 +58,11 @@ export const fetchPostsData = async ({
 
   if (error) throw new Error(error.message);
 
-  return data.map((answer) => ({
-    ...answer,
-    like_count: answer.likes?.[0]?.count ?? 0,
-    isLiked: answer.myLiked && answer.myLiked.length > 0,
+  return data.map((post) => ({
+    ...post,
+    like_count: post.likes?.[0]?.count ?? 0,
+    isLiked: post.myLiked && post.myLiked.length > 0,
+    comment_count: post.comments?.[0]?.count ?? 0,
   }));
 };
 
@@ -75,7 +76,7 @@ export const fetchPostDetail = async (
   const { data, error } = await supabase
     .from('post')
     .select(QUERY_JOIN_DATA)
-    .eq('myLiked.user_id', userId || " ''")
+    .eq('myLiked.user_id', userId || '00000000-0000-0000-0000-000000000000')
     .eq('slug', decodeURIComponent(postSlug))
     .eq('post_category.slug', decodeURIComponent(categorySlug))
     .maybeSingle();
@@ -86,11 +87,13 @@ export const fetchPostDetail = async (
     ...data,
     like_count: data.likes?.[0]?.count ?? 0,
     isLiked: data.myLiked && data.myLiked.length > 0,
+    comment_count: data.comments?.[0]?.count ?? 0,
   };
 };
 const postQuery = supabase.from('post').select(QUERY_JOIN_DATA);
 export type PostWithJoin = QueryData<typeof postQuery>[number];
-export type mapToPostDetail = PostWithJoin & {
+export type mapToPostDetail = RawPostJoined & {
   isLiked: boolean;
   like_count: number;
+  comment_count: number;
 };

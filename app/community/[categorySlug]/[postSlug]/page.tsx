@@ -8,7 +8,7 @@ export default async function PostDetailPage({ params }: Props) {
   const { categorySlug, postSlug } = await params;
 
   return (
-    <div className="mx-auto mt-8 flex max-w-250 flex-col items-start gap-1">
+    <div>
       <CommunityDetail slug={postSlug} categorySlug={categorySlug} />
     </div>
   );

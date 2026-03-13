@@ -7,9 +7,9 @@ import InfoText1 from '@/components/common/Info/InfoText1';
 import Tags from '@/components/common/Tags/Tags';
 import Loader from '@/components/ui/Loader';
 import { useFetchPostCategory } from '../../hooks/useFetchPostCategory';
-import { RawPostJoined } from '../../services/fetchPostsData';
+import { mapToPostDetail } from '../../services/fetchPostsData';
 
-const PostCard = ({ post }: { post: RawPostJoined }) => {
+const PostCard = ({ post }: { post: mapToPostDetail }) => {
   const categorySlug = post.post_category?.slug;
   const { data: postCategory, isPending } = useFetchPostCategory();
 
@@ -44,7 +44,7 @@ const PostCard = ({ post }: { post: RawPostJoined }) => {
               createdAt={post.create_at}
             />
 
-            <div className="flex items-center gap-3 text-gray-400">
+            <div className="flex items-center gap-3 text-gray-600">
               <div className="flex items-center gap-1 text-[12px] font-medium">
                 <Heart
                   size={14}
@@ -52,11 +52,16 @@ const PostCard = ({ post }: { post: RawPostJoined }) => {
                     post.likes.length > 0 ? 'fill-red-400 text-red-400' : ''
                   }
                 />
-                <span>{post.likes.length}</span>
+                <span>{post.like_count}</span>
               </div>
               <div className="flex items-center gap-1 text-[12px] font-medium">
                 <MessageSquare size={14} />
                 <span>{post.comment_count}</span>
+              </div>
+
+              <div className="flex items-center gap-1 text-[12px] font-medium">
+                <Eye size={14} />
+                <span>{post.view_count}</span>
               </div>
             </div>
           </div>
