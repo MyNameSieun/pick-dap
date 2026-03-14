@@ -63,10 +63,7 @@ const CommunityDetail = ({
   return (
     <div className="flex w-full flex-col">
       <div className="mb-4">
-        <BackButton
-          path={`/community/${categorySlug}`}
-          label={<span>뒤로가기</span>}
-        />
+        <BackButton label={<span>뒤로가기</span>} />
       </div>
 
       <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white">

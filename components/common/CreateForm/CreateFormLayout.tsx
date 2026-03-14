@@ -41,7 +41,7 @@ const CreateFormLayout = ({
   if (isLoading) return <Loader />;
 
   return (
-    <main>
+    <main className="w-max-7xl">
       <header>
         <BackButton label={BackButtonLabel} />
         <HeaderTitleBox title={title} content={content} icon={icon} />

@@ -1,6 +1,6 @@
 @layer components {
   .container-col {
-    @apply flex flex-col rounded-[14px] border border-gray-300 p-9;
+    @apply flex flex-col rounded-[14px] border border-gray-100 p-9 shadow-sm;
   }
 
   .container-row {

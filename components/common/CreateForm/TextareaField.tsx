@@ -20,7 +20,7 @@ const TextareaField = forwardRef<HTMLTextAreaElement, TextareaFieldProps>(
           placeholder={placeholder}
         />
         <p className="c1 absolute right-0 text-gray-600">
-          {value?.length || 0}/최소 20자
+          {value?.length || 0}자/최소 20자
         </p>
       </div>
     );

@@ -17,15 +17,18 @@ export type PostFilterOptions = {
   categorySlug?: string;
   sort?: 'latest' | 'likes' | 'views';
   searchQuery?: string;
+  userId?: string;
 };
 
 const postJoinQuery = supabase.from('post').select(QUERY_JOIN_DATA);
 export type RawPostJoined = QueryData<typeof postJoinQuery>[number];
 
+// 게시글 리스트
 export const fetchPostsData = async ({
   categorySlug,
   sort = 'latest',
   searchQuery,
+  userId,
 }: PostFilterOptions) => {
   const supabase = await createClient();
 
@@ -34,6 +37,11 @@ export const fetchPostsData = async ({
   } = await supabase.auth.getUser();
 
   let query = supabase.from('post').select(QUERY_JOIN_DATA);
+
+  if (userId) {
+    query = query.eq('user_id', userId);
+  }
+
   if (user?.id) {
     query = query.eq('myLiked.user_id', user.id);
   }
@@ -66,6 +74,7 @@ export const fetchPostsData = async ({
   }));
 };
 
+// 상세 게시글
 export const fetchPostDetail = async (
   categorySlug: string,
   postSlug: string,
@@ -90,6 +99,8 @@ export const fetchPostDetail = async (
     comment_count: data.comments?.[0]?.count ?? 0,
   };
 };
+
+// 타입
 const postQuery = supabase.from('post').select(QUERY_JOIN_DATA);
 export type PostWithJoin = QueryData<typeof postQuery>[number];
 export type mapToPostDetail = RawPostJoined & {

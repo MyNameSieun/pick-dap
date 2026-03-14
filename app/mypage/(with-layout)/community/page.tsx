@@ -12,8 +12,7 @@ const TabItem = [
     content: (
       <div className="container-col gap-2.5">
         <CommunityCard />
-        <CommunityCard />
-        <CommunityCard />
+
         <PaginationCustom />
       </div>
     ),

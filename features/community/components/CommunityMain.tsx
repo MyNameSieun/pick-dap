@@ -39,11 +39,7 @@ const CommunityMain = () => {
           icon: SquarePen,
           action: () => router.push('/community/post/new'),
         }}
-        content={
-          <p className="text-sm font-medium text-gray-500">
-            면접 경험을 공유하고 다른 사람들의 후기를 확인해보세요.
-          </p>
-        }
+        content={<p>면접 경험을 공유하고 다른 사람들의 후기를 확인해보세요.</p>}
       />
 
       <div className="flex w-full items-center gap-2">

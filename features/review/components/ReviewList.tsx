@@ -80,7 +80,7 @@ const ReviewList = ({ reviews }: { reviews?: mapToReviewDetail[] }) => {
               </div>
 
               <div className="flex items-center justify-end border-t border-gray-50 pt-3">
-                <div className="flex items-center gap-1 text-[13px] font-bold text-gray-500 transition-colors group-hover:text-blue-500">
+                <div className="flex items-center gap-1 text-[13px] font-bold text-gray-600 transition-colors group-hover:text-blue-500">
                   후기 자세히보기
                   <ChevronRight size={16} />
                 </div>

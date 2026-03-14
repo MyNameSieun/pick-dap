@@ -19,7 +19,7 @@ const MypageUserMenu = () => {
 
   return (
     <nav className="sticky top-5 flex gap-4">
-      <section className="w-[238] rounded-md border border-gray-300 bg-white p-6 shadow-md">
+      <section className="w-[238] rounded-[14px] border border-gray-100 bg-white p-6 shadow-sm">
         <article className="flex flex-col items-center gap-5">
           <div className="relative h-32 w-32 overflow-hidden rounded-full border border-gray-300">
             <Image
@@ -33,7 +33,6 @@ const MypageUserMenu = () => {
           </div>
           <div className="flex gap-3">
             <h6 className="h6 text-gray-800">사용자2</h6>
-            <Settings className="text-icon-default" />
           </div>
         </article>
         <Line />

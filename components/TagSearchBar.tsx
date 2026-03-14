@@ -49,7 +49,7 @@ const TagSearchBar = () => {
   ];
 
   return (
-    <section className="flex flex-col gap-10 rounded-3xl border border-gray-100 bg-white p-8 shadow-sm">
+    <section className="flex flex-col gap-10 rounded-[14px] border border-gray-100 bg-white p-8 shadow-sm">
       <article className="flex flex-col gap-4">
         <div className="flex items-center gap-2 text-gray-900">
           <LayoutGrid size={18} className="text-blue-500" />
@@ -92,9 +92,9 @@ const TagSearchBar = () => {
         <div className="relative" ref={containerRef}>
           <div className="relative">
             <Input
-              className="h-12 w-full rounded-2xl border-gray-100 bg-gray-50 pl-11 text-sm text-gray-900 transition-all focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-50"
+              className="h-12 w-full rounded-2xl border-gray-100 bg-gray-100 pl-11 text-sm text-gray-900 transition-all focus:border-blue-400 focus:bg-white focus:ring-4 focus:ring-blue-50"
               type="text"
-              placeholder="관심 있는 기술을 검색하고 추가해보세요"
+              placeholder="관심 있는 기술을 검색해보세요"
               value={searchTerm}
               onClick={onOpen}
               onChange={(e) => setSearchTerm(e.target.value)}

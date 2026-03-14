@@ -1,9 +1,9 @@
 'use client';
-import Line from '@/components/common/Line';
-import Tags from '@/components/common/Tags/Tags';
+
 import { Button } from '@/components/ui/button/Button';
 import { QuestionWithDetails } from '@/features/question/services/question/fetchQuestion';
-import { Bookmark, Dot, Eye, MessageSquare } from 'lucide-react';
+import { displayDate } from '@/lib/displayDate';
+import { Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -17,82 +17,69 @@ const QuestionCard = ({ questions }: { questions: QuestionWithDetails[] }) => {
   };
 
   return (
-    <section>
+    <section className="w-full">
       {questions?.map((q) => (
-        <Link key={q.id} href={`/question/${q.idx}/${q.slug}`}>
-          <article className="card-col-no-border">
-            <div className="flex">
-              <Tags className="mr-1" size="big">
-                {q.category?.category_type || ''}
-              </Tags>
-
-              <div className="flex flex-wrap">
-                {q.tech_stacks.map((t) => (
-                  <Tags
-                    key={t.tech.id}
-                    className="mr-1"
-                    color="purple"
-                    size="big"
-                  >
-                    {t.tech.name}
-                  </Tags>
-                ))}
+        <Link
+          key={q.id}
+          href={`/question/${q.idx}/${q.slug}`}
+          className="group block border-b border-gray-100 px-2 py-4 transition-all hover:bg-gray-50/50"
+        >
+          <article className="flex items-center justify-between gap-4">
+            <div className="flex-1">
+              <div className="mb-1.5 flex items-center gap-2">
+                <span className="text-main-400 text-[11px] font-bold tracking-wider uppercase">
+                  {q.category?.category_type}
+                </span>
+                <span className="text-[11px] font-medium text-gray-600">
+                  {displayDate(q.created_at)}
+                </span>
               </div>
 
-              <div className="flex flex-wrap">
-                {q.tags.map((tag) => (
-                  <Tags
-                    key={tag.tag.label}
-                    className="mr-1"
-                    size="big"
-                    color="green"
-                  >
-                    {tag.tag.label}
-                  </Tags>
-                ))}
-              </div>
-            </div>
+              <h6 className="mb-2 truncate text-[15px] font-bold text-gray-900 transition-colors group-hover:text-blue-600">
+                {q.title}
+              </h6>
 
-            <h6 className="h6 text-gray-1000">{q.title}</h6>
+              <div className="flex items-center gap-3">
+                <div className="flex gap-1">
+                  {q.tech_stacks.slice(0, 3).map((t) => (
+                    <span
+                      key={t.tech.id}
+                      className="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-medium text-gray-600"
+                    >
+                      {t.tech.name}
+                    </span>
+                  ))}
+                </div>
 
-            <div className="text-icon-default c1 flex items-center justify-between">
-              <div className="flex gap-2">
-                <time className="">답변일: {q.created_at}</time>
-                <Dot size={15} />
-                <div className="flex gap-3">
-                  <div className="flex items-center gap-0.5">
-                    <Eye size={12} />
-                    <p>{q.stats?.view_count}</p>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <Bookmark size={12} />
-                    <p>{q.stats?.bookmark_count}</p>
-                  </div>
-                  <div className="flex items-center gap-0.5">
-                    <MessageSquare size={12} />
-                    <p>{q.stats?.comment_count}</p>
-                  </div>
+                <div className="flex items-center gap-2.5 border-l border-gray-200 pl-3 text-[11px] font-medium text-gray-600">
+                  <span className="flex items-center gap-1">
+                    <Eye size={12} className="text-gray-400" />{' '}
+                    {q.stats?.view_count}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <MessageSquare size={11} className="text-gray-400" />{' '}
+                    {q.stats?.comment_count}
+                  </span>
                 </div>
               </div>
+            </div>
 
-              <div className="flex justify-end gap-1 font-bold">
-                <Button
-                  className="h-10"
-                  onClick={(e) => handleButtonClick(e, '/')}
-                >
-                  답변하기
-                </Button>
-                <Button
-                  variant={'white'}
-                  className="h-10"
-                  onClick={(e) => handleButtonClick(e, '/interview')}
-                >
-                  면접 연습
-                </Button>
-              </div>
+            <div className="flex items-center gap-1 opacity-0 transition-opacity group-hover:opacity-100">
+              <Button
+                variant="white"
+                className="h-8 border-gray-200 px-3 text-[11px] font-semibold text-gray-700"
+                onClick={(e) => handleButtonClick(e, '/interview')}
+              >
+                연습
+              </Button>
+              <Button
+                className="h-8 bg-gray-900 px-3 text-[11px] font-semibold text-white"
+                onClick={(e) => handleButtonClick(e, '/')}
+              >
+                답변
+              </Button>
             </div>
           </article>
-          <Line />
         </Link>
       ))}
     </section>

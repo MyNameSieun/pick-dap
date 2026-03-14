@@ -28,24 +28,21 @@ const QuestionSearchToolbar = ({ questions }: QuestionSearchToolbarProps) => {
   };
 
   return (
-    <div className="mb-5 flex items-center gap-3">
-      <Input
-        className="c1 bg-gray-100"
-        placeholder="질문을 검색하세요"
-        leftIcon={Search}
-        autoFocus
-        value={searchValue}
-        onChange={handleChangeSearchValue}
-        onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
-      />
-      <Button onClick={handleSearchSubmit}>검색</Button>
-      {/* <Filter
-        options={FILTER_OPTIONS}
-        filterType={filterType}
-        handleFilterSelect={(value) => handleFilterSelect(value)}
-        isFilterOpen={isFilterOpen}
-        handleFilterClick={onToggle}
-      /> */}
+    <div className="mx-auto mb-8 w-full">
+      <div className="group relative">
+        <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
+          <Search className="h-5 w-5 text-gray-400 transition-colors group-focus-within:text-blue-500" />
+        </div>
+        <input
+          type="text"
+          className="h-12 w-full rounded-full border border-gray-200 bg-gray-50 pr-4 pl-12 text-sm transition-all duration-200 placeholder:text-gray-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+          placeholder="질문을 검색하세요"
+          autoFocus
+          value={searchValue}
+          onChange={handleChangeSearchValue}
+          onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
+        />
+      </div>
     </div>
   );
 };

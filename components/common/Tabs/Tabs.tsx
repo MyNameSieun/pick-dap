@@ -43,7 +43,7 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
                 'relative flex cursor-pointer items-center justify-center px-6 py-4 transition-colors duration-200 outline-none',
                 isActive
                   ? 'font-bold text-blue-600'
-                  : 'font-medium text-gray-500 hover:text-gray-800',
+                  : 'font-medium text-gray-700 hover:text-gray-800',
               )}
             >
               <span className="relative z-10 text-[15px] tracking-tight">

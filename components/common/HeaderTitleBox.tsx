@@ -48,7 +48,7 @@ const HeaderTitleBox = ({
 
         <div className="flex flex-col justify-around">
           <div className={`text-[20px] font-bold ${titleColor}`}>{title}</div>
-          <div className={`c1 ${subColor}`}>{content}</div>
+          <div className={`c1 ${subColor} text-[13px]`}>{content}</div>
         </div>
       </div>
 
