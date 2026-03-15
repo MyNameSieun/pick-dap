@@ -96,18 +96,16 @@ const CommunityDetail = ({
 
                     {isManage && (
                       <>
-                        {/* 메뉴 바깥 클릭 시 닫히게 하는 투명 오버레이 */}
                         <div
                           className="fixed inset-0 z-40 cursor-default"
                           onClick={() => setManage(false)}
                         />
 
-                        {/* 실제 메뉴 위치: 버튼 우하단 정렬 */}
                         <div className="absolute top-full right-0 z-50 mt-2">
                           <CommunityManageButton
                             postId={post.id}
                             categorySlug={categorySlug}
-                            postSlug={slug} // slug 전달
+                            postSlug={slug}
                             onClose={() => setManage(false)}
                           />
                         </div>

@@ -15,37 +15,66 @@ export const useTogglePostLike = (
     mutationFn: togglePostLike,
 
     onMutate: async ({ postId, slug }: { postId: string; slug: string }) => {
-      const queryKey = QUERY_KEYS.post.detail(slug, user?.id);
+      const detailKey = QUERY_KEYS.post.detail(slug, user?.id);
+      const listKey = QUERY_KEYS.post.myList;
 
-      await queryClient.cancelQueries({ queryKey });
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: detailKey }),
+        queryClient.cancelQueries({ queryKey: listKey }),
+      ]);
 
-      const previous = queryClient.getQueryData<mapToPostDetail>(queryKey);
+      const prevDetail = queryClient.getQueryData<mapToPostDetail>(detailKey);
+      const prevList = queryClient.getQueryData<mapToPostDetail[]>(listKey);
 
-      if (previous) {
-        queryClient.setQueryData<mapToPostDetail>(queryKey, {
-          ...previous,
-          isLiked: !previous.isLiked,
-          like_count: previous.isLiked
-            ? Math.max(0, previous.like_count - 1)
-            : previous.like_count + 1,
+      // 상세페이지
+      if (prevDetail) {
+        queryClient.setQueryData<mapToPostDetail>(detailKey, {
+          ...prevDetail,
+          isLiked: !prevDetail.isLiked,
+          like_count: prevDetail.isLiked
+            ? Math.max(0, prevDetail.like_count - 1)
+            : prevDetail.like_count + 1,
         });
       }
 
-      return { previous, queryKey };
+      // 목록
+      if (prevList) {
+        queryClient.setQueryData<mapToPostDetail[]>(listKey, (old) =>
+          old?.map((post) =>
+            post.id === postId
+              ? {
+                  ...post,
+                  isLiked: !post.isLiked,
+                  like_count: post.isLiked
+                    ? post.like_count - 1
+                    : post.like_count + 1,
+                }
+              : post,
+          ),
+        );
+      }
+      return { prevDetail, prevList, detailKey, listKey };
     },
 
     onError: (error, variables, context) => {
-      if (context?.previous) {
-        queryClient.setQueryData(context.queryKey, context.previous);
+      if (context?.prevDetail) {
+        queryClient.setQueryData(context.detailKey, context.prevDetail);
+      }
+      if (context?.prevList) {
+        queryClient.setQueryData(context.listKey, context.prevList);
       }
       if (callbacks?.onError) callbacks.onError(error);
     },
 
     onSettled: (data, error, variables, context) => {
-      if (context?.queryKey) {
-        queryClient.invalidateQueries({ queryKey: context.queryKey });
+      if (context?.detailKey) {
+        queryClient.invalidateQueries({ queryKey: context.detailKey });
+      }
+      if (context?.listKey) {
+        queryClient.invalidateQueries({ queryKey: context.listKey });
       }
     },
+
     onSuccess: () => {
       if (callbacks?.onSuccess) callbacks.onSuccess();
     },

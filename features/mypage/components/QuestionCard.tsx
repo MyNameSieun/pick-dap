@@ -3,6 +3,7 @@
 import { Button } from '@/components/ui/button/Button';
 import { QuestionWithDetails } from '@/features/question/services/question/fetchQuestion';
 import { displayDate } from '@/lib/displayDate';
+import { cn } from '@/lib/utils';
 import { Bookmark, Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
@@ -51,7 +52,12 @@ const QuestionCard = ({ questions }: { questions: QuestionWithDetails[] }) => {
                   ))}
                 </div>
 
-                <div className="flex items-center gap-2.5 border-l border-gray-200 pl-3 text-[11px] font-medium text-gray-600">
+                <div
+                  className={cn(
+                    'flex items-center gap-2.5 text-[11px] font-medium text-gray-600',
+                    q.tech_stacks.length > 0 && 'border-l border-gray-200 pl-3',
+                  )}
+                >
                   <span className="flex items-center gap-1">
                     <Eye size={12} className="text-gray-600" />{' '}
                     {q.stats?.view_count}
@@ -61,7 +67,16 @@ const QuestionCard = ({ questions }: { questions: QuestionWithDetails[] }) => {
                     {q.stats?.comment_count}
                   </span>
                   <span className="flex items-center gap-1">
-                    <Bookmark size={12} className="text-gray-600" />
+                    <Bookmark
+                      size={12}
+                      fill={q.is_mine_bookmarked ? 'currentColor' : 'none'}
+                      className={cn(
+                        'transition-colors',
+                        q.is_mine_bookmarked
+                          ? 'text-main-300'
+                          : 'text-gray-400',
+                      )}
+                    />
                     {q.stats?.bookmark_count}
                   </span>
                 </div>

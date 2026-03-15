@@ -1,15 +1,13 @@
-// featurs/question/services/comment/deleteComment.ts
-
 'use server';
 import { createClient } from '@/lib/supabase/server';
 
-export const deleteComment = async ({ commentId }: { commentId: string }) => {
+const deletePostComment = async ({ commentId }: { commentId: string }) => {
   const supabase = await createClient();
 
   const { data, error } = await supabase
     .from('comments')
     .delete()
-    .select('id, answer_id')
+    .select('id, post_id')
     .eq('id', commentId)
     .single();
 
@@ -19,3 +17,5 @@ export const deleteComment = async ({ commentId }: { commentId: string }) => {
 
   return data;
 };
+
+export default deletePostComment;

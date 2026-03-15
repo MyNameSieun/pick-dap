@@ -15,21 +15,32 @@ export const useCreateComment = (
     mutationFn: createComment,
 
     onSuccess: (newComment) => {
-      // 1. post 페이지 댓글인 경우
-      if (newComment.post_id) {
+      const { post_id, answer_id } = newComment;
+
+      // post 페이지 댓글인 경우
+      if (post_id) {
         queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.comment.byPostId(newComment.post_id),
+          queryKey: QUERY_KEYS.comment.byPostId(post_id),
+        });
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.comment.myPostComments(post_id),
+        });
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.post.myList,
         });
       }
 
-      // 2. answer 페이지의 댓글인 경우
-      if (newComment.answer_id) {
+      // answer 페이지의 댓글인 경우
+      if (answer_id) {
         queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.comment.byAnswerId(newComment.answer_id),
+          queryKey: QUERY_KEYS.comment.byAnswerId(answer_id),
+        });
+        queryClient.invalidateQueries({
+          queryKey: QUERY_KEYS.comment.myAnswerComments(answer_id),
         });
       }
-      // 3. 전체 댓글 목록 업데이트 (정렬을 위함)
-      queryClient.invalidateQueries({ queryKey: QUERY_KEYS.comment.list });
+
+      // queryClient.invalidateQueries({ queryKey: QUERY_KEYS.comment.list });
 
       if (callbacks?.onSuccess) callbacks.onSuccess();
     },

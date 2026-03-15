@@ -9,13 +9,13 @@ import { Input } from '@/components/ui/input/Input';
 import MoreOptionsMenu from '../MoreOptionsMenu';
 
 import { useCreateComment } from '@/features/question/hooks/comment/useCreateComment';
-import { useDeleteComment } from '@/features/question/hooks/comment/useDeleteComment';
 import { useUpdateComment } from '@/features/question/hooks/comment/useUpdateComment';
 import defaultProfile from '@/public/defaultProfile.png';
 import { useFetchPostComment } from '@/features/community/hooks/useFetchPostComment';
 import { useSession } from '@/store/session';
 import Loader from '@/components/ui/Loader';
 import { cn } from '@/lib/utils';
+import { useDeletePostComment } from '@/features/community/hooks/useDeletePostComment';
 
 interface CommentEditorProps {
   postId: string;
@@ -57,7 +57,7 @@ const CommentEditor = ({ postId }: CommentEditorProps) => {
   const { mutate: updateComment } = useUpdateComment({
     onSuccess: () => setEditingCommentId(null),
   });
-  const { mutate: deleteComment } = useDeleteComment();
+  const { mutate: deleteComment } = useDeletePostComment();
 
   if (isCommentsPending)
     return (
@@ -68,7 +68,7 @@ const CommentEditor = ({ postId }: CommentEditorProps) => {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex items-center justify-between ">
+      <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <div className="flex h-8 w-8 items-center justify-center rounded-full bg-blue-100/50">
             <MessageSquare size={16} className="text-main-500" />

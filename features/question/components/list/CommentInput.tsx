@@ -10,12 +10,12 @@ import defaultProfile from '@/public/defaultProfile.png';
 import Loader from '@/components/ui/Loader';
 import { MessageSquare, Pencil, Siren, Trash2 } from 'lucide-react';
 import MoreOptionsMenu from '@/components/common/MoreOptionsMenu';
-import { useDeleteComment } from '../../hooks/comment/useDeleteComment';
 import { useSession } from '@/store/session';
 import { toast } from 'sonner';
 import { useUpdateComment } from '../../hooks/comment/useUpdateComment';
 import { isUpdateWrite } from '@/lib/isUpdateWrite';
 import LikeCommentButton from './LikeCommentButton';
+import { useDeleteAnswerComment } from '../../hooks/comment/useDeleteAnswerComment';
 
 interface CommentItemProps {
   answerData: AnswerEntity;
@@ -57,11 +57,10 @@ const CommentInput = ({ answerData }: CommentItemProps) => {
   };
 
   // 댓글 삭제
-  const { mutate: deleteCommentMutate } = useDeleteComment();
+  const { mutate: deleteCommentMutate } = useDeleteAnswerComment();
   const handleCommentDeleteButton = (commentId: string) => {
     if (window.confirm('정말 삭제하시겠습니까?')) {
       deleteCommentMutate({ commentId });
-      toast.success('삭제 되었습니다!', { position: 'top-center' });
     }
   };
 
@@ -85,8 +84,6 @@ const CommentInput = ({ answerData }: CommentItemProps) => {
 
     commnetUpdateMutate({ id: comment.id, content: editValue });
   };
-
-  // 좋아요
 
   if (isLoading) return <Loader />;
 

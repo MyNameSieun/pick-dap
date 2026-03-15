@@ -1,22 +1,24 @@
-// features/question/hooks/comment/useDeleteComment.ts
-
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { deleteComment } from '../../services/comment/deleteComment';
 import { UseMutationCallback } from '@/types/useMutationCallback';
 import { CommentEntity } from '@/types/entity';
 import { QUERY_KEYS } from '@/lib/constants';
+import deletePostComment from '../services/deletePostComment';
 
-export const useDeleteComment = (callbacks?: UseMutationCallback) => {
+export const useDeletePostComment = (callbacks?: UseMutationCallback) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: deleteComment,
+    mutationFn: deletePostComment,
     onSuccess: (deletedComment) => {
       queryClient.setQueryData<CommentEntity[]>(
-        QUERY_KEYS.comment.byAnswerId(deletedComment.answer_id!),
+        QUERY_KEYS.comment.byPostId(deletedComment.post_id!),
         (old) => {
           if (!old) return [];
-          return old?.filter((comment) => comment.id !== deletedComment.id);
+              return old.filter(
+            (comment) =>
+              comment.id !== deletedComment.id &&
+              comment.parent_id !== deletedComment.id,
+          );
         },
       );
 

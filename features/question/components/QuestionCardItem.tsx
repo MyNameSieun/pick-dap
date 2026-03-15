@@ -66,10 +66,9 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
                     fill={question.is_mine_bookmarked ? 'currentColor' : 'none'}
                     className={cn(
                       'transition-colors',
-
                       question.is_mine_bookmarked
-                        ? 'text-gray-500'
-                        : 'text-gray-600',
+                        ? 'text-main-300'
+                        : 'text-gray-400',
                     )}
                   />
 
