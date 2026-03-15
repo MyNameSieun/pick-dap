@@ -4,14 +4,14 @@ import TagSearchBar from '@/components/TagSearchBar';
 import Loader from '@/components/ui/Loader';
 import QuestionCard from '@/features/mypage/components/QuestionCard';
 import QuestionSearchToolbar from '@/features/mypage/components/QuestionSearchToolbar';
+import { useStatusFilters } from '@/features/mypage/hooks/useStatusFilters';
 import { useFetchMySaveQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
-import { useQuestionFilters } from '@/features/question/hooks/question/useQuestionFilters';
 
 const MypageQuestionsPage = () => {
-  const filters = useQuestionFilters();
+  const statusFilter = useStatusFilters();
 
   const { data: savedQuestions, isPending } =
-    useFetchMySaveQuestionData(filters);
+    useFetchMySaveQuestionData(statusFilter);
 
   if (isPending) return <Loader />;
 
@@ -20,7 +20,7 @@ const MypageQuestionsPage = () => {
       <TagSearchBar />
 
       <section className="container-col">
-        <QuestionSearchToolbar questions={savedQuestions!} />
+        <QuestionSearchToolbar />
 
         <Line my={1} />
         <div className="mb-4" />

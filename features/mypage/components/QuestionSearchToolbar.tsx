@@ -1,48 +1,79 @@
 'use client';
 
-import Filter from '@/components/common/Filter';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input/Input';
-import { FILTER_OPTIONS } from '@/constants/selectOptions';
-import { useQuestionFilters } from '@/features/question/hooks/question/useQuestionFilters';
-import { QuestionWithDetails } from '@/features/question/services/question/fetchQuestion';
-import { useDisclosure } from '@/hooks/useClickOutside';
-import { Search } from 'lucide-react';
 import { useState } from 'react';
+import { Search, Check, SlidersHorizontal } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { useDisclosure } from '@/hooks/useClickOutside';
+import { useStatusFilters } from '../hooks/useStatusFilters';
 
-interface QuestionSearchToolbarProps {
-  questions: QuestionWithDetails[];
-}
-const QuestionSearchToolbar = ({ questions }: QuestionSearchToolbarProps) => {
-  const { onToggle } = useDisclosure();
+const QuestionSearchToolbar = () => {
+  const { isOpen, onClose, onToggle } = useDisclosure();
 
-  const { updateParams, ...filters } = useQuestionFilters();
-  const [searchValue, setSearchValue] = useState(filters.searchQuery || '');
+  const { updateParams, status, searchQuery } = useStatusFilters();
+  const [searchValue, setSearchValue] = useState(searchQuery || '');
 
   const handleSearchSubmit = () => {
     updateParams({ q: searchValue.trim() });
   };
 
-  const handleChangeSearchValue = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
+  const STATUS_OPTIONS = [
+    { label: '전체', value: 'ALL' },
+    { label: '답변 완료', value: 'completed' },
+    { label: '답변 대기', value: 'pending' },
+  ];
 
   return (
-    <div className="mx-auto mb-8 w-full">
-      <div className="group relative">
-        <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
-          <Search className="h-5 w-5 text-gray-400 transition-colors group-focus-within:text-blue-500" />
+    <div className="relative mx-auto mb-8 w-full">
+      <div className="flex gap-2">
+        <div className="group relative flex flex-1">
+          <div className="pointer-events-none absolute inset-y-0 left-4 flex items-center">
+            <Search className="h-5 w-5 text-gray-400 transition-colors group-focus-within:text-blue-500" />
+          </div>
+          <input
+            type="text"
+            className="h-12 w-full rounded-[13px] border border-gray-200 bg-gray-50 pr-4 pl-12 text-sm transition-all duration-200 placeholder:text-gray-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
+            placeholder="질문을 검색하세요"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
+          />
         </div>
-        <input
-          type="text"
-          className="h-12 w-full rounded-full border border-gray-200 bg-gray-50 pr-4 pl-12 text-sm transition-all duration-200 placeholder:text-gray-400 focus:border-blue-500 focus:bg-white focus:ring-4 focus:ring-blue-500/10 focus:outline-none"
-          placeholder="질문을 검색하세요"
-          autoFocus
-          value={searchValue}
-          onChange={handleChangeSearchValue}
-          onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
-        />
+
+        <button
+          onClick={onToggle}
+          className={cn(
+            'flex h-12 w-12 items-center justify-center rounded-xl border shadow-sm transition-all active:scale-95',
+            isOpen || status !== 'ALL'
+              ? 'border-blue-500 bg-blue-50 text-blue-600'
+              : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700',
+          )}
+        >
+          <SlidersHorizontal size={18} />
+        </button>
       </div>
+
+      {isOpen && (
+        <div className="animate-in fade-in zoom-in-95 absolute top-14 right-0 z-20 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white p-1 shadow-xl duration-150">
+          {STATUS_OPTIONS.map((option) => (
+            <button
+              key={option.value}
+              onClick={() => {
+                updateParams({ status: option.value });
+                onClose();
+              }}
+              className={cn(
+                'flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-xs font-bold transition-colors',
+                status === option.value
+                  ? 'bg-blue-50 text-blue-600'
+                  : 'text-gray-600 hover:bg-gray-50',
+              )}
+            >
+              {option.label}
+              {status === option.value && <Check size={14} />}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

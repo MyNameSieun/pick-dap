@@ -1,13 +1,12 @@
-import { CategoryTypeEnums, QuestionType, StatusEnums } from '@/types/entity';
+import { CategoryTypeEnums, StatusEnums } from '@/types/entity';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-export const useQuestionFilters = () => {
-  const searchParams = useSearchParams();
+export const useStatusFilters = () => {
   const router = useRouter();
+  const searchParams = useSearchParams();
 
   const filters = {
-    type: (searchParams.get('type') as QuestionType) || 'pickdap',
-    status: (searchParams.get('status') as StatusEnums) || 'ALL',
+    status: (searchParams.get('status') as StatusEnums | 'ALL') || 'ALL',
     category:
       (searchParams.get('category') as CategoryTypeEnums | 'ALL') || 'ALL',
     searchQuery: searchParams.get('q') || '',

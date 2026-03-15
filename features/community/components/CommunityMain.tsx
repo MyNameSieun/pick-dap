@@ -50,7 +50,7 @@ const CommunityMain = () => {
             value={searchValue}
             onChange={(e) => setSearchValue(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && handleSearchSubmit()}
-            className="h-11 border-gray-200 bg-white shadow-sm transition-all focus:border-blue-400 focus:ring-1 focus:ring-blue-400/10"
+            className="h-11 rounded-[13px] border-gray-200 bg-white shadow-sm transition-all focus:border-blue-400 focus:ring-1 focus:ring-blue-400/10"
           />
         </div>
 
@@ -64,7 +64,7 @@ const CommunityMain = () => {
                 : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700',
             )}
           >
-            <SlidersHorizontal size={18} />
+            <SlidersHorizontal size={18} className="text-gray-600" />
           </button>
 
           {isFilterActive && (

@@ -9,7 +9,7 @@ import { QueryData } from '@supabase/supabase-js';
 // 1. 조인 쿼리 정의
 const QUERY_JOIN_DATA = `
   *,
-  author:profiles(*),
+  author:profiles!user_id(*),
   stats:question_stats(*),
   status:question_status(status),
   category:question_category(category_type),
@@ -21,8 +21,8 @@ const QUERY_JOIN_DATA = `
 `;
 
 // 2. 조인된 결과 데이터 타입 추론
-const questionsJoinQuery = supabase.from('questions').select(QUERY_JOIN_DATA); // questions 기준 JOIN select 쿼리 정의(타입 추론용)
-export type RawQuestionJoined = QueryData<typeof questionsJoinQuery>[number]; // 해당 쿼리 결과 배열의 요소(질문 1개) 타입 추출
+const questionsJoinQuery = supabase.from('questions').select(QUERY_JOIN_DATA);
+export type RawQuestionJoined = QueryData<typeof questionsJoinQuery>[number];
 
 // UI에서 사용할 최종 타입
 export type QuestionWithDetails = RawQuestionJoined & {
@@ -32,13 +32,16 @@ export type QuestionWithDetails = RawQuestionJoined & {
 };
 
 // DB 조인 결과를 화면에서 사용하기 위한 형태로 가공
-const mapToQuestionDetail = (q: RawQuestionJoined): QuestionWithDetails => ({
-  ...q,
-  total_bookmark_count: q.stats?.bookmark_count || 0,
-  is_mine_bookmarked: !!(q.is_bookmarked && q.is_bookmarked.length > 0),
-  current_status: q.status?.status || 'pending',
-});
+const mapToQuestionDetail = (q: RawQuestionJoined): QuestionWithDetails => {
+  const statusData = Array.isArray(q.status) ? q.status[0] : q.status;
 
+  return {
+    ...q,
+    total_bookmark_count: q.stats?.bookmark_count || 0,
+    is_mine_bookmarked: !!(q.is_bookmarked && q.is_bookmarked.length > 0),
+    current_status: (statusData?.status as StatusEnums) || 'pending',
+  };
+};
 // 필터링 옵션 타입
 export type QuestionFilterOptions = {
   category?: CategoryTypeEnums | 'ALL';
@@ -70,7 +73,7 @@ export const fetchQuestions = async ({
 
   const DYNAMIC_QUERY_DATA = `
   *,
-  author:profiles(*),
+  author:profiles!user_id(*),
   stats:question_stats(*),
   status:question_status${hasStatus ? '!inner' : ''}(status), 
   category:question_category${hasCategory ? '!inner' : ''}(category_type),
@@ -166,7 +169,7 @@ export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
 
   const DYNAMIC_QUERY_DATA = `
     *,
-    author:profiles(*),
+    author:profiles!user_id(*),
     stats:question_stats(*),
     status:question_status${hasStatus ? '!inner' : ''}(status), 
     category:question_category${hasCategory ? '!inner' : ''}(category_type),
@@ -223,7 +226,7 @@ export const fetchMySaveQuestions = async (
 
   const DYNAMIC_QUERY_DATA = `
     *,
-    author:profiles(*),
+    author:profiles!user_id(*),
     stats:question_stats(*),
     status:question_status${hasStatus ? '!inner' : ''}(status), 
     category:question_category${hasCategory ? '!inner' : ''}(category_type),

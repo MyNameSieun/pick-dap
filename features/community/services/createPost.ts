@@ -40,9 +40,7 @@ export const createPost = async ({
     .select(
       `
       *,
-      post_category (
-        slug
-      )
+      post_category (slug)
     `,
     )
     .single();
