@@ -96,8 +96,6 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
       },
     });
 
-  // 데이터가 없으면 먼저 리턴
-  // 이 줄 아래부터는 반드시 데이터 존재함을 보장함
   if (isQuestionLoading || isAnswerLoading || !question) return <Loader />;
 
   // 등록

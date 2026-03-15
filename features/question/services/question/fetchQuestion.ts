@@ -6,7 +6,6 @@ import { supabase } from '@/lib/supabase/supabase';
 import { CategoryTypeEnums, QuestionType, StatusEnums } from '@/types/entity';
 import { QueryData } from '@supabase/supabase-js';
 
-// 1. 조인 쿼리 정의
 const QUERY_JOIN_DATA = `
   *,
   author:profiles!user_id(*),
@@ -20,18 +19,15 @@ const QUERY_JOIN_DATA = `
   )
 `;
 
-// 2. 조인된 결과 데이터 타입 추론
 const questionsJoinQuery = supabase.from('questions').select(QUERY_JOIN_DATA);
 export type RawQuestionJoined = QueryData<typeof questionsJoinQuery>[number];
 
-// UI에서 사용할 최종 타입
 export type QuestionWithDetails = RawQuestionJoined & {
   total_bookmark_count: number;
   is_mine_bookmarked: boolean;
   current_status: StatusEnums;
 };
 
-// DB 조인 결과를 화면에서 사용하기 위한 형태로 가공
 const mapToQuestionDetail = (q: RawQuestionJoined): QuestionWithDetails => {
   const statusData = Array.isArray(q.status) ? q.status[0] : q.status;
 
@@ -42,7 +38,6 @@ const mapToQuestionDetail = (q: RawQuestionJoined): QuestionWithDetails => {
     current_status: (statusData?.status as StatusEnums) || 'pending',
   };
 };
-// 필터링 옵션 타입
 export type QuestionFilterOptions = {
   category?: CategoryTypeEnums | 'ALL';
   techs?: string;
@@ -55,35 +50,47 @@ export type QuestionFilterOptions = {
 /**
  *  * 전체 목록 조회
  */
-
 export const fetchQuestions = async ({
   category,
   techs,
-  sort = 'popular', // 정렬 기본값
-
+  sort = 'popular',
   type,
   status,
   searchQuery,
 }: QuestionFilterOptions = {}) => {
   const supabase = await createClient();
 
-  // 필터 활성화 여부 확인
+  // 🚀 추가: 로그인한 유저 정보 가져오기
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
   const hasCategory = category && category !== 'ALL';
   const hasStatus = status && status !== 'ALL';
 
   const DYNAMIC_QUERY_DATA = `
-  *,
-  author:profiles!user_id(*),
-  stats:question_stats(*),
-  status:question_status${hasStatus ? '!inner' : ''}(status), 
-  category:question_category${hasCategory ? '!inner' : ''}(category_type),
-  is_bookmarked:bookmark!question_id(user_id),
-  tags:question_tags(tag:tags(label)),
-  tech_stacks:question_tech_stack(
-    tech:tech_stack_id(id, name, slug)
-  )
-`;
+    *,
+    author:profiles!user_id(*),
+    stats:question_stats(*),
+    status:question_status${hasStatus ? '!inner' : ''}(status), 
+    category:question_category${hasCategory ? '!inner' : ''}(category_type),
+    is_bookmarked:bookmark!question_id(user_id), 
+    tags:question_tags(tag:tags(label)),
+    tech_stacks:question_tech_stack(
+      tech:tech_stack_id(id, name, slug)
+    )
+  `;
+
   let query = supabase.from('questions').select(DYNAMIC_QUERY_DATA);
+
+  if (user) {
+    query = query.eq('is_bookmarked.user_id', user.id);
+  } else {
+    query = query.eq(
+      'is_bookmarked.user_id',
+      '00000000-0000-0000-0000-000000000000',
+    );
+  }
 
   if (type) {
     query = query.eq('question_type', type);

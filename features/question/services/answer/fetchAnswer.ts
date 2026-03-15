@@ -33,7 +33,7 @@ const mapToAnswerDetail = (answer: RawAnswerJoined): AnswerEntity => ({
 
 // 3. 실제 데이터를 가져오는 함수
 /**
- *  특정 질문에 대한 모든 답변 리스트 조회
+ *  * 특정 질문에 대한 모든 답변 리스트 조회
  */
 
 export const fetchAnswers = async (questionId: string) => {
@@ -63,7 +63,7 @@ export const fetchAnswers = async (questionId: string) => {
 };
 
 /**
- *  내가 작성한 단일 답변 조회
+ *  * 내가 작성한 단일 답변 조회
  */
 export const fetchMySingleAnswer = async (questionId: string) => {
   const supabase = await createClient();

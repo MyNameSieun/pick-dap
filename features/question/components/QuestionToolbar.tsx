@@ -37,7 +37,9 @@ const QuestionToolbar = () => {
 
     openCreate();
   };
-
+  const currentStatusLabel =
+    FILTER_OPTIONS.find((option) => option.value === filters.status)?.label ||
+    '전체';
   const {
     isOpen: isFilterOpen,
     onToggle: toggleFilter,
@@ -82,7 +84,10 @@ const QuestionToolbar = () => {
         </div>
 
         <div className="flex items-center gap-3">
-          <div ref={containerRef}>
+          <div ref={containerRef} className="flex items-center gap-2">
+            <span className="text-[13px] font-semibold text-gray-700">
+              {currentStatusLabel}
+            </span>
             <Filter
               options={FILTER_OPTIONS}
               handleFilterClick={toggleFilter}

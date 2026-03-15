@@ -12,11 +12,11 @@ export const useTogglePostLike = (
   const user = useSession()?.user;
 
   return useMutation({
-    mutationFn: togglePostLike,
+    mutationFn: ({ postId }) => togglePostLike({ postId }),
 
     onMutate: async ({ postId, slug }: { postId: string; slug: string }) => {
       const detailKey = QUERY_KEYS.post.detail(slug, user?.id);
-      const listKey = QUERY_KEYS.post.myList;
+      const listKey = QUERY_KEYS.post.all;
 
       await Promise.all([
         queryClient.cancelQueries({ queryKey: detailKey }),

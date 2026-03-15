@@ -9,7 +9,11 @@ export default async function PostDetailPage({ params }: Props) {
 
   return (
     <div>
-      <CommunityDetail slug={postSlug} categorySlug={categorySlug} />
+      <CommunityDetail
+        type="community"
+        slug={postSlug}
+        categorySlug={categorySlug}
+      />
     </div>
   );
 }

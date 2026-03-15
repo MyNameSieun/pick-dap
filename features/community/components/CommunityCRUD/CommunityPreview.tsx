@@ -50,7 +50,7 @@ const CommunityPreview = ({
       <main className="mx-auto w-full max-w-4xl px-4 py-10">
         <div className="mb-4">
           <div className="inline-block rounded-md bg-gray-200 px-3 py-1 text-xs font-bold text-gray-500">
-            목록으로 돌아가기 (미리보기)
+            미리보기
           </div>
         </div>
 
@@ -63,7 +63,7 @@ const CommunityPreview = ({
                 </h1>
 
                 <div className="flex items-center gap-3">
-                  <div className="flex items-center gap-1.5 text-[13px] font-medium text-gray-300">
+                  <div className="flex items-center gap-1.5 text-[13px] font-medium text-gray-600">
                     <Eye size={16} />
                     <span>0</span>
                   </div>

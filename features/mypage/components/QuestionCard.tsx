@@ -59,17 +59,18 @@ const QuestionCard = ({ questions }: { questions: QuestionWithDetails[] }) => {
                   )}
                 >
                   <span className="flex items-center gap-1">
-                    <Eye size={12} className="text-gray-600" />{' '}
+                    <Eye size={14} className="text-gray-600" />{' '}
                     {q.stats?.view_count}
                   </span>
                   <span className="flex items-center gap-1">
-                    <MessageSquare size={11} className="text-gray-600" />{' '}
+                    <MessageSquare size={14} className="text-gray-600" />{' '}
                     {q.stats?.comment_count}
                   </span>
                   <span className="flex items-center gap-1">
                     <Bookmark
-                      size={12}
+                      size={14}
                       fill={q.is_mine_bookmarked ? 'currentColor' : 'none'}
+                      strokeWidth={q.is_mine_bookmarked ? 0 : 2}
                       className={cn(
                         'transition-colors',
                         q.is_mine_bookmarked

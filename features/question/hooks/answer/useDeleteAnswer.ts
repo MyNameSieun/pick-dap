@@ -1,4 +1,3 @@
-// featurs/question/hooks/comment/useDeleteAnswer.ts
 import { AnswerEntity } from '@/types/entity';
 import { UseMutationCallback } from '@/types/useMutationCallback';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -14,14 +13,13 @@ export const useDeleteAnswer = (
     mutationFn: deleteAnswer,
 
     onSuccess: ({ questionId, answerId }) => {
-      queryClient.setQueryData<AnswerEntity[]>(
-        QUERY_KEYS.answer.byQuestionId(questionId),
-        (oldData) => {
-          if (!oldData) return [];
-          return oldData.filter((answer) => answer.id !== answerId);
-        },
-      );
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.answer.byQuestionId(questionId),
+      });
 
+      queryClient.invalidateQueries({
+        queryKey: QUERY_KEYS.answer.byQuestionIdMine(questionId),
+      });
       if (callbacks?.onSuccess) callbacks.onSuccess();
     },
     onError: (error) => {

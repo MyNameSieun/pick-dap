@@ -22,9 +22,11 @@ import { displayDate } from '@/lib/displayDate';
 const CommunityDetail = ({
   categorySlug,
   slug,
+  type,
 }: {
   categorySlug: string;
   slug: string;
+  type: 'mypage' | 'community';
 }) => {
   const user = useSession()?.user;
   const [isManage, setManage] = useState(false);
@@ -63,7 +65,14 @@ const CommunityDetail = ({
   return (
     <div className="flex w-full flex-col">
       <div className="mb-4">
-        <BackButton label={<span>뒤로가기</span>} />
+        <BackButton
+          path={
+            type === 'community'
+              ? `/community/${categorySlug}`
+              : '/mypage/community'
+          }
+          label={<span>뒤로가기</span>}
+        />
       </div>
 
       <div className="flex w-full flex-col overflow-hidden rounded-2xl border border-gray-200 bg-white">

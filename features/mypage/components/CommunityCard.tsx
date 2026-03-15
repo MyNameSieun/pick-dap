@@ -42,7 +42,7 @@ const CommunityCard = ({ post }: { post: mapToPostDetail }) => {
                   fill
                 />
               </div>
-              <span className="c1 font-medium tracking-tight text-gray-700">
+              <span className="c1 font-medium tracking-tight text-gray-600">
                 {post.profiles?.nickname}
               </span>
             </div>
