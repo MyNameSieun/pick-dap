@@ -10,27 +10,30 @@ import {
   Check,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState } from 'react';
+import { useState, useEffect } from 'react'; // useEffect 추가
 import { cn } from '@/lib/utils';
 import usePostFilters from '../hooks/usePostFilters';
+import { useDisclosure } from '@/hooks/useClickOutside'; // 공통 훅 사용 권장
 
 const CommunityMain = () => {
   const router = useRouter();
-  const [isFilterActive, setIsFilterActive] = useState(false);
+  const { isOpen, onClose, onToggle } = useDisclosure(); // 필터 드롭다운 상태 관리
 
   const SORT_OPTIONS = [
     { label: '최신순', value: 'latest' },
     { label: '좋아요순', value: 'likes' },
     { label: '조회순', value: 'views' },
   ];
-  const { sort, updateParams, ...filters } = usePostFilters();
-  const [searchValue, setSearchValue] = useState(filters.searchQuery || '');
+
+  const { sort, updateParams, searchQuery } = usePostFilters();
+  const [searchValue, setSearchValue] = useState(searchQuery || '');
 
   const handleSearchSubmit = () => {
     updateParams({ q: searchValue.trim() });
   };
+
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-6">
       <HeaderTitleBox
         icon={Activity}
         title={<h4 className="text-2xl font-bold text-gray-900">커뮤니티</h4>}
@@ -41,7 +44,6 @@ const CommunityMain = () => {
         }}
         content={<p>면접 경험을 공유하고 다른 사람들의 후기를 확인해보세요.</p>}
       />
-
       <div className="flex w-full items-center gap-2">
         <div className="relative flex-1">
           <Input
@@ -56,31 +58,28 @@ const CommunityMain = () => {
 
         <div className="relative">
           <button
-            onClick={() => setIsFilterActive(!isFilterActive)}
+            onClick={onToggle}
             className={cn(
               'flex h-11 w-11 items-center justify-center rounded-xl border shadow-sm transition-all active:scale-95',
-              isFilterActive
+              isOpen || sort !== 'latest'
                 ? 'border-blue-500 bg-blue-50 text-blue-600'
                 : 'border-gray-200 bg-white text-gray-500 hover:border-gray-300 hover:text-gray-700',
             )}
           >
-            <SlidersHorizontal size={18} className="text-gray-600" />
+            <SlidersHorizontal size={18} />
           </button>
 
-          {isFilterActive && (
+          {isOpen && (
             <>
-              <div
-                className="fixed inset-0 z-10"
-                onClick={() => setIsFilterActive(false)}
-              />
+              <div className="fixed inset-0 z-10" onClick={onClose} />
 
               <div className="animate-in fade-in zoom-in-95 absolute top-13 right-0 z-20 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white p-1 shadow-xl duration-150">
                 {SORT_OPTIONS.map((option) => (
                   <button
                     key={option.value}
                     onClick={() => {
-                      setIsFilterActive(false);
                       updateParams({ sort: option.value });
+                      onClose();
                     }}
                     className={cn(
                       'flex w-full items-center justify-between rounded-lg px-3 py-2.5 text-xs font-bold transition-colors',
