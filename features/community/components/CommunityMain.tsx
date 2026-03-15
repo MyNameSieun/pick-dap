@@ -10,14 +10,14 @@ import {
   Check,
 } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { useState, useEffect } from 'react'; // useEffect 추가
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
 import usePostFilters from '../hooks/usePostFilters';
-import { useDisclosure } from '@/hooks/useClickOutside'; // 공통 훅 사용 권장
+import { useDisclosure } from '@/hooks/useClickOutside';
 
 const CommunityMain = () => {
   const router = useRouter();
-  const { isOpen, onClose, onToggle } = useDisclosure(); // 필터 드롭다운 상태 관리
+  const { isOpen, onClose, onToggle } = useDisclosure();
 
   const SORT_OPTIONS = [
     { label: '최신순', value: 'latest' },

@@ -6,6 +6,7 @@ import {
 import CommunityCard from './CommunityCard';
 import PaginationCustom from '@/components/common/PaginationCustom';
 import Loader from '@/components/ui/Loader';
+import useMyPageCommunityFilters from '../hooks/useMyPageCommunityFilters';
 
 const MypageCommunityList = ({
   type,
@@ -14,9 +15,15 @@ const MypageCommunityList = ({
   type: 'posts' | 'comments' | 'liked';
   userId: string;
 }) => {
-  const postsQuery = useFetchMyPosts(userId);
-  const commentsQuery = useFetchMyCommentedPosts(userId);
-  const likedQuery = useFetchMyLikedPosts(userId);
+  const { category, sort } = useMyPageCommunityFilters();
+  const filters = {
+    categorySlug: category,
+    sort,
+  };
+
+  const postsQuery = useFetchMyPosts(userId, filters);
+  const commentsQuery = useFetchMyCommentedPosts(userId, filters);
+  const likedQuery = useFetchMyLikedPosts(userId, filters);
 
   const { data, isPending } =
     type === 'posts'

@@ -43,8 +43,12 @@ const MypageCommunityPage = () => {
         content="등록한 게시글과 좋아요한 게시글을 관리하세요"
         icon={Users}
       />
-
-      <Tabs tabs={TabItem} setId={currentTab} onTabChange={handleTabChange} />
+      <Tabs
+        tabs={TabItem}
+        setId={currentTab}
+        onTabChange={handleTabChange}
+        type="mypage"
+      />
     </div>
   );
 };

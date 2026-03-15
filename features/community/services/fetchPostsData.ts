@@ -51,7 +51,7 @@ export const fetchPostsData = async ({
   if (user?.id) {
     query = query.eq('myLiked.user_id', user.id);
   }
-  if (categorySlug && categorySlug !== 'all') {
+  if (categorySlug && categorySlug.toLowerCase() !== 'all') {
     query = query.eq('post_category.slug', decodeURIComponent(categorySlug));
   }
   if (searchQuery) {
@@ -63,7 +63,7 @@ export const fetchPostsData = async ({
   if (sort === 'views') {
     query = query.order('view_count', { ascending: false });
   } else if (sort === 'likes') {
-    query = query.order('bookmark_count', { ascending: false });
+    query = query.order('like_count', { ascending: false });
   } else {
     query = query.order('create_at', { ascending: false });
   }
@@ -105,12 +105,14 @@ export const fetchPostDetail = async (
     comment_count: data.comments?.[0]?.count ?? 0,
   };
 };
-
-// 좋아요 한 글
-export const fetchLikedPosts = async (userId: string) => {
+export const fetchLikedPosts = async (
+  userId: string,
+  filters?: PostFilterOptions,
+) => {
   const supabase = await createClient();
+  const { categorySlug, sort = 'latest' } = filters || {};
 
-  const { data, error } = await supabase
+  let query = supabase
     .from('post')
     .select(
       `
@@ -122,9 +124,21 @@ export const fetchLikedPosts = async (userId: string) => {
       myLiked:like!post_id!inner (*) 
     `,
     )
-    .eq('myLiked.user_id', userId)
-    .order('create_at', { ascending: false });
+    .eq('myLiked.user_id', userId);
 
+  if (categorySlug && categorySlug !== 'ALL') {
+    query = query.eq('post_category.slug', decodeURIComponent(categorySlug));
+  }
+
+  if (sort === 'views') {
+    query = query.order('view_count', { ascending: false });
+  } else if (sort === 'likes') {
+    query = query.order('like_count', { ascending: false });
+  } else {
+    query = query.order('create_at', { ascending: false });
+  }
+
+  const { data, error } = await query;
   if (error) throw new Error(error.message);
 
   return data.map((post) => ({
@@ -134,11 +148,15 @@ export const fetchLikedPosts = async (userId: string) => {
     comment_count: post.comments?.[0]?.count ?? 0,
   }));
 };
-// 내가 댓글 단 글
-export const fetchCommentedPosts = async (userId: string) => {
-  const supabase = await createClient();
 
-  const { data, error } = await supabase
+export const fetchCommentedPosts = async (
+  userId: string,
+  filters?: PostFilterOptions,
+) => {
+  const supabase = await createClient();
+  const { categorySlug, sort = 'latest' } = filters || {};
+
+  let query = supabase
     .from('post')
     .select(
       `
@@ -151,12 +169,23 @@ export const fetchCommentedPosts = async (userId: string) => {
       myLiked:like!post_id (*)
     `,
     )
-    .eq('myComments.user_id', userId)
-    .order('create_at', { ascending: false });
+    .eq('myComments.user_id', userId);
 
+  if (categorySlug && categorySlug !== 'ALL') {
+    query = query.eq('post_category.slug', decodeURIComponent(categorySlug));
+  }
+
+  if (sort === 'views') {
+    query = query.order('view_count', { ascending: false });
+  } else if (sort === 'likes') {
+    query = query.order('like_count', { ascending: false });
+  } else {
+    query = query.order('create_at', { ascending: false });
+  }
+
+  const { data, error } = await query;
   if (error) throw new Error(error.message);
 
-  // 한 포스트에 댓글 여러 개 썼을 때 중복 제거
   const uniquePosts = Array.from(
     new Map(data.map((item) => [item.id, item])).values(),
   );

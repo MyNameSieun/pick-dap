@@ -31,10 +31,10 @@ const Filter = ({
               type="button"
               onClick={() => handleFilterSelect(value)}
               className={cn(
-                'w-full cursor-pointer rounded-sm px-4 py-2 text-left text-sm transition-colors hover:bg-gray-50',
+                'w-full cursor-pointer rounded-sm px-4 py-2 text-left text-sm transition-colors',
                 filterType === value
                   ? 'bg-main-100 text-main-400'
-                  : 'text-gray-1000',
+                  : 'text-gray-1000 hover:bg-gray-50',
               )}
             >
               {label}

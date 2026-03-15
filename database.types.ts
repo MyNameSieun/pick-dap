@@ -384,14 +384,13 @@ export type Database = {
       }
       post: {
         Row: {
-          bookmark_count: number
           category_id: string
-          comment_count: number
           content: string
           create_at: string
           id: string
           idx: number
           image_urls: string[] | null
+          like_count: number
           slug: string
           title: string
           update_at: string
@@ -399,14 +398,13 @@ export type Database = {
           view_count: number
         }
         Insert: {
-          bookmark_count?: number
           category_id?: string
-          comment_count?: number
           content: string
           create_at?: string
           id?: string
           idx?: number
           image_urls?: string[] | null
+          like_count?: number
           slug: string
           title: string
           update_at?: string
@@ -414,14 +412,13 @@ export type Database = {
           view_count?: number
         }
         Update: {
-          bookmark_count?: number
           category_id?: string
-          comment_count?: number
           content?: string
           create_at?: string
           id?: string
           idx?: number
           image_urls?: string[] | null
+          like_count?: number
           slug?: string
           title?: string
           update_at?: string

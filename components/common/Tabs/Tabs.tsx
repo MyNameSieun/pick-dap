@@ -4,15 +4,18 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { twMerge } from 'tailwind-merge';
+import { Filter } from 'lucide-react';
+import CommunityFilterBar from '@/features/mypage/components/CommunityFilterBar';
 
 interface TabsProps {
   tabs: { id: string; label: string; content?: React.ReactNode }[];
   setId?: string;
   className?: string;
   onTabChange?: (id: string) => void;
+  type?: 'mypage' | 'community';
 }
 
-const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
+const Tabs = ({ tabs, setId, className, onTabChange, type }: TabsProps) => {
   const [isMenu, setMenu] = useState(setId || tabs[0].id);
   const [prevId, setPrevId] = useState(setId);
 
@@ -57,19 +60,20 @@ const Tabs = ({ tabs, setId, className, onTabChange }: TabsProps) => {
                   transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                 />
               )}
-
-              <div className="absolute inset-x-1 inset-y-2 rounded-lg bg-gray-100 opacity-0 transition-opacity group-hover:opacity-100" />
             </button>
           );
         })}
       </div>
 
-      <div className="relative mt-8 min-h-[200px] w-full px-1">
+      {type === 'mypage' && <CommunityFilterBar />}
+
+      <div className="relative mt-4 min-h-[200px] w-full px-1">
         <AnimatePresence mode="wait">
           <motion.div
             key={isMenu}
+            initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -10 }}
+            exit={{ opacity: 0, y: -5 }}
             transition={{ duration: 0.2, ease: 'easeInOut' }}
           >
             {tabs.find((v) => isMenu === v.id)?.content || (
