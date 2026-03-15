@@ -3,7 +3,7 @@
 import { Button } from '@/components/ui/button/Button';
 import { QuestionWithDetails } from '@/features/question/services/question/fetchQuestion';
 import { displayDate } from '@/lib/displayDate';
-import { Eye, MessageSquare } from 'lucide-react';
+import { Bookmark, Eye, MessageSquare } from 'lucide-react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
@@ -35,7 +35,7 @@ const QuestionCard = ({ questions }: { questions: QuestionWithDetails[] }) => {
                 </span>
               </div>
 
-              <h6 className="mb-2 truncate text-[15px] font-bold text-gray-900 transition-colors group-hover:text-blue-600">
+              <h6 className="mb-2 line-clamp-2 min-h-[2.5rem] text-[15px] font-bold break-all text-gray-900 transition-colors group-hover:text-blue-600">
                 {q.title}
               </h6>
 
@@ -44,7 +44,7 @@ const QuestionCard = ({ questions }: { questions: QuestionWithDetails[] }) => {
                   {q.tech_stacks.slice(0, 3).map((t) => (
                     <span
                       key={t.tech.id}
-                      className="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-medium text-gray-600"
+                      className="rounded bg-gray-100 px-1.5 py-0.5 text-[11px] font-medium text-gray-700"
                     >
                       {t.tech.name}
                     </span>
@@ -53,12 +53,16 @@ const QuestionCard = ({ questions }: { questions: QuestionWithDetails[] }) => {
 
                 <div className="flex items-center gap-2.5 border-l border-gray-200 pl-3 text-[11px] font-medium text-gray-600">
                   <span className="flex items-center gap-1">
-                    <Eye size={12} className="text-gray-400" />{' '}
+                    <Eye size={12} className="text-gray-600" />{' '}
                     {q.stats?.view_count}
                   </span>
                   <span className="flex items-center gap-1">
-                    <MessageSquare size={11} className="text-gray-400" />{' '}
+                    <MessageSquare size={11} className="text-gray-600" />{' '}
                     {q.stats?.comment_count}
+                  </span>
+                  <span className="flex items-center gap-1">
+                    <Bookmark size={12} className="text-gray-600" />
+                    {q.stats?.bookmark_count}
                   </span>
                 </div>
               </div>

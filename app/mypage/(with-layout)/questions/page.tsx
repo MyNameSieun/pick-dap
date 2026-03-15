@@ -16,7 +16,7 @@ const MypageQuestionsPage = () => {
   if (isPending) return <Loader />;
 
   return (
-    <main className="flex flex-col gap-3">
+    <main className="mx-auto flex w-full flex-col gap-3">
       <TagSearchBar />
 
       <section className="container-col">

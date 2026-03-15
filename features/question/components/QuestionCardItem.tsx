@@ -68,7 +68,7 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
                       'transition-colors',
 
                       question.is_mine_bookmarked
-                        ? 'text-main-300 fill-opacity-50'
+                        ? 'text-gray-500'
                         : 'text-gray-600',
                     )}
                   />

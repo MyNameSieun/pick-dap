@@ -49,10 +49,10 @@ export type QuestionFilterOptions = {
   searchQuery?: string;
 };
 
-// 3. 실제 데이터를 가져오는 함수
 /**
- *  전체 목록 조회
+ *  * 전체 목록 조회
  */
+
 export const fetchQuestions = async ({
   category,
   techs,
@@ -80,30 +80,24 @@ export const fetchQuestions = async ({
     tech:tech_stack_id(id, name, slug)
   )
 `;
-  //  필터링 시작 - 태그 존재 여부에 따라 조인 방식 결정
   let query = supabase.from('questions').select(DYNAMIC_QUERY_DATA);
 
-  // 1. 질문 유형 필터
   if (type) {
     query = query.eq('question_type', type);
   }
 
-  // 2. 카테고리 필터
   if (category && category !== 'ALL') {
     query = query.eq('question_category.category_type', category);
   }
 
-  // 3. 상태 필터
   if (status && status !== 'ALL') {
     query = query.eq('question_status.status', status);
   }
 
-  // 4. 제목 검색
   if (searchQuery) {
     query = query.ilike('title', `%${searchQuery}%`);
   }
 
-  // 5. 기술 스택 필터링 로직 (RPC 사용)
   if (techs) {
     const techArray = techs.split(',');
 
@@ -119,13 +113,10 @@ export const fetchQuestions = async ({
     query = query.in('id', ids);
   }
 
-  // --- 정렬 로직 ---
   if (sort === 'popular') {
-    // 조인된 stats 테이블의 bookmark_count 기준 정렬
-    query = query.order('bookmark_count', {
-      referencedTable: 'question_stats',
-      ascending: false,
-    });
+    query = query
+      .order('stats(bookmark_count)', { ascending: false })
+      .order('created_at', { ascending: false });
   } else {
     query = query.order('created_at', { ascending: false });
   }
@@ -137,12 +128,11 @@ export const fetchQuestions = async ({
 };
 
 /**
- *  단건 상세 조회
+ *  * 단건 상세 조회
  */
 export const fetchQuestionByIdx = async (idx: number) => {
   const supabase = await createClient();
 
-  // 로그인한 나의 정보를 가져와서, 내가 북마크를 눌렀는지 확인
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -160,7 +150,7 @@ export const fetchQuestionByIdx = async (idx: number) => {
 };
 
 /**
- * 내 마이페이지용: 현재 로그인한 세션의 질문만 조회
+ * * 내 마이페이지용: 현재 로그인한 세션의 질문만 조회
  * userId를 인자로 받지 않아 보안상 안전
  */
 export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
@@ -203,12 +193,10 @@ export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
   if (filters.searchQuery)
     query = query.ilike('title', `%${filters.searchQuery}%`);
 
-  // 정렬 로직
   if (filters.sort === 'popular') {
-    query = query.order('bookmark_count', {
-      referencedTable: 'question_stats',
-      ascending: false,
-    });
+    query = query
+      .order('stats(bookmark_count)', { ascending: false })
+      .order('created_at', { ascending: false });
   } else {
     query = query.order('created_at', { ascending: false });
   }
@@ -219,7 +207,7 @@ export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
   return (data as unknown as RawQuestionJoined[]).map(mapToQuestionDetail);
 };
 
-// 내가 저장한 질문
+// * 내가 저장한 질문
 export const fetchMySaveQuestions = async (
   filters: QuestionFilterOptions = {},
 ) => {
@@ -261,14 +249,26 @@ export const fetchMySaveQuestions = async (
   if (filters.searchQuery)
     query = query.ilike('title', `%${filters.searchQuery}%`);
 
-  // 정렬 로직
   if (filters.sort === 'popular') {
-    query = query.order('bookmark_count', {
-      referencedTable: 'question_stats',
-      ascending: false,
-    });
+    query = query
+      .order('stats(bookmark_count)', { ascending: false })
+      .order('created_at', { ascending: false });
   } else {
     query = query.order('created_at', { ascending: false });
+  }
+
+  if (filters.techs) {
+    const techArray = filters.techs.split(',');
+
+    const { data: filteredQuestions, error: rpcError } = await supabase.rpc(
+      'get_questions_with_all_techs',
+      { tech_slugs: techArray },
+    );
+
+    if (rpcError) throw rpcError;
+
+    const ids = filteredQuestions.map((q) => q.id);
+    query = query.in('id', ids);
   }
 
   const { data, error } = await query;
@@ -278,7 +278,7 @@ export const fetchMySaveQuestions = async (
 };
 
 /**
- * 타인 프로필용: 특정 유저의 질문 목록 조회
+ * * 타인 프로필용: 특정 유저의 질문 목록 조회
  * 공개된 프로필 페이지 등에서 사용
  */
 export const fetchUserQuestions = async (userId: string) => {
