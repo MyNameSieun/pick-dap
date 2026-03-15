@@ -1,5 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import {
+  fetchCommentedPosts,
+  fetchLikedPosts,
   fetchPostDetail,
   fetchPostsData,
   PostFilterOptions,
@@ -35,6 +37,23 @@ export const useFetchMyPosts = (
   return useQuery({
     queryKey: [...QUERY_KEYS.post.myList, filters],
     queryFn: () => fetchPostsData({ ...filters, userId }),
+    enabled: !!userId,
+  });
+};
+// 작성한 댓글 기준 게시글 조회 훅
+export const useFetchMyCommentedPosts = (userId: string | undefined) => {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.post.myList, 'commented', userId],
+    queryFn: () => fetchCommentedPosts(userId!),
+    enabled: !!userId,
+  });
+};
+
+// 좋아요 한 게시글 조회 훅
+export const useFetchMyLikedPosts = (userId: string | undefined) => {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.post.myList, 'liked', userId],
+    queryFn: () => fetchLikedPosts(userId!),
     enabled: !!userId,
   });
 };

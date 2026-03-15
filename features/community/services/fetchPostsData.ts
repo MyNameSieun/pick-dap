@@ -19,9 +19,15 @@ export type PostFilterOptions = {
   searchQuery?: string;
   userId?: string;
 };
+// 타입
+const postQuery = supabase.from('post').select(QUERY_JOIN_DATA);
+export type PostWithJoin = QueryData<typeof postQuery>[number];
 
-const postJoinQuery = supabase.from('post').select(QUERY_JOIN_DATA);
-export type RawPostJoined = QueryData<typeof postJoinQuery>[number];
+export type mapToPostDetail = PostWithJoin & {
+  isLiked: boolean;
+  like_count: number;
+  comment_count: number;
+};
 
 // 게시글 리스트
 export const fetchPostsData = async ({
@@ -100,11 +106,65 @@ export const fetchPostDetail = async (
   };
 };
 
-// 타입
-const postQuery = supabase.from('post').select(QUERY_JOIN_DATA);
-export type PostWithJoin = QueryData<typeof postQuery>[number];
-export type mapToPostDetail = RawPostJoined & {
-  isLiked: boolean;
-  like_count: number;
-  comment_count: number;
+// 좋아요 한 글
+export const fetchLikedPosts = async (userId: string) => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('post')
+    .select(
+      `
+      *,
+      profiles (nickname, avatar_url),
+      post_category!inner (name, slug),
+      likes:like!post_id (count),
+      comments:comments!post_id (count),
+      myLiked:like!post_id!inner (*) 
+    `,
+    )
+    .eq('myLiked.user_id', userId)
+    .order('create_at', { ascending: false });
+
+  if (error) throw new Error(error.message);
+
+  return data.map((post) => ({
+    ...post,
+    like_count: post.likes?.[0]?.count ?? 0,
+    isLiked: true,
+    comment_count: post.comments?.[0]?.count ?? 0,
+  }));
+};
+// 내가 댓글 단 글
+export const fetchCommentedPosts = async (userId: string) => {
+  const supabase = await createClient();
+
+  const { data, error } = await supabase
+    .from('post')
+    .select(
+      `
+      *,
+      profiles (nickname, avatar_url),
+      post_category!inner (name, slug),
+      likes:like!post_id (count),
+      comments:comments!post_id (count),
+      myComments:comments!post_id!inner (user_id),
+      myLiked:like!post_id (*)
+    `,
+    )
+    .eq('myComments.user_id', userId)
+    .order('create_at', { ascending: false });
+
+  if (error) throw new Error(error.message);
+
+  // 한 포스트에 댓글 여러 개 썼을 때 중복 제거
+  const uniquePosts = Array.from(
+    new Map(data.map((item) => [item.id, item])).values(),
+  );
+
+  return uniquePosts.map((post) => ({
+    ...post,
+    like_count: post.likes?.[0]?.count ?? 0,
+    isLiked: post.myLiked && post.myLiked.length > 0,
+    comment_count: post.comments?.[0]?.count ?? 0,
+  }));
 };

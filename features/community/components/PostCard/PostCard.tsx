@@ -49,7 +49,9 @@ const PostCard = ({ post }: { post: mapToPostDetail }) => {
                 <Heart
                   size={14}
                   className={
-                    post.likes.length > 0 ? 'fill-red-400 text-red-400' : ''
+                    post.likes.length > 0
+                      ? 'fill-point-heart text-point-heart'
+                      : ''
                   }
                 />
                 <span>{post.like_count}</span>

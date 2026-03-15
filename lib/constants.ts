@@ -6,33 +6,21 @@ export const QUERY_KEYS = {
   question: {
     all: ['question'] as const,
 
-    // 필터 객체를 인자로 받아 쿼리 키에 포함시킨다.
     list: (filters?: QuestionFilterOptions) =>
       [...QUERY_KEYS.question.all, 'list', filters] as const,
 
-    // 상세 조회
     detail: (idx: number) =>
       [...QUERY_KEYS.question.all, 'detail', idx] as const,
 
-    // 나의 질문 (마이페이지용, 보안 위해 props로 userId를 받지 않음)
     myList: (filters?: QuestionFilterOptions) =>
       [...QUERY_KEYS.question.all, 'list', 'me', filters] as const,
 
-    // 내가 저장한 질문 (마이페이지용, 보안 위해 props로 userId를 받지 않음)
     mySaveList: (filters?: QuestionFilterOptions) =>
       [...QUERY_KEYS.question.all, 'list', 'me', 'save', filters] as const,
 
-    // 특정 유저가 작성한 질문 목록 조회 (타인 프로필용)
     userList: (userId: string) =>
       [...QUERY_KEYS.question.list(), 'user', userId] as const,
   },
-
-  /**
-   * 서버 로직 내부에서 supabase.auth.getUser()를 통해 로그인한 사용자를 식별하고 있는 경우
-   * userId를 props로 받을 필요 없음
-   * 쿼리키에서 props로 가져온 userId는 클라이언트(브라우저) 환경에 있는 데이터인데,
-   * 클라이언트에서 userId를 넘겨주면, 악의적인 사용자가 다른 사람의 UUID를 인자로 가로채서 보낼 위험 존재하기 때문
-   */
 
   answer: {
     all: ['answer'] as const,

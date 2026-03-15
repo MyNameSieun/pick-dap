@@ -4,6 +4,7 @@ import { Bookmark, Eye } from 'lucide-react';
 import { QuestionWithDetails } from '../services/question/fetchQuestion';
 import Image from 'next/image';
 import { displayDate } from '@/lib/displayDate';
+import { cn } from '@/lib/utils';
 
 interface QuestionCardItemProps {
   question: QuestionWithDetails;
@@ -60,7 +61,18 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
                   {stats?.view_count ?? 0}
                 </span>
                 <span className="flex items-center gap-1">
-                  <Bookmark size={14} />
+                  <Bookmark
+                    size={14}
+                    fill={question.is_mine_bookmarked ? 'currentColor' : 'none'}
+                    className={cn(
+                      'transition-colors',
+
+                      question.is_mine_bookmarked
+                        ? 'text-main-300 fill-opacity-50'
+                        : 'text-gray-600',
+                    )}
+                  />
+
                   {stats?.bookmark_count ?? 0}
                 </span>
               </div>
