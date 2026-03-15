@@ -45,6 +45,7 @@ export type QuestionFilterOptions = {
   type?: QuestionType;
   status?: StatusEnums | 'ALL';
   searchQuery?: string;
+  view?: 'ALL' | 'my';
 };
 
 /**
@@ -57,10 +58,10 @@ export const fetchQuestions = async ({
   type,
   status,
   searchQuery,
+  view,
 }: QuestionFilterOptions = {}) => {
   const supabase = await createClient();
 
-  // 🚀 추가: 로그인한 유저 정보 가져오기
   const {
     data: { user },
   } = await supabase.auth.getUser();
@@ -122,7 +123,10 @@ export const fetchQuestions = async ({
 
     query = query.in('id', ids);
   }
-
+  if (view && view != 'ALL') {
+    if (!user?.id) return;
+    query = query.eq('user_id', user?.id);
+  }
   if (sort === 'popular') {
     query = query
       .order('stats(bookmark_count)', { ascending: false })

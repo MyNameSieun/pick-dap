@@ -22,7 +22,6 @@ const MypageQuestionsPage = () => {
       <section className="container-col">
         <QuestionSearchToolbar />
 
-        <Line my={1} />
         <div className="mb-4" />
         <div className="flex flex-col gap-3">
           <QuestionCard questions={savedQuestions ?? []} />
