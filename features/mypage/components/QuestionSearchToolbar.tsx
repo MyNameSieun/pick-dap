@@ -2,13 +2,13 @@
 
 import { useState } from 'react';
 import { Search, Check, SlidersHorizontal } from 'lucide-react';
+import { motion } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { useDisclosure } from '@/hooks/useClickOutside';
 import { useStatusFilters } from '../hooks/useStatusFilters';
 
 const QuestionSearchToolbar = () => {
   const { isOpen, onClose, onToggle, containerRef } = useDisclosure();
-
   const { updateParams, status, searchQuery, view } = useStatusFilters();
   const [searchValue, setSearchValue] = useState(searchQuery || '');
 
@@ -51,32 +51,48 @@ const QuestionSearchToolbar = () => {
           <SlidersHorizontal size={18} />
         </button>
       </div>
+
       <div className="mt-10 mb-[-30px] flex gap-6 border-b border-gray-100">
         <button
           onClick={() => updateParams({ view: 'ALL' })}
           className={cn(
-            'pb-3 text-sm transition-all duration-200',
+            'relative pb-3 text-sm transition-all duration-200',
             view === 'ALL'
-              ? 'border-b-2 border-blue-500 font-bold text-blue-600'
+              ? 'font-bold text-blue-600'
               : 'font-medium text-gray-400 hover:text-gray-600',
           )}
         >
           전체 질문
+          {view === 'ALL' && (
+            <motion.div
+              layoutId="activeTab"
+              className="absolute right-0 bottom-[-1px] left-0 h-[2px] bg-blue-600"
+              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+            />
+          )}
         </button>
         <button
           onClick={() => updateParams({ view: 'my' })}
           className={cn(
-            'pb-3 text-sm transition-all duration-200',
+            'relative pb-3 text-sm transition-all duration-200',
             view === 'my'
-              ? 'border-b-2 border-blue-500 font-bold text-blue-600'
+              ? 'font-bold text-blue-600'
               : 'font-medium text-gray-400 hover:text-gray-600',
           )}
         >
           내가 쓴 질문
+          {view === 'my' && (
+            <motion.div
+              layoutId="activeTab"
+              className="absolute right-0 bottom-[-1px] left-0 h-[2px] bg-blue-600"
+              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+            />
+          )}
         </button>
       </div>
+
       {isOpen && (
-        <div className="animate-in fade-in zoom-in-95 absolute top-14 right-0 z-20 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white p-1 shadow-xl duration-150">
+        <div className="animate-in fade-in zoom-in-95 absolute top-14 right-0 z-30 w-32 overflow-hidden rounded-xl border border-gray-100 bg-white p-1 shadow-xl duration-150">
           {STATUS_OPTIONS.map((option) => (
             <button
               key={option.value}

@@ -92,7 +92,10 @@ export const fetchQuestions = async ({
       '00000000-0000-0000-0000-000000000000',
     );
   }
-
+  if (view && view != 'ALL') {
+    if (!user?.id) return;
+    query = query.eq('user_id', user?.id);
+  }
   if (type) {
     query = query.eq('question_type', type);
   }
@@ -123,10 +126,7 @@ export const fetchQuestions = async ({
 
     query = query.in('id', ids);
   }
-  if (view && view != 'ALL') {
-    if (!user?.id) return;
-    query = query.eq('user_id', user?.id);
-  }
+
   if (sort === 'popular') {
     query = query
       .order('stats(bookmark_count)', { ascending: false })
@@ -202,6 +202,13 @@ export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
       'question_category.category_type',
       filters.category as CategoryTypeEnums,
     );
+
+  if (filters.view && filters.view != 'ALL') {
+    if (!user?.id) return;
+    console.log('view: ', filters.view);
+    query = query.eq('user_id', user?.id);
+  }
+
   if (hasStatus)
     query = query.eq('question_status.status', filters.status as StatusEnums);
   if (filters.searchQuery)
@@ -258,6 +265,11 @@ export const fetchMySaveQuestions = async (
       'question_category.category_type',
       filters.category as CategoryTypeEnums,
     );
+  if (filters.view && filters.view != 'ALL') {
+    if (!user?.id) return;
+    console.log('view: ', filters.view);
+    query = query.eq('user_id', user?.id);
+  }
   if (hasStatus)
     query = query.eq('question_status.status', filters.status as StatusEnums);
   if (filters.searchQuery)

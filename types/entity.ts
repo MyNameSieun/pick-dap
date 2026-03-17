@@ -35,6 +35,9 @@ export type ProjectRoleEntity = Tables<'project_role'>;
 export type ProjectFunctionEntity = Tables<'project_function'>;
 export type ProjectTechStackEntity = Tables<'project_tech_stack'>;
 
+export type AiInterviewEntity = Tables<'ai_interview'>;
+export type AiMessageEntity = Tables<'ai_message'>;
+
 // ==========================================
 // 중간 테이블
 // ==========================================
@@ -65,3 +68,4 @@ export type InterviewPersonnelType = Enums<'interview_personnel_type'>;
 export type ResultWaitTimeType = Enums<'result_wait_time_type'>;
 export type FinalStatusType = Enums<'final_status_type'>;
 export type ProjectType = Enums<'project_type_enum'>;
+export type ChatRole = Enums<'chat_role'>;

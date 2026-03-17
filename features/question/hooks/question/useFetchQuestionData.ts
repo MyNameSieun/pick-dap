@@ -1,4 +1,3 @@
-// features/question/hooks/question/useFetchQuestionData.ts
 import { useQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/lib/constants';
 import {

@@ -14,6 +14,73 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_interview: {
+        Row: {
+          created_at: string
+          id: string
+          job_role_id: string
+          question_id: string
+          status: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          job_role_id: string
+          question_id: string
+          status?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          job_role_id?: string
+          question_id?: string
+          status?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_interview_job_role_id_fkey"
+            columns: ["job_role_id"]
+            isOneToOne: false
+            referencedRelation: "job_role"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_message: {
+        Row: {
+          chat_role: Database["public"]["Enums"]["chat_role"]
+          content: string
+          created_at: string
+          id: string
+          interview_id: string
+        }
+        Insert: {
+          chat_role: Database["public"]["Enums"]["chat_role"]
+          content: string
+          created_at?: string
+          id?: string
+          interview_id: string
+        }
+        Update: {
+          chat_role?: Database["public"]["Enums"]["chat_role"]
+          content?: string
+          created_at?: string
+          id?: string
+          interview_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_message_interview_id_fkey"
+            columns: ["interview_id"]
+            isOneToOne: false
+            referencedRelation: "ai_interview"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       answers: {
         Row: {
           answer: string
@@ -1161,6 +1228,7 @@ export type Database = {
         | "AI"
         | "Android"
         | "iOS"
+      chat_role: "user" | "pickbot" | "system"
       difficulty_type: "쉬움" | "보통" | "어려움"
       employment_type: "신입" | "경력" | "인턴" | "계약직"
       final_status_type: "합격" | "불합격" | "진행중"
@@ -1317,6 +1385,7 @@ export const Constants = {
         "Android",
         "iOS",
       ],
+      chat_role: ["user", "pickbot", "system"],
       difficulty_type: ["쉬움", "보통", "어려움"],
       employment_type: ["신입", "경력", "인턴", "계약직"],
       final_status_type: ["합격", "불합격", "진행중"],
