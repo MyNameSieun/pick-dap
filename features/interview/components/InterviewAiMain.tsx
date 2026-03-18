@@ -6,47 +6,86 @@ import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import { Sparkles } from 'lucide-react';
 import AiPrevSection from './InterviewAi/AiPrevSection';
 import AiNextSection from './InterviewAi/AiNextSection';
-import useFetchGenerateQuestions from '../services/useFetchGenerateQuestions';
+import useFetchGenerateQuestions from '../hooks/useFetchGenerateQuestions';
 import {
   GenerateQuestionsRequest,
   GenerateQuestionsResponse,
-} from '../hooks/fetchGenerateQuestions';
+} from '../services/fetchGenerateQuestions';
+import { useCreateInterview } from '../hooks/useCreateAiInterview';
+import { useRouter } from 'next/navigation';
+import { toast } from 'sonner';
+import { CategoryTypeEnums } from '@/types/entity';
 
-const STORAGE_KEY = 'interview_generated_questions';
+const INTERVIEW_SESSION_KEY = 'ai_interview_session_bundle';
+
+interface InterviewSessionData {
+  category: string;
+  questions: GenerateQuestionsResponse[];
+}
 
 const InterviewAiMain = () => {
-  useState<GenerateQuestionsResponse | null>(null);
+  const { mutate: generateQuestions, isPending: isgenerateQuestionsPending } =
+    useFetchGenerateQuestions();
+  const router = useRouter();
 
-  const { mutate, isPending } = useFetchGenerateQuestions();
+  const { mutate: startInterview, isPending: isStartPending } =
+    useCreateInterview({
+      onSuccess: (data) => {
+        router.push(`/interview/ai/room/${data?.id}`);
+      },
+      onError: () => {
+        toast.error('면접 방 생성에 실패했습니다.');
+      },
+    });
 
-  // 1. 처음 화면에 들어왔을 때 저장된 질문 복구
-  const [questions, setQuestions] = useState<GenerateQuestionsResponse[]>(
+  const [sessionData, setSessionData] = useState<InterviewSessionData | null>(
     () => {
       if (typeof window !== 'undefined') {
-        const savedQuestions = sessionStorage.getItem(STORAGE_KEY);
-        if (savedQuestions) {
+        const saved = sessionStorage.getItem(INTERVIEW_SESSION_KEY);
+        if (saved) {
           try {
-            return JSON.parse(savedQuestions);
+            return JSON.parse(saved);
           } catch (error) {
-            console.error('저장된 질문을 불러오는 데 실패했습니다.', error);
+            console.error('세션 복구 실패:', error);
           }
         }
       }
-      return [];
+      return null;
     },
   );
 
-  // 새로운 질문 요청 시
   const handleGenerate = (options: GenerateQuestionsRequest) => {
-    setQuestions([]);
+    setSessionData(null);
 
-    mutate(options, {
+    generateQuestions(options, {
       onSuccess: (data) => {
-        setQuestions(data);
+        const newBundle: InterviewSessionData = {
+          category: options.question_type,
+          questions: data,
+        };
+
+        setSessionData(newBundle);
+
         if (typeof window !== 'undefined') {
-          sessionStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+          sessionStorage.setItem(
+            INTERVIEW_SESSION_KEY,
+            JSON.stringify(newBundle),
+          );
         }
       },
+    });
+  };
+
+  const handleStart = (selectedQuestion: GenerateQuestionsResponse) => {
+    if (!sessionData?.category) {
+      toast.error('카테고리 정보가 없습니다. 질문을 다시 생성해주세요.');
+      return;
+    }
+
+    startInterview({
+      categoryType: sessionData.category as CategoryTypeEnums,
+      questionId: selectedQuestion.id,
+      initialQuestion: selectedQuestion.question,
     });
   };
 
@@ -59,7 +98,7 @@ const InterviewAiMain = () => {
           </p>
         }
       />
-      <div>
+      <div className="mb-6">
         <HeaderTitleBox
           title={'AI 면접 질문 생성하기'}
           content={'AI를 통해 랜덤으로 면접 질문 생성'}
@@ -68,9 +107,16 @@ const InterviewAiMain = () => {
       </div>
 
       <div className="flex items-start gap-4">
-        <AiPrevSection onGenerate={handleGenerate} isPending={isPending} />
+        <AiPrevSection
+          onGenerate={handleGenerate}
+          isPending={isgenerateQuestionsPending}
+        />
 
-        <AiNextSection questions={questions} isPending={isPending} />
+        <AiNextSection
+          questions={sessionData?.questions || []}
+          isPending={isgenerateQuestionsPending || isStartPending}
+          onStart={handleStart}
+        />
       </div>
     </>
   );

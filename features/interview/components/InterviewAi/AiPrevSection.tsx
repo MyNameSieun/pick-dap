@@ -9,7 +9,8 @@ import { twMerge } from 'tailwind-merge';
 import { jobCategories } from '@/constants/jobCategories';
 import { useTechStackData } from '@/hooks/useTechStackData';
 import Spinner from '@/components/ui/Spinner';
-import { GenerateQuestionsRequest } from '../../hooks/fetchGenerateQuestions';
+import { GenerateQuestionsRequest } from '../../services/fetchGenerateQuestions';
+import { CategoryTypeEnums } from '@/types/entity';
 
 interface AiPrevSectionProps {
   onGenerate: (options: GenerateQuestionsRequest) => void;
@@ -17,7 +18,8 @@ interface AiPrevSectionProps {
 }
 
 const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
-  const [selectedCategory, setSelectedCategory] = useState('FrontEnd');
+  const [selectedCategory, setSelectedCategory] =
+    useState<CategoryTypeEnums>('FrontEnd');
   const { data: techStack = [] } = useTechStackData();
 
   const [isTechStackOpen, setIsTechStackOpen] = useState(false);
@@ -71,7 +73,7 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
 
   const handleSubmit = () => {
     onGenerate({
-      category: selectedCategory,
+      question_type: selectedCategory,
       skills: selectedTechs.length > 0 ? selectedTechs.join(', ') : undefined,
       topic:
         selectedCustomTopic.length > 0
@@ -94,6 +96,7 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
             <Button
               key={i}
               onClick={() => setSelectedCategory(v)}
+              disabled={isPending}
               variant="white"
               className={cn(
                 'h-12 transition-colors',
@@ -117,6 +120,7 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
             type="text"
             placeholder="기술 스택을 선택해주세요"
             value={techSearchInput}
+            disabled={isPending}
             onChange={(e) => {
               setTechSearchInput(e.target.value);
               setIsTechStackOpen(true);
@@ -190,6 +194,7 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
           type="text"
           placeholder="예: React Hooks, Spring boot"
           value={topicInput}
+          disabled={isPending}
           onChange={(e) => setTopicInput(e.target.value)}
           onKeyDown={handleTopicKeyDown}
         />
@@ -219,7 +224,7 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
           'mt-2 h-14 font-bold shadow-md transition-all',
           isPending
             ? 'cursor-not-allowed bg-gray-400'
-            : 'bg-main-400 hover:bg-main-600',
+            : 'bg-main-500 hover:bg-main-600',
         )}
         onClick={handleSubmit}
         disabled={isPending}
@@ -228,7 +233,7 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
           <div className="flex items-center justify-center gap-3">
             <Spinner size="sm" className="text-gray-500" />
             <span className="b2 font-medium text-gray-700">
-              AI가 질문을 생성하는 중...
+              AI가 질문을 생성하는 중입니다...
             </span>
           </div>
         ) : (

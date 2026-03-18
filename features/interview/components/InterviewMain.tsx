@@ -36,7 +36,7 @@ const InterviewMain = () => {
       <div className="grid w-full max-w-2xl grid-cols-1 gap-6 sm:grid-cols-2">
         <InterviewButton
           Icon={RotateCcw}
-          onClick={() => router.push('/interview/rooms')}
+          onClick={() => router.push('/interview/ai/room')}
         >
           지난 면접 기록 불러오기
         </InterviewButton>

@@ -1,5 +1,5 @@
 import TagSearchBar from '@/components/TagSearchBar';
-import QuestionCardList from '../../features/question/components/QuestionCardList';
+import QuestionCardList from '../../../features/question/components/QuestionCardList';
 import { Suspense } from 'react';
 import { Metadata } from 'next';
 import Loader from '@/components/ui/Loader';

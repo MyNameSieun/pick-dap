@@ -1,16 +1,20 @@
-/* public static void main(String[] args) throws IOException { BufferedReader br = new BufferedReader(new InputStreamReader(System.in)); import java.io.*; import java.util.*; */
-
 import { Lightbulb } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
-import { GenerateQuestionsResponse } from '../../hooks/fetchGenerateQuestions';
+import { GenerateQuestionsResponse } from '../../services/fetchGenerateQuestions';
 import { Button } from '@/components/ui/button/Button';
+import AiThinkingBubble from './AiThinkingBubble';
 
-type AiNextSectionProps = {
+interface AiNextSectionProps {
   questions: GenerateQuestionsResponse[];
-  isPending: boolean; 
-};
+  isPending: boolean;
+  onStart: (question: GenerateQuestionsResponse) => void;
+}
 
-const AiNextSection = ({ questions, isPending }: AiNextSectionProps) => {
+const AiNextSection = ({
+  questions,
+  isPending,
+  onStart,
+}: AiNextSectionProps) => {
   return (
     <div className={twMerge('container-col', 'w-3/5 gap-8 p-9')}>
       {/* 헤더 */}
@@ -25,16 +29,7 @@ const AiNextSection = ({ questions, isPending }: AiNextSectionProps) => {
 
       <div className="flex flex-col gap-4">
         {/* 로딩 상태 */}
-        {isPending && (
-          <div className="my-16 flex animate-pulse flex-col items-center justify-center gap-5">
-            <div className="bg-main-100 text-main-500 flex h-16 w-16 items-center justify-center rounded-full">
-              <Lightbulb size={32} />
-            </div>
-            <p className="b1 font-medium text-gray-700">
-              AI가 최적의 면접 질문을 고민하고 있습니다...
-            </p>
-          </div>
-        )}
+        {isPending && <AiThinkingBubble />}
 
         {/* 빈 상태 (초기 화면) */}
         {!isPending && questions.length === 0 && (
@@ -59,7 +54,6 @@ const AiNextSection = ({ questions, isPending }: AiNextSectionProps) => {
                 key={item.id}
                 className="group hover:border-main-400 flex flex-col justify-between gap-6 rounded-2xl border border-gray-200 bg-white p-6 shadow-sm transition-all hover:shadow-md md:flex-row md:items-center"
               >
-                {/* 왼쪽: 질문 텍스트 및 태그 */}
                 <div className="flex flex-col gap-3">
                   <p className="b1 leading-relaxed font-bold text-gray-900">
                     <span className="text-main-500 mr-2">Q{index + 1}.</span>
@@ -84,9 +78,11 @@ const AiNextSection = ({ questions, isPending }: AiNextSectionProps) => {
                 <div className="shrink-0 pt-2 md:pt-0">
                   <Button
                     size="sm"
-                    className="bg-main-400 hover:bg-main-600 flex w-full items-center justify-center gap-1.5 font-bold text-white shadow-sm transition-colors md:w-auto"
+                    disabled={isPending}
+                    onClick={() => onStart(item)}
+                    className="bg-main-400 hover:bg-main-600 flex w-full min-w-[100px] items-center justify-center gap-1.5 font-bold text-white shadow-sm transition-colors md:w-auto"
                   >
-                    면접 시작
+                    {isPending ? '준비 중...' : '면접 시작'}
                   </Button>
                 </div>
               </div>

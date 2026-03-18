@@ -16,35 +16,38 @@ export type Database = {
     Tables: {
       ai_interview: {
         Row: {
+          category_type: Database["public"]["Enums"]["category_type_enum"]
           created_at: string
           id: string
-          job_role_id: string
           question_id: string
           status: string
+          title: string
           user_id: string
         }
         Insert: {
+          category_type: Database["public"]["Enums"]["category_type_enum"]
           created_at?: string
           id?: string
-          job_role_id: string
           question_id: string
           status?: string
-          user_id: string
+          title: string
+          user_id?: string
         }
         Update: {
+          category_type?: Database["public"]["Enums"]["category_type_enum"]
           created_at?: string
           id?: string
-          job_role_id?: string
           question_id?: string
           status?: string
+          title?: string
           user_id?: string
         }
         Relationships: [
           {
-            foreignKeyName: "ai_interview_job_role_id_fkey"
-            columns: ["job_role_id"]
+            foreignKeyName: "ai_interview_user_id_fkey1"
+            columns: ["user_id"]
             isOneToOne: false
-            referencedRelation: "job_role"
+            referencedRelation: "profiles"
             referencedColumns: ["id"]
           },
         ]

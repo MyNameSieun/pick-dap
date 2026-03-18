@@ -6,16 +6,15 @@ const openai = new OpenAI({
 });
 
 export async function POST(request: NextRequest) {
-  // 질문 생성 API
   try {
     const body = await request.json();
 
     const {
-      category,
+      question_type,
       skills,
       topic,
     }: {
-      category?: string;
+      question_type?: string;
       skills?: string;
       topic?: string;
     } = body;
@@ -27,13 +26,12 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 질문 생성 프롬프트
     const prompt = `
     당신은 한국어를 사용하는 시니어 면접관입니다.
     아래 정보를 참고해서 프론트엔드/백엔드/기타 개발 직무용 기술 면접 질문을 생성하세요.
     
-    - 직무 카테고리: ${category || '미지정'}
-    - 보유 기술 스택(키워드): ${skills || '미지정'}
+    - 직무 카테고리: ${question_type || '개발자'}
+    - 보유 기술 스택(키워드): ${skills || '일반'}
     - 추가 주제: ${topic || '없음'}
     
     [요청]
@@ -45,55 +43,43 @@ export async function POST(request: NextRequest) {
     출력 형식 예시:
     [
       {
-        "id": 1,
+        "id": "1",
         "question": "React에서 상태 관리를 할 때 Context API와 Redux의 차이점은 무엇인가요?",
         "tags": ["React", "상태관리"]
-      }
+      },
     ]
         `.trim();
 
-    // 모델(gpt-4o-mini) 사용
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [
-        // 역할을 system으로 분리
         {
           role: 'system',
           content:
-            '당신은 한국어를 사용하는 시니어 기술 면접관입니다. 오직 JSON 형식의 배열만 출력해야 합니다.',
+            '당신은 기술 면접 질문 생성기입니다. 반드시 {"items": []} 형태의 JSON 객체만 출력하며, id는 문자열이어야 합니다.',
         },
         { role: 'user', content: prompt },
       ],
       temperature: 0.7,
+      response_format: { type: 'json_object' },
     });
 
-    // AI 응답 파싱
     const text = completion.choices[0].message.content || '';
-    let items: Array<{ id: number; question: string; tags: string[] }> = [];
-    const cleanText = text
-      .replace(/```json/g, '')
-      .replace(/```/g, '')
-      .trim();
 
     try {
-      items = JSON.parse(cleanText) as Array<{
-        id: number;
-        question: string;
-        tags: string[];
-      }>;
-    } catch {
+      const parsedData = JSON.parse(text);
+
+      const items = Array.isArray(parsedData.items) ? parsedData.items : [];
+
+      return NextResponse.json({ items });
+    } catch (e) {
       return NextResponse.json(
-        { error: 'AI 응답 파싱에 실패했습니다.', raw: text },
+        { error: 'JSON 파싱 실패', raw: text },
         { status: 500 },
       );
     }
-
-    return NextResponse.json({ items });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: '질문 생성 중 오류가 발생했습니다.' },
-      { status: 500 },
-    );
+    return NextResponse.json({ error: '서버 에러' }, { status: 500 });
   }
 }

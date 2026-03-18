@@ -152,4 +152,18 @@ export const QUERY_KEYS = {
     userDetail: (slug: string) =>
       [...QUERY_KEYS.post.all, 'detail', 'user', slug] as const,
   },
+
+  aiInterview: {
+    all: ['ai_interview'],
+    list: () => [...QUERY_KEYS.aiInterview.all, 'list'] as const,
+    myList: () => [...QUERY_KEYS.aiInterview.list(), 'me'] as const,
+    detail: (interviewId: string) =>
+      [...QUERY_KEYS.aiInterview.all, 'detail', interviewId] as const,
+  },
+
+  aiMessage: {
+    all: ['ai_message'],
+    list: (interviewId: string) =>
+      [...QUERY_KEYS.aiMessage.all, 'list', interviewId] as const,
+  },
 };

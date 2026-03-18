@@ -1,13 +1,15 @@
+import { CategoryTypeEnums } from '@/types/entity';
+
 // 프론트 -> 서버
 export type GenerateQuestionsRequest = {
-  category: string;
+  question_type: CategoryTypeEnums;
   skills?: string;
   topic?: string;
 };
 
 // 서버 -> 프론트
 export type GenerateQuestionsResponse = {
-  id: number;
+  id: string;
   question: string;
   tags: string[];
 };
