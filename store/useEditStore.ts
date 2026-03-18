@@ -3,7 +3,7 @@ import { combine } from 'zustand/middleware';
 
 const initialState = {
   isEditMode: false,
-  selectedIds: [] as number[],
+  selectedIds: [] as string[],
 };
 
 export const useEditStore = create(
@@ -12,7 +12,7 @@ export const useEditStore = create(
       set({ isEditMode: mode, selectedIds: [] });
     },
 
-    toggleSelectedId: (id: number) => {
+    toggleSelectedId: (id: string) => {
       set((state) => ({
         selectedIds: state.selectedIds.includes(id)
           ? state.selectedIds.filter((itemId) => itemId !== id)

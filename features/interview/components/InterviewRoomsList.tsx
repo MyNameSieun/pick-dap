@@ -3,7 +3,7 @@ import AiRoomCard from '@/components/common/AiRoomCard';
 const InterviewRoomsList = () => {
   return (
     <>
-      <article className="container-col flex flex-col gap-3">
+      <article className="container-col">
         <AiRoomCard />
       </article>
     </>

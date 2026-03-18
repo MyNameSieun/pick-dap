@@ -2,63 +2,60 @@
 
 import { Button } from '@/components/ui/button/Button';
 import { cn } from '@/lib/utils';
-import { useEditActions } from '@/store/useEditStore';
+import { useEditActions, useSelectedIds } from '@/store/useEditStore';
 import { toast } from 'sonner';
 
-type State = 'save' | 'delete';
-
 interface SelectCountBoxProps {
-  count: number;
-  name?: string;
-  onClick?: () => void;
-  state: State;
-
+  onClick?: (ids: string[]) => void;
+  state: 'save' | 'delete';
   className?: string;
 }
 
-const SelectCountBox = ({
-  count,
-  name,
-  state,
+const SelectCountBox = ({ onClick, state, className }: SelectCountBoxProps) => {
+  const selectedIds = useSelectedIds();
+  const { resetSelectedIds, setEditMode } = useEditActions();
 
-  className,
-}: SelectCountBoxProps) => {
-  const { setEditMode } = useEditActions();
-
+  const count = selectedIds.length;
   const isSave = state === 'save';
 
-  const onClickSaveButtonHandler = () => {
-    toast.success('마이페이지에 저장되었습니다!', { position: 'top-center' });
-    setEditMode(false);
+  const handleAction = () => {
+    if (count === 0) {
+      toast.error('선택된 항목이 없습니다.');
+      return;
+    }
+
+    if (onClick) {
+      onClick(selectedIds);
+      resetSelectedIds();
+      setEditMode(false);
+    }
   };
 
-  const onClickDeleteButtonHandler = () => {
-    toast.success('삭제되었습니다.', { position: 'top-center' });
-    setEditMode(false);
-  };
   return (
-    <>
-      <div
+    <div
+      className={cn(
+        'animate-in fade-in slide-in-from-top-2 mb-3 flex h-15 w-full items-center justify-between rounded-[6px] px-4',
+        isSave ? 'bg-main-100' : 'bg-red-50',
+        className,
+      )}
+    >
+      <p
         className={cn(
-          'mb-3 flex h-15 w-full items-center justify-between rounded-[6px] px-4',
-          isSave ? 'bg-main-100' : 'bg-tag-bg-red',
-          className,
+          'b2 font-bold',
+          isSave ? 'text-main-500' : 'text-red-600',
         )}
       >
-        <p className={cn('b2', isSave ? 'text-main-500' : 'text-tag-text-red')}>
-          {count || 0}개 {name || '질문'} 선택됨
-        </p>
-        <Button
-          variant={isSave ? 'default' : 'red'}
-          className="h-7.5"
-          onClick={
-            isSave ? onClickSaveButtonHandler : onClickDeleteButtonHandler
-          }
-        >
-          {isSave ? '선택한 질문 저장' : '선택한 질문 삭제'}
-        </Button>
-      </div>
-    </>
+        {count}개의 면접 선택됨
+      </p>
+      <Button
+        variant={isSave ? 'default' : 'red'}
+        size="sm"
+        disabled={count === 0}
+        onClick={handleAction}
+      >
+        {isSave ? '선택한 면접 저장' : '선택한 면접 삭제'}
+      </Button>
+    </div>
   );
 };
 

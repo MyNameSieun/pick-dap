@@ -20,6 +20,15 @@ const AiRoomCard = () => {
 
   if (isPending) return <Loader />;
 
+  if (!myInterviews || myInterviews.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+        <p className="b1 font-medium">아직 진행한 면접이 없습니다.</p>
+        <p className="b2 mt-1">AI와 함께 첫 면접 연습을 시작해보세요!</p>
+      </div>
+    );
+  }
+
   const handleBoxClick = (e: React.MouseEvent, id: string) => {
     if (isEditMode) {
       e.preventDefault();
@@ -29,7 +38,7 @@ const AiRoomCard = () => {
 
   return (
     <div className="w-full border-t border-gray-200">
-      {myInterviews?.map((room) => {
+      {myInterviews.map((room) => {
         const { id, category_type, created_at, status, title } = room;
         const isSelected = selectedIds.includes(id);
 
@@ -63,6 +72,7 @@ const AiRoomCard = () => {
                 </div>
               </div>
 
+              {/* 체크박스 UI: 편집 모드일 때만 노출 */}
               {isEditMode && (
                 <div
                   className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-all ${isSelected ? 'border-blue-600 bg-blue-600 shadow-sm' : 'border-gray-300 bg-white'}`}
