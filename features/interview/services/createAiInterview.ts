@@ -26,6 +26,7 @@ export const createAiInterview = async ({
     .select('id')
     .eq('user_id', user.id)
     .eq('question_id', questionId)
+    .eq('title', initialQuestion)
     .eq('status', 'IN_PROGRESS')
     .maybeSingle();
 
