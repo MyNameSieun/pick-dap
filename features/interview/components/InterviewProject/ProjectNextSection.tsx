@@ -2,14 +2,19 @@
 
 import { useState } from 'react';
 import { twMerge } from 'tailwind-merge';
-import { Loader2, ZapOff, Check } from 'lucide-react';
+import { Loader2, ZapOff, Check, ArrowRight } from 'lucide-react';
+import { usePathname } from 'next/navigation';
+import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button/Button';
 import Tags from '@/components/common/Tags/Tags';
 import { GenerateProjectsResponse } from '../../services/fetchGenerateProjects';
 import { useCreateQuestion } from '@/features/question/hooks/question/useCreateQuestion';
-import { toast } from 'sonner';
-import { usePathname } from 'next/navigation';
+import { cx } from 'class-variance-authority';
+import { useFetchMySaveQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
+import Loader from '@/components/ui/Loader';
+import { QUERY_KEYS } from '@/lib/constants';
+import { useQueryClient } from '@tanstack/react-query';
 
 interface ProjectNextSectionProps {
   projects: GenerateProjectsResponse[];
@@ -27,16 +32,25 @@ const ProjectNextSection = ({
   const [isEditMode, setIsEditMode] = useState(false);
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
   const pathname = usePathname();
+  const queryClient = useQueryClient();
 
-  const { mutate: saveQuestion, isPending: isSaveQuestionPending } =
+  const { mutateAsync: saveQuestion, isPending: isSaveQuestionPending } =
     useCreateQuestion({});
+  const { data: mySaveQuestion, isPending: isMySaveLoading } =
+    useFetchMySaveQuestionData();
 
   const handleChooseButton = () => {
     setIsEditMode(!isEditMode);
     if (isEditMode) setSelectedIds([]);
   };
+  if (isMySaveLoading) return <Loader />;
 
-  const handleItemClick = (p: GenerateProjectsResponse) => {
+  const handleItemClick = (
+    p: GenerateProjectsResponse,
+    isAlreadySaved: boolean,
+  ) => {
+    if (isAlreadySaved && isEditMode) return;
+
     if (isEditMode) {
       setSelectedIds((prev) =>
         prev.includes(p.id) ? prev.filter((i) => i !== p.id) : [...prev, p.id],
@@ -46,16 +60,12 @@ const ProjectNextSection = ({
     }
   };
 
-  // handleSaveQuestions 내부 수정 제안
   const handleSaveQuestions = async () => {
-    const selectedQuestions = projects.filter((p) =>
-      selectedIds.includes(p.id),
-    );
-    if (selectedQuestions.length === 0) return;
+    const selectedProjects = projects.filter((q) => selectedIds.includes(q.id));
 
-    toast.promise(
+    await toast.promise(
       Promise.all(
-        selectedQuestions.map((item) =>
+        selectedProjects.map((item) =>
           saveQuestion({
             title: item.question,
             category: 'Project',
@@ -67,11 +77,16 @@ const ProjectNextSection = ({
         ),
       ),
       {
-        loading: '질문을 저장 중입니다...',
-        success: '모든 질문이 마이페이지에 저장되었습니다!',
-        error: '일부 질문 저장에 실패했습니다.',
+        loading: '질문을 보관함에 담는 중...',
+        success: '선택한 질문이 마이페이지에 저장되었습니다!',
+        error: '저장 중 오류가 발생했습니다.',
+        position: 'top-center',
       },
     );
+
+    queryClient.invalidateQueries({
+      queryKey: QUERY_KEYS.question.mySaveList(),
+    });
 
     setIsEditMode(false);
     setSelectedIds([]);
@@ -79,32 +94,43 @@ const ProjectNextSection = ({
 
   return (
     <div
-      className={twMerge(
-        'container-col',
-        'w-3/5 gap-8 rounded-[32px] bg-white p-9 shadow-sm',
-      )}
+      className={twMerge('container-col', 'w-3/5 gap-8 bg-white p-9 shadow-sm')}
     >
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
-          <h5 className="h5 font-bold text-black">생성된 질문</h5>
-          <span className="bg-main-100 text-main-600 rounded-full px-3 py-0.5 text-sm font-bold">
+          <h5 className="h5 font-bold text-gray-900">생성된 질문</h5>
+          <span className="bg-main-100/50 text-main-500 rounded-full px-3 py-0.5 text-sm font-bold">
             {projects.length}개
           </span>
         </div>
 
         {projects.length > 0 && (
-          <Button
-            // variant={isEditMode ? 'primary' : 'white'}
-            size="sm"
-            className="font-bold"
-            onClick={handleChooseButton}
-            disabled={isPending || isStarting}
-          >
-            {isEditMode ? '선택 취소' : '질문 담기'}
-          </Button>
+          <div className="flex items-center gap-2">
+            {isEditMode && selectedIds.length > 0 && (
+              <Button
+                onClick={handleSaveQuestions}
+                disabled={isSaveQuestionPending}
+                className="animate-in fade-in zoom-in-95 font-bold transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {selectedIds.length}개 저장하기
+              </Button>
+            )}
+
+            <Button
+              onClick={handleChooseButton}
+              disabled={isPending || isStarting}
+              className={cx(
+                'px-4 py-2 font-bold transition-all active:scale-95 disabled:cursor-not-allowed disabled:opacity-50',
+                isEditMode
+                  ? 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                  : 'bg-main-100/50 text-main-400 hover:bg-main-200/50',
+              )}
+            >
+              {isEditMode ? '선택 취소' : '질문 담기'}
+            </Button>
+          </div>
         )}
       </div>
-
       <div className="custom-scrollbar flex max-h-[600px] flex-col gap-4 overflow-y-auto pr-2">
         {isPending ? (
           <div className="flex flex-col items-center justify-center py-20 text-gray-400">
@@ -117,15 +143,18 @@ const ProjectNextSection = ({
         ) : projects.length > 0 ? (
           projects.map((p) => {
             const isSelected = selectedIds.includes(p.id);
+            const isAlreadySaved =
+              mySaveQuestion?.some((m) => m.title === p.question) ?? false;
 
             return (
               <div
                 key={p.id}
-                onClick={() => handleItemClick(p)}
+                onClick={() => handleItemClick(p, isAlreadySaved)}
                 className={twMerge(
                   'group relative cursor-pointer rounded-2xl border-2 p-6 transition-all',
+                  isAlreadySaved && isEditMode && 'opacity-60',
                   isSelected
-                    ? 'border-main-500 bg-main-50/30'
+                    ? 'border-main-300 bg-main-50/30'
                     : 'hover:border-main-200 border-gray-50 bg-gray-50/50',
                 )}
               >
@@ -144,21 +173,25 @@ const ProjectNextSection = ({
                     </div>
                   </div>
 
-                  <p className="pr-8 text-[15px] leading-relaxed font-semibold text-gray-800">
+                  <p className="pr-10 text-[15px] leading-relaxed font-semibold text-gray-800 transition-all group-hover:text-black">
                     {p.question}
                   </p>
                 </div>
 
-                {isEditMode && (
+                {isEditMode && !isAlreadySaved ? (
                   <div
                     className={twMerge(
-                      'absolute top-6 right-6 flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all',
+                      'absolute top-6 right-6 flex h-6 w-6 items-center justify-center rounded-full border-2 border-gray-200 transition-all',
                       isSelected
-                        ? 'bg-main-500 border-main-500 text-white'
+                        ? 'bg-main-300 border-main-300 text-white'
                         : 'border-gray-300 bg-white',
                     )}
                   >
                     {isSelected && <Check size={14} strokeWidth={3} />}
+                  </div>
+                ) : (
+                  <div className="text-main-500 absolute right-6 bottom-6 flex translate-y-1 items-center gap-1.5 text-[13px] font-bold opacity-0 group-hover:translate-y-0 group-hover:opacity-100">
+                    면접 시작 <ArrowRight size={16} />
                   </div>
                 )}
               </div>
@@ -174,19 +207,6 @@ const ProjectNextSection = ({
           </div>
         )}
       </div>
-
-      {isEditMode && selectedIds.length > 0 && (
-        <div className="animate-in fade-in slide-in-from-bottom-2 mt-auto flex justify-end">
-          <Button
-            onClick={handleSaveQuestions}
-            size="lg"
-            className="gap-2 px-10 font-bold shadow-xl"
-            disabled={isSaveQuestionPending}
-          >
-            선택한 {selectedIds.length}개 질문 저장
-          </Button>
-        </div>
-      )}
     </div>
   );
 };

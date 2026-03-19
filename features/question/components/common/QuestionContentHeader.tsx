@@ -25,11 +25,19 @@ const QuestionContentHeader = ({
 
   const questionId = question.id;
   const questionIdx = question.idx;
+
   const onClickSaveButtonHandler = () => {
     bookmark({ questionId, questionIdx });
-    toast.success('마이페이지에 저장이 완료되었습니다!', {
-      position: 'top-center',
-    });
+
+    if (question.is_mine_bookmarked) {
+      toast.success('마이페이지에서 삭제되었습니다.', {
+        position: 'top-center',
+      });
+    } else {
+      toast.success('마이페이지에 저장이 완료되었습니다!', {
+        position: 'top-center',
+      });
+    }
   };
   // 삭제
   const { mutate: deleteQuestion, isPending: isDeleteQuestionPending } =

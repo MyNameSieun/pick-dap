@@ -3,7 +3,7 @@
 import { cn } from '@/lib/utils';
 import { Input } from '@/components/ui/input/Input';
 import { Button } from '@/components/ui/button/Button';
-import { Search, X, ChevronDown } from 'lucide-react';
+import { Search, X, ChevronDown, Zap } from 'lucide-react';
 import { useState, useRef, useEffect } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { jobCategories } from '@/constants/jobCategories';
@@ -88,7 +88,7 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
 
       {/* 카테고리 */}
       <article className="flex flex-col gap-3">
-        <p className="b2 text-gray-1000">
+        <p className="b2 font-bold text-gray-900">
           카테고리 <span className="text-point-star">*</span>
         </p>
         <div className="c1 grid grid-cols-2 gap-2.5">
@@ -113,10 +113,10 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
 
       {/* 보유 기술 */}
       <article className="relative flex flex-col gap-3" ref={dropdownRef}>
-        <p className="b2 text-gray-1000">보유 기술</p>
+        <p className="b2 font-bold text-gray-900">보유 기술</p>
         <div className="relative">
           <Input
-            className="c1 text-gray-1000 focus:ring-main-500 cursor-text pr-10 pl-10"
+            className="c1 focus:ring-main-500 cursor-text pr-10 pl-10 text-gray-900"
             type="text"
             placeholder="기술 스택을 선택해주세요"
             value={techSearchInput}
@@ -188,9 +188,9 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
 
       {/* 커스텀 주제 */}
       <article className="flex flex-col gap-3">
-        <p className="b2 text-gray-1000">커스텀 주제</p>
+        <p className="b2 font-bold text-gray-900">커스텀 주제</p>
         <Input
-          className="c1 text-gray-1000 focus:ring-main-500"
+          className="c1 focus:ring-main-500 text-gray-900"
           type="text"
           placeholder="예: React Hooks, Spring boot"
           value={topicInput}
@@ -224,20 +224,22 @@ const AiPrevSection = ({ onGenerate, isPending }: AiPrevSectionProps) => {
           'mt-2 h-14 font-bold shadow-md transition-all',
           isPending
             ? 'cursor-not-allowed bg-gray-400'
-            : 'bg-main-500 hover:bg-main-600',
+            : 'bg-main-400 hover:bg-main-600',
         )}
         onClick={handleSubmit}
         disabled={isPending}
       >
+        <Zap size={18} fill="currentColor" />
+
         {isPending ? (
           <div className="flex items-center justify-center gap-3">
-            <Spinner size="sm" className="text-gray-500" />
             <span className="b2 font-medium text-gray-700">
               AI가 질문을 생성하는 중입니다...
             </span>
+            <Spinner size="sm" className="text-gray-500" />
           </div>
         ) : (
-          <span className="b1 font-bold">⚡ AI 맞춤 면접 질문 생성하기</span>
+          <span className="b1 font-bold">AI 맞춤 면접 질문 생성하기</span>
         )}
       </Button>
     </div>

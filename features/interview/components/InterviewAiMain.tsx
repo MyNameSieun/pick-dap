@@ -116,6 +116,7 @@ const InterviewAiMain = () => {
           questions={sessionData?.questions || []}
           isPending={isgenerateQuestionsPending || isStartPending}
           onStart={handleStart}
+          category={sessionData?.category}
         />
       </div>
     </>

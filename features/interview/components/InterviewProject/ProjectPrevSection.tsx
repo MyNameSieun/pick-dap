@@ -12,6 +12,7 @@ import { useFetchProjectMyList } from '@/features/mypage/hooks/project/useFetchP
 import { fetchProjectMyDetail } from '@/features/mypage/services/project/fetchProject';
 import { QUERY_KEYS } from '@/lib/constants';
 import { GenerateProjectsRequest } from '../../services/fetchGenerateProjects';
+import Spinner from '@/components/ui/Spinner';
 
 interface ProjectSubItem {
   id: string;
@@ -170,10 +171,7 @@ const ProjectPrevSection = ({
 
   return (
     <div
-      className={twMerge(
-        'container-col',
-        'w-2/5 gap-2 rounded-[32px] bg-white p-8 shadow-sm',
-      )}
+      className={twMerge('container-col', 'w-2/5 gap-2 bg-white p-8 shadow-sm')}
     >
       <div className="flex flex-col">
         <div className="flex items-center justify-between">
@@ -205,14 +203,14 @@ const ProjectPrevSection = ({
                 'card-row cursor-pointer items-center border-2 transition-all active:scale-[0.98]',
                 isSelected
                   ? 'border-main-300 bg-main-50/30'
-                  : 'border-transparent bg-white shadow-sm hover:border-gray-100',
+                  : 'border-gray-100 bg-white shadow-sm hover:border-gray-200 hover:bg-gray-50',
               )}
             >
               <div
                 className={twMerge(
                   'rounded-[10px] p-4 transition-colors',
                   isSelected
-                    ? 'bg-main-400 text-white'
+                    ? 'bg-main-300 text-white'
                     : 'bg-gray-100 text-gray-400',
                 )}
               >
@@ -237,14 +235,6 @@ const ProjectPrevSection = ({
         })}
       </div>
 
-      <div className="mt-2 h-6">
-        {isDetailsLoading && (
-          <p className="text-main-500 flex animate-pulse items-center gap-1 text-xs font-semibold">
-            선택한 {selectedSlugs.length}개의 상세 데이터를 불러오는 중...
-          </p>
-        )}
-      </div>
-
       <Button
         size="lg"
         className="w-full gap-2 font-bold shadow-lg"
@@ -252,7 +242,10 @@ const ProjectPrevSection = ({
         onClick={handleGenerateClick}
       >
         {isPending ? (
-          <div className="flex items-center gap-2">AI 심층 분석 중...</div>
+          <div className="flex items-center gap-2">
+            <span>AI 심층 분석 중...</span>
+            <Spinner size="sm" className="text-gray-500" />
+          </div>
         ) : (
           <>
             <Zap size={18} fill="currentColor" />
