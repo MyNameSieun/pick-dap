@@ -8,10 +8,17 @@ import SelectCountBox from '@/components/common/SelectCountBox/SelectCountBox';
 import useDeleteAiInterview from '../hooks/useDeleteAiInterview';
 import { useEditActions, useIsEditMode } from '@/store/useEditStore';
 import { toast } from 'sonner';
+import { useEffect } from 'react';
 
 const InterviewManagementContainer = () => {
-  const { setEditMode } = useEditActions();
   const isEditMode = useIsEditMode();
+  const { setEditMode } = useEditActions();
+
+  useEffect(() => {
+    return () => {
+      setEditMode(false);
+    };
+  }, [setEditMode]);
 
   const { mutate: deleteAiInterview } = useDeleteAiInterview({
     onSuccess: () => {

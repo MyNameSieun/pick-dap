@@ -38,7 +38,7 @@ export const useFetchMyQuestionData = (filters: QuestionFilterOptions) => {
 };
 
 // 내가 저장한 모든 질문 (마이페이지용)
-export const useFetchMySaveQuestionData = (filters: QuestionFilterOptions) => {
+export const useFetchMySaveQuestionData = (filters?: QuestionFilterOptions) => {
   return useQuery({
     queryKey: QUERY_KEYS.question.mySaveList(filters),
     queryFn: () => fetchMySaveQuestions(filters),

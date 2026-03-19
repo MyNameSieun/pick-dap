@@ -165,7 +165,6 @@ export const fetchQuestionByIdx = async (idx: number) => {
 
 /**
  * * 내 마이페이지용: 현재 로그인한 세션의 질문만 조회
- * userId를 인자로 받지 않아 보안상 안전
  */
 export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
   const supabase = await createClient();
