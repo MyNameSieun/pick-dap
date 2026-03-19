@@ -3,17 +3,18 @@ import AiRoomCard from '@/components/common/AiRoomCard';
 import { FolderOpen } from 'lucide-react';
 import HeaderTitleBox from '@/components/common/HeaderTitleBox';
 import SelectCountBox from '@/components/common/SelectCountBox/SelectCountBox';
-import {
-  useEditActions,
-  useIsEditMode,
-  useSelectedIds,
-} from '@/store/useEditStore';
+import { useEditActions, useIsEditMode } from '@/store/useEditStore';
+import useDeleteAiInterview from '@/features/interview/hooks/useDeleteAiInterview';
 
 const MypageRoomsPage = () => {
   const isEditMode = useIsEditMode();
-  const selectedIds = useSelectedIds();
   const { setEditMode } = useEditActions();
+  const { mutate: deleteInterviews } = useDeleteAiInterview();
 
+  const handleDeleteInterview = (ids: string[]) => {
+    if (!confirm(`정말 ${ids.length}개의 기록을 삭제하시겠습니까?`)) return;
+    deleteInterviews(ids);
+  };
   return (
     <div>
       <HeaderTitleBox
@@ -26,7 +27,7 @@ const MypageRoomsPage = () => {
         }}
       />
       {isEditMode && (
-        <SelectCountBox count={selectedIds.length} state="delete" />
+        <SelectCountBox state="delete" onClick={handleDeleteInterview} />
       )}
       <div className="container-col gap-2.5">
         <AiRoomCard />

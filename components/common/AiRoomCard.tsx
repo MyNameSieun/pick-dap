@@ -72,7 +72,6 @@ const AiRoomCard = () => {
                 </div>
               </div>
 
-              {/* 체크박스 UI: 편집 모드일 때만 노출 */}
               {isEditMode && (
                 <div
                   className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 transition-all ${isSelected ? 'border-blue-600 bg-blue-600 shadow-sm' : 'border-gray-300 bg-white'}`}
