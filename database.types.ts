@@ -19,6 +19,7 @@ export type Database = {
           category_type: Database["public"]["Enums"]["category_type_enum"]
           created_at: string
           id: string
+          project_id: string | null
           question_id: string
           status: string
           title: string
@@ -28,6 +29,7 @@ export type Database = {
           category_type: Database["public"]["Enums"]["category_type_enum"]
           created_at?: string
           id?: string
+          project_id?: string | null
           question_id: string
           status?: string
           title: string
@@ -37,12 +39,20 @@ export type Database = {
           category_type?: Database["public"]["Enums"]["category_type_enum"]
           created_at?: string
           id?: string
+          project_id?: string | null
           question_id?: string
           status?: string
           title?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "ai_interview_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "project"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "ai_interview_user_id_fkey1"
             columns: ["user_id"]
@@ -1231,6 +1241,7 @@ export type Database = {
         | "AI"
         | "Android"
         | "iOS"
+        | "Project"
       chat_role: "user" | "pickbot" | "system"
       difficulty_type: "쉬움" | "보통" | "어려움"
       employment_type: "신입" | "경력" | "인턴" | "계약직"
@@ -1238,7 +1249,7 @@ export type Database = {
       interview_personnel_type: "1:1" | "면접관 다수" | "그룹 면접"
       interview_season_type: "상반기" | "하반기"
       project_type_enum: "team" | "personal"
-      question_type: "pickdap" | "user"
+      question_type: "pickdap" | "user" | "pickbot"
       result_wait_time_type:
         | "1일"
         | "2~3일"
@@ -1387,6 +1398,7 @@ export const Constants = {
         "AI",
         "Android",
         "iOS",
+        "Project",
       ],
       chat_role: ["user", "pickbot", "system"],
       difficulty_type: ["쉬움", "보통", "어려움"],
@@ -1395,7 +1407,7 @@ export const Constants = {
       interview_personnel_type: ["1:1", "면접관 다수", "그룹 면접"],
       interview_season_type: ["상반기", "하반기"],
       project_type_enum: ["team", "personal"],
-      question_type: ["pickdap", "user"],
+      question_type: ["pickdap", "user", "pickbot"],
       result_wait_time_type: [
         "1일",
         "2~3일",

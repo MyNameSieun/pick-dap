@@ -7,12 +7,14 @@ export interface CreateInterviewParams {
   categoryType: CategoryTypeEnums;
   questionId: string;
   initialQuestion: string;
+  projectId?: string;
 }
 
 export const createAiInterview = async ({
   categoryType,
   questionId,
   initialQuestion,
+  projectId,
 }: CreateInterviewParams) => {
   const supabase = await createClient();
 
@@ -40,6 +42,7 @@ export const createAiInterview = async ({
       question_id: questionId,
       status: 'IN_PROGRESS',
       title: initialQuestion,
+      project_id: projectId || null,
     })
     .select()
     .single();

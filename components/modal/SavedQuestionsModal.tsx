@@ -128,7 +128,7 @@ const SavedQuestionsModal = () => {
                     <div className="flex items-center gap-1.5">
                       <Bookmark
                         size={15}
-                        className="text-main-500 fill-main-500/10"
+                        className="text-main-300 fill-main-200/40"
                       />
                       <span className="text-main-600">
                         {savedQuestion.total_bookmark_count}

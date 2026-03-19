@@ -4,7 +4,6 @@ import { useCreateProject } from '@/features/mypage/hooks/project/useCreateProje
 import Loader from '@/components/ui/Loader';
 import { useCreateProjectStore } from '@/features/mypage/store/useCreateProjectStore';
 import { useRouter } from 'next/navigation';
-import { useRef } from 'react';
 import { toast } from 'sonner';
 import ProjectForm from '@/features/mypage/components/ProjectForm';
 

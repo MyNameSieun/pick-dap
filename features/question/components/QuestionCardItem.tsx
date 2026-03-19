@@ -64,11 +64,10 @@ const QuestionCardItem = ({ question }: QuestionCardItemProps) => {
                   <Bookmark
                     size={14}
                     fill={question.is_mine_bookmarked ? 'currentColor' : 'none'}
-                    strokeWidth={question.is_mine_bookmarked ? 0 : 2}
                     className={cn(
                       'transition-colors',
                       question.is_mine_bookmarked
-                        ? 'text-main-300'
+                        ? 'text-main-300 fill-main-200/40'
                         : 'text-gray-400',
                     )}
                   />

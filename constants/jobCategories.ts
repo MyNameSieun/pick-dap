@@ -9,5 +9,6 @@ export const jobCategories: CategoryTypeEnums[] = [
   'AI',
   'Android',
   'iOS',
+  'Project',
 ] as const;
 export const ALL_CATEGORIES = ['ALL', ...jobCategories] as const;

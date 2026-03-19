@@ -1,5 +1,4 @@
 'use client';
-import Line from '@/components/common/Line';
 import TagSearchBar from '@/components/TagSearchBar';
 import Loader from '@/components/ui/Loader';
 import QuestionCard from '@/features/mypage/components/QuestionCard';

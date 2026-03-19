@@ -59,7 +59,7 @@ const QuestionSearchToolbar = () => {
             'relative pb-3 text-sm transition-all duration-200',
             view === 'ALL'
               ? 'font-bold text-blue-600'
-              : 'font-medium text-gray-400 hover:text-gray-600',
+              : 'font-medium text-gray-600 hover:text-gray-600',
           )}
         >
           전체 질문
@@ -77,11 +77,29 @@ const QuestionSearchToolbar = () => {
             'relative pb-3 text-sm transition-all duration-200',
             view === 'my'
               ? 'font-bold text-blue-600'
-              : 'font-medium text-gray-400 hover:text-gray-600',
+              : 'font-medium text-gray-600 hover:text-gray-600',
           )}
         >
           내가 쓴 질문
           {view === 'my' && (
+            <motion.div
+              layoutId="activeTab"
+              className="absolute right-0 bottom-[-1px] left-0 h-[2px] bg-blue-600"
+              transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+            />
+          )}
+        </button>
+        <button
+          onClick={() => updateParams({ view: 'pickbot' })}
+          className={cn(
+            'relative pb-3 text-sm transition-all duration-200',
+            view === 'pickbot'
+              ? 'font-bold text-blue-600'
+              : 'font-medium text-gray-600 hover:text-gray-600',
+          )}
+        >
+          픽봇 생성 질문
+          {view === 'pickbot' && (
             <motion.div
               layoutId="activeTab"
               className="absolute right-0 bottom-[-1px] left-0 h-[2px] bg-blue-600"

@@ -18,6 +18,7 @@ import { useTogglePostLike } from '../../hooks/useTogglePostLike';
 import { useSession } from '@/store/session';
 import { cn } from '@/lib/utils';
 import { displayDate } from '@/lib/displayDate';
+import { useRouter } from 'next/navigation';
 
 const CommunityDetail = ({
   categorySlug,
@@ -30,6 +31,7 @@ const CommunityDetail = ({
 }) => {
   const user = useSession()?.user;
   const [isManage, setManage] = useState(false);
+  const router = useRouter();
 
   const { data: post, isPending: isPostPending } = useFetchPostDetail(
     categorySlug,
@@ -66,11 +68,7 @@ const CommunityDetail = ({
     <div className="flex w-full flex-col">
       <div className="mb-4">
         <BackButton
-          path={
-            type === 'community'
-              ? `/community/${categorySlug}`
-              : '/mypage/community'
-          }
+          onClick={() => router.back()}
           label={<span>뒤로가기</span>}
         />
       </div>

@@ -70,12 +70,11 @@ const QuestionCard = ({ questions }: { questions: QuestionWithDetails[] }) => {
                     <Bookmark
                       size={14}
                       fill={q.is_mine_bookmarked ? 'currentColor' : 'none'}
-                      strokeWidth={q.is_mine_bookmarked ? 0 : 2}
                       className={cn(
                         'transition-colors',
                         q.is_mine_bookmarked
-                          ? 'text-main-300'
-                          : 'text-gray-400',
+                          ? 'text-main-300 fill-main-200/40'
+                          : 'fill-transparent text-gray-400',
                       )}
                     />
                     {q.stats?.bookmark_count}

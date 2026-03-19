@@ -35,7 +35,7 @@ const ProjectForm = ({
     <CreateFormLayout
       onSubmit={onSubmit}
       isLoading={isLoading}
-      BackButtonLabel="마이페이지로 돌아가기"
+      BackButtonLabel="돌아가기"
       HeaderTitleBoxObj={{
         title,
         content: '자세히 입력할수록 AI가 더 정확한 질문을 생성할 수 있습니다.',

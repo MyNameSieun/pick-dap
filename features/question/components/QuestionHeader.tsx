@@ -19,6 +19,7 @@ import { isUpdateWrite } from '@/lib/isUpdateWrite';
 import { useDeleteAnswer } from '../hooks/answer/useDeleteAnswer';
 import { useFetchQuestionByIdxData } from '../hooks/question/useFetchQuestionData';
 import { useIncrementViewCount } from '../hooks/question/useincrementViewCount';
+import { displayDate } from '@/lib/displayDate';
 
 interface QuestionHeaderProps {
   idx: string;
@@ -137,7 +138,7 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
       if (answerData) {
         setAnswer(answerData.answer);
       }
-      setIsEditing(true); // 수정 모드로 전환
+      setIsEditing(true);
     }
   };
 
@@ -156,10 +157,10 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
 
         {/* 프로필 */}
         <div className="flex gap-3">
-          <div className="relative h-12 w-12 overflow-hidden rounded-full">
+          <div className="relative h-12 w-12 overflow-hidden">
             <Image
-              onDragStart={(e) => e.preventDefault()} // 드래그 이벤트 차단
-              className="object-cover"
+              onDragStart={(e) => e.preventDefault()}
+              className="rounded-full border object-cover"
               alt="작성자 프로필"
               src={question.author.avatar_url || defaultProfile}
               fill
@@ -174,11 +175,9 @@ const QuestionHeader = ({ idx }: QuestionHeaderProps) => {
               <div>
                 <div className="c1">
                   {isUpdateWrite(question.created_at, question.updated_at) ? (
-                    <p>{new Date(question.created_at).toLocaleString()}</p>
+                    <p>{displayDate(question.created_at)}</p>
                   ) : (
-                    <p>
-                      {new Date(question.updated_at).toLocaleString()} (수정됨)
-                    </p>
+                    <p>{displayDate(question.created_at)} (수정됨)</p>
                   )}
                 </div>
               </div>

@@ -12,7 +12,7 @@ export const useStatusFilters = () => {
     searchQuery: searchParams.get('q') || '',
     techs: searchParams.get('techs') || undefined,
     sort: (searchParams.get('sort') as 'latest' | 'popular') || 'popular',
-    view: (searchParams.get('view') as 'ALL' | 'my') || 'ALL',
+    view: (searchParams.get('view') as 'ALL' | 'my' | 'pickbot') || 'ALL',
   };
 
   const updateParams = (updates: Record<string, string | null>) => {

@@ -97,7 +97,7 @@ const QuestionContentHeader = ({
               className={cn(
                 'transition-colors',
                 question.is_mine_bookmarked
-                  ? 'fill-blue-400 text-blue-400'
+                  ? 'text-main-300 fill-main-200/40'
                   : 'text-gray-400 group-hover/like:text-gray-400',
               )}
             />

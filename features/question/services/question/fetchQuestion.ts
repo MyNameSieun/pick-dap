@@ -45,7 +45,7 @@ export type QuestionFilterOptions = {
   type?: QuestionType;
   status?: StatusEnums | 'ALL';
   searchQuery?: string;
-  view?: 'ALL' | 'my';
+  view?: 'ALL' | 'my' | 'pickbot';
 };
 
 /**
@@ -92,9 +92,15 @@ export const fetchQuestions = async ({
       '00000000-0000-0000-0000-000000000000',
     );
   }
-  if (view && view != 'ALL') {
-    if (!user?.id) return;
-    query = query.eq('user_id', user?.id);
+  if (view && view !== 'ALL') {
+    if (!user?.id) return [];
+    query = query.eq('user_id', user.id);
+
+    if (view === 'my') {
+      query = query.eq('question_type', 'user');
+    } else if (view === 'pickbot') {
+      query = query.eq('question_type', 'pickbot');
+    }
   }
   if (type) {
     query = query.eq('question_type', type);
@@ -192,7 +198,6 @@ export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
 
   let query = supabase.from('questions').select(DYNAMIC_QUERY_DATA);
 
-  // 작성자 본인의 데이터만 가져오도록 필터
   query = query.eq('user_id', user.id);
 
   if (filters.type) query = query.eq('question_type', filters.type);
@@ -202,12 +207,16 @@ export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
       filters.category as CategoryTypeEnums,
     );
 
-  if (filters.view && filters.view != 'ALL') {
-    if (!user?.id) return;
-    console.log('view: ', filters.view);
-    query = query.eq('user_id', user?.id);
-  }
+  if (filters.view && filters.view !== 'ALL') {
+    if (!user?.id) return [];
+    query = query.eq('user_id', user.id);
 
+    if (filters.view === 'my') {
+      query = query.eq('question_type', 'user');
+    } else if (filters.view === 'pickbot') {
+      query = query.eq('question_type', 'pickbot');
+    }
+  }
   if (hasStatus)
     query = query.eq('question_status.status', filters.status as StatusEnums);
   if (filters.searchQuery)
@@ -264,10 +273,15 @@ export const fetchMySaveQuestions = async (
       'question_category.category_type',
       filters.category as CategoryTypeEnums,
     );
-  if (filters.view && filters.view != 'ALL') {
-    if (!user?.id) return;
-    console.log('view: ', filters.view);
-    query = query.eq('user_id', user?.id);
+  if (filters.view && filters.view !== 'ALL') {
+    if (!user?.id) return [];
+    query = query.eq('user_id', user.id);
+
+    if (filters.view === 'my') {
+      query = query.eq('question_type', 'user');
+    } else if (filters.view === 'pickbot') {
+      query = query.eq('question_type', 'pickbot');
+    }
   }
   if (hasStatus)
     query = query.eq('question_status.status', filters.status as StatusEnums);
