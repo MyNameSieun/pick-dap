@@ -12,7 +12,6 @@ import {
   ChevronLeft,
 } from 'lucide-react';
 
-import { Input } from '@/components/ui/input/Input';
 import { Button } from '@/components/ui/button/Button';
 
 import { useFetchAiInterview } from '../hooks/useFetchAiInterview';
@@ -28,22 +27,19 @@ interface InterviewRoomProps {
 const InterviewRoom = ({ interviewId }: InterviewRoomProps) => {
   const scrollRef = useRef<HTMLDivElement>(null);
   const [inputValue, setInputValue] = useState('');
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [isHintMode, setIsHintMode] = useState(false);
   const router = useRouter();
 
-  // 1. 면접 방 정보 가져오기 (카테고리 타입 등)
   const { data: interview, isLoading: isInfoLoading } =
     useFetchAiInterview(interviewId);
 
-  // 2. 채팅 메시지 내역 가져오기 (DB에서 실시간 조회)
   const { data: messages = [], isLoading: isMessagesLoading } =
     useFetchMessages(interviewId);
 
-  // 3. 답변 전송 및 AI 응답 생성 훅
   const { mutate: sendAnswer, isPending: isAiThinking } =
     useSendAnswer(interviewId);
 
-  // 메시지가 추가되거나 AI가 생각 중일 때 하단으로 자동 스크롤
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({
@@ -53,11 +49,15 @@ const InterviewRoom = ({ interviewId }: InterviewRoomProps) => {
     }
   }, [messages, isAiThinking]);
 
-  // 메시지 전송 로직
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto';
+      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 200)}px`;
+    }
+  }, [inputValue]);
   const handleSendMessage = (text: string) => {
     if (!text.trim() || isAiThinking || !interview) return;
 
-    // 서버 액션 실행 (내 답변 저장 + AI 답변 생성 및 저장)
     sendAnswer({
       interviewId: interviewId,
       content: text,
@@ -66,9 +66,12 @@ const InterviewRoom = ({ interviewId }: InterviewRoomProps) => {
 
     setInputValue('');
     setIsHintMode(false);
+
+    setTimeout(() => {
+      textareaRef.current?.focus();
+    }, 0);
   };
 
-  // "잘 모르겠어요" 클릭 시 (힌트 요청)
   const handleRequestHint = () => {
     setIsHintMode(true);
     handleSendMessage(
@@ -82,19 +85,16 @@ const InterviewRoom = ({ interviewId }: InterviewRoomProps) => {
     <div className="flex h-screen w-full flex-col overflow-hidden bg-white text-gray-900">
       <header className="flex h-25 items-center border-b border-gray-200 bg-white/70 px-4 shadow-md">
         <div className="flex flex-1 justify-center">
-          <div className="relative">
-            <h1 className="truncate text-sm font-bold text-gray-900">
-              {interview?.title || `${interview?.category_type} 면접 연습`}
-            </h1>
-
-            <button
-              onClick={() => router.back()}
-              className="text-main-500 absolute top-0 left-[-150px] flex items-center gap-1 text-sm font-semibold"
-            >
-              <ChevronLeft size={18} />
-              Exit
-            </button>
-          </div>
+          <h1 className="max-w-[600px] pl-4 text-center -indent-4 text-sm font-bold break-keep text-gray-900">
+            {interview?.title || `${interview?.category_type} 면접 연습`}
+          </h1>
+          <button
+            onClick={() => router.back()}
+            className="text-main-500 absolute top-10 left-[300px] flex items-center gap-1 text-sm font-semibold"
+          >
+            <ChevronLeft size={18} />
+            Exit
+          </button>
         </div>
       </header>
 
@@ -158,7 +158,6 @@ const InterviewRoom = ({ interviewId }: InterviewRoomProps) => {
         </div>
       </main>
 
-      {/* Footer */}
       <footer className="shrink-0 border-t border-gray-100 bg-white p-6 pb-10">
         <div className="mx-auto flex max-w-3xl flex-col gap-4">
           {!isHintMode && !isAiThinking && (
@@ -181,12 +180,17 @@ const InterviewRoom = ({ interviewId }: InterviewRoomProps) => {
               </Button>
             ) : (
               <div className="relative overflow-hidden rounded-2xl border border-gray-200 bg-white shadow-sm transition-all focus-within:border-blue-400 focus-within:ring-4 focus-within:ring-blue-50">
-                <Input
-                  className="h-14 border-none bg-transparent px-6 text-[15px] placeholder:text-gray-400 focus-visible:ring-0"
+                <textarea
+                  ref={textareaRef}
+                  rows={1}
+                  className="custom-scrollbar w-full resize-none border-none bg-transparent px-6 py-4 pr-14 text-[15px] placeholder:text-gray-400 focus:ring-0 focus:outline-none"
                   value={inputValue}
                   onChange={(e) => setInputValue(e.target.value)}
                   onKeyDown={(e) => {
                     if (e.key === 'Enter' && !e.nativeEvent.isComposing) {
+                      if (e.shiftKey) {
+                        return;
+                      }
                       e.preventDefault();
                       handleSendMessage(inputValue);
                     }
@@ -195,8 +199,7 @@ const InterviewRoom = ({ interviewId }: InterviewRoomProps) => {
                 />
                 <button
                   onClick={() => handleSendMessage(inputValue)}
-                  disabled={!inputValue.trim() || isAiThinking}
-                  className="absolute top-1/2 right-3 -translate-y-1/2 rounded-xl p-2.5 text-blue-600 transition-all hover:bg-blue-50 disabled:text-gray-200"
+                  className="text-main-500 absolute right-3 bottom-2 rounded-xl bg-blue-50 p-2.5 transition-all disabled:text-gray-200"
                 >
                   {isAiThinking ? (
                     <Loader2 className="animate-spin" size={20} />

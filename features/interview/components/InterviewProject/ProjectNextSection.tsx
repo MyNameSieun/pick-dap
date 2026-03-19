@@ -136,7 +136,7 @@ const ProjectNextSection = ({
           <div className="flex flex-col items-center justify-center py-20 text-gray-400">
             <Loader2 className="text-main-500 mb-4 h-10 w-10 animate-spin" />
             <p className="font-bold text-gray-900">
-              AI가 프로젝트를 심층 분석 중입니다...
+              AI가 프로젝트를 분석 중입니다...
             </p>
             <p className="text-sm text-gray-500">잠시만 기다려 주세요.</p>
           </div>

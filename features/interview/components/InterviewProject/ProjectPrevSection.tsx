@@ -243,7 +243,7 @@ const ProjectPrevSection = ({
       >
         {isPending ? (
           <div className="flex items-center gap-2">
-            <span>AI 심층 분석 중...</span>
+            <span>AI 분석 중...</span>
             <Spinner size="sm" className="text-gray-500" />
           </div>
         ) : (
