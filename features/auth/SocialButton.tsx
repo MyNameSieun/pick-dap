@@ -1,10 +1,10 @@
 'use client';
-import googleLogo from '@/public/logo/goggle-logo.png';
+import googleLogo from '@/public/logo/google-logo.png';
 import kakaoLogo from '@/public/logo/kakao-logo.png';
 import githubLogo from '@/public/logo/github-logo.png';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
-import { useSignInWithOAuth } from '@/hooks/mutations/useSignInWithOAuth';
+import { useSignInWithOAuth } from '../../hooks/mutations/useSignInWithOAuth';
 
 const SocialButton = () => {
   const searchParams = useSearchParams();
