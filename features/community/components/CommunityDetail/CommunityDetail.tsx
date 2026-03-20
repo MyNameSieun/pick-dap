@@ -68,7 +68,11 @@ const CommunityDetail = ({
     <div className="flex w-full flex-col">
       <div className="mb-4">
         <BackButton
-          onClick={() => router.back()}
+          path={
+            type === 'community'
+              ? `/community/${categorySlug}`
+              : '/mypage/community'
+          }
           label={<span>뒤로가기</span>}
         />
       </div>

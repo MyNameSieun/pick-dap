@@ -1,7 +1,7 @@
 import InterviewProjectMain from '@/features/interview/components/InterviewProjectMain';
 
 export const metadata = {
-  title: '프로젝트 면접 질문 생성',
+  title: '프로젝트 질문 생성',
 };
 
 const InterviewProjectPage = () => {

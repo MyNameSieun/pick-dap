@@ -2,10 +2,12 @@ import MypageUserMenu from '@/features/mypage/components/MypageUserMenu';
 import { Metadata } from 'next';
 
 export const metadata: Metadata = {
-  title: '마이페이지',
-  description: '내 정보와 활동을 관리합니다.',
+  title: {
+    default: '마이페이지',
+    template: '마이페이지 | %s',
+  },
+  description: 'AI 기반 맞춤형 면접 대비 솔루션, 픽답',
 };
-
 const MyPageLayout = ({ children }: { children: React.ReactNode }) => {
   return (
     <main className="flex gap-5">

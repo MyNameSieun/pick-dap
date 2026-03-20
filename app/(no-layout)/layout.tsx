@@ -14,6 +14,7 @@ export const metadata: Metadata = {
     title: 'pickdap - AI로 완성하는 면접 준비',
     description: 'AI로 완성하는 면접 준비, 픽답',
     type: 'website',
+    images: ['/pickbotCircle.png'],
   },
 };
 

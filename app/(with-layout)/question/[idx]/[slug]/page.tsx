@@ -6,6 +6,15 @@ import Loader from '@/components/ui/Loader';
 interface PageProps {
   params: Promise<{ idx: string; slug: string }>;
 }
+export const generateMetadata = async ({ params }: PageProps) => {
+  const { slug } = await params;
+  const decodedSlug = decodeURIComponent(slug);
+  return {
+    title: {
+      absolute: `면접 질문 - ${decodedSlug}`,
+    },
+  };
+};
 
 const QuestionPage = async ({ params }: PageProps) => {
   const { idx, slug } = await params;

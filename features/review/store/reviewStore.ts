@@ -16,13 +16,9 @@ interface QuestionItem {
 
 interface ReviewState {
   formData: CreateReviewParams;
-  // 일반 필드 업데이트 (문자열, 숫자 등)
   setField: (field: string, value: string | number | QuestionItem[]) => void;
-  // 질문 목록 업데이트 (1:N)
   setQuestions: (questions: QuestionItem[]) => void;
-  // 체크박스/다중 선택 업데이트 (M:N)
   toggleId: (field: 'processIds' | 'questionTypeIds', id: string) => void;
-  // 초기화
   reset: () => void;
 }
 
