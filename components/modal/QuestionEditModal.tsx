@@ -60,7 +60,7 @@ const QuestionEditModal = () => {
     isEdit ? modalData.tagList : [],
   );
   const [seletedTech, setSeletedTech] = useState<string[]>(
-    isEdit ? modalData.techList || [] : [], // 수정 모드 시 스토어의 techList(slug 배열) 사용
+    isEdit ? modalData.techList || [] : [],
   );
   const checkIsDirty = () => {
     if (isEdit) {
@@ -108,7 +108,6 @@ const QuestionEditModal = () => {
       },
     });
 
-  // 버튼 클릭시 수정/삭제 모드 결정 후 질문 추가
   const handleEditQuesionClick = () => {
     if (title.trim() === '') {
       toast.success('질문을 입력해주세요.', {
@@ -145,6 +144,7 @@ const QuestionEditModal = () => {
         tagList,
         techStackIds,
         currentPath: pathname,
+        question_type: 'user',
       });
     }
   };
@@ -241,7 +241,6 @@ const QuestionEditModal = () => {
             />
           </div>
 
-          {/* 카테고리 */}
           <div className="flex flex-col gap-1">
             <span className="flex gap-1 text-sm">
               <p className="text-gray-700">카테고리</p>
@@ -259,7 +258,7 @@ const QuestionEditModal = () => {
               onValueChange={(value) => setCategory(value as CategoryTypeEnums)}
             />
           </div>
-          {/* 기술 스택 */}
+
           <article className="flex flex-col gap-3">
             <span className="flex gap-1 text-sm">
               <p className="text-gray-700">기술 스택</p>
@@ -269,12 +268,11 @@ const QuestionEditModal = () => {
                 className="c1 text-gray-1000 focus:ring-main-400 border-gray-200 bg-gray-100"
                 type="text"
                 placeholder="기술 스택을 입력해주세요"
-                value={searchTerm} // state와 연결
+                value={searchTerm}
                 onClick={techOnOpen}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />
 
-              {/* 선택된 배지들 (URL 상태 기반) */}
               <div className="mt-3 flex flex-wrap gap-2">
                 {seletedTech.map((slug, index) => (
                   <span
@@ -323,7 +321,6 @@ const QuestionEditModal = () => {
             </div>
           </article>
 
-          {/* 태그 */}
           <div className="flex flex-col gap-1">
             <p className="text-sm text-gray-700">태그</p>
             <Input

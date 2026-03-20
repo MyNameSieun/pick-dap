@@ -19,7 +19,7 @@ export const useCreatePost = (
     mutationFn: createPost,
     onSuccess: async (newPost) => {
       await queryClient.invalidateQueries({
-        queryKey: QUERY_KEYS.post.list,
+        queryKey: QUERY_KEYS.post.list(),
       });
 
       if (callbacks?.onSuccess) {

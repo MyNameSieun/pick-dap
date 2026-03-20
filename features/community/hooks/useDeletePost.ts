@@ -12,7 +12,7 @@ const useDeletePost = (callbacks?: UseMutationCallback<PostEntity>) => {
     onSuccess: (slug) => {
       if (slug) {
         queryClient.invalidateQueries({
-          queryKey: QUERY_KEYS.post.categoryList(slug),
+          queryKey: QUERY_KEYS.post.categoryList({ categorySlug: slug }),
         });
       }
 
