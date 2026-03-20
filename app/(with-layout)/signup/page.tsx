@@ -3,6 +3,8 @@ import AuthHeader from '@/features/auth/AuthHeader';
 import SignupInput from '@/features/auth/SignupInput';
 import SocialButton from '@/features/auth/SocialButton';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
+import Loader from '@/components/ui/Loader';
 
 export const metadata: Metadata = {
   title: '회원가입',
@@ -30,8 +32,9 @@ const SignupPage = () => {
         <p className="shrink-0 text-gray-700">SNS 계정으로 회원가입</p>
         <div className="h-px flex-1 bg-gray-300" />
       </div>
-
-      <SocialButton />
+      <Suspense fallback={<Loader />}>
+        <SocialButton />
+      </Suspense>
     </div>
   );
 };

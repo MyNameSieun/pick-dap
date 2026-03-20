@@ -3,6 +3,8 @@ import AuthHeader from '@/features/auth/AuthHeader';
 import LoginInput from '@/features/auth/LoginInput';
 import SocialButton from '@/features/auth/SocialButton';
 import { Metadata } from 'next';
+import { Suspense } from 'react';
+import Loader from '@/components/ui/Loader';
 
 export const metadata: Metadata = {
   title: '로그인 페이지',
@@ -30,7 +32,9 @@ const LoginPage = () => {
         <div className="h-px flex-1 bg-gray-300" />
       </div>
 
-      <SocialButton />
+      <Suspense fallback={<Loader />}>
+        <SocialButton />
+      </Suspense>
     </div>
   );
 };
