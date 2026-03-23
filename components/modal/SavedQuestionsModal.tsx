@@ -8,13 +8,16 @@ import {
   useSaveQuestionModalAction,
   useSaveQuestionModalState,
 } from '@/store/modal/saveQuestionModal';
-import { useFetchMySaveQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
+import { useFetchInfiniteQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
 import { displayDate } from '@/lib/displayDate';
 import { useCreateInterview } from '@/features/interview/hooks/useCreateAiInterview';
 import { toast } from 'sonner';
 import { useRouter } from 'next/navigation';
 import { CategoryTypeEnums } from '@/types/entity';
 import { QuestionWithDetails } from '@/features/question/services/question/fetchQuestion';
+import { useInView } from 'react-intersection-observer';
+import { useEffect } from 'react';
+import Loader from '../ui/Loader';
 
 const SavedQuestionsModal = () => {
   const router = useRouter();
@@ -23,8 +26,20 @@ const SavedQuestionsModal = () => {
 
   useEscClose(MODAL_ID.SAVE_QUESTION, isOpen, close);
 
-  const { data: mySaveQuestionData, isPending: isMySaveQuestionPending } =
-    useFetchMySaveQuestionData();
+  const {
+    data: mySaveQuestionData,
+    isPending,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFetchInfiniteQuestionData({});
+
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+  });
+
+  const savedQuestions =
+    mySaveQuestionData?.pages.flatMap((page) => page) ?? [];
 
   const { mutate: startInterview, isPending: isStartPending } =
     useCreateInterview({
@@ -36,6 +51,12 @@ const SavedQuestionsModal = () => {
         toast.error('면접 방 생성에 실패했습니다.');
       },
     });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (!isOpen) return null;
 
@@ -87,13 +108,13 @@ const SavedQuestionsModal = () => {
         </div>
 
         <div className="custom-scrollbar flex-1 overflow-y-auto p-6 md:p-8">
-          {isMySaveQuestionPending ? (
+          {isPending && !isFetchingNextPage ? (
             <div className="flex h-40 items-center justify-center">
               <Loader2 className="h-8 w-8 animate-spin text-gray-300" />
             </div>
-          ) : mySaveQuestionData && mySaveQuestionData.length > 0 ? (
+          ) : savedQuestions.length > 0 ? (
             <div className="grid gap-5">
-              {mySaveQuestionData.map((savedQuestion) => (
+              {savedQuestions.map((savedQuestion) => (
                 <article
                   key={savedQuestion.id}
                   onClick={() => handleStartInterview(savedQuestion)}
@@ -158,6 +179,20 @@ const SavedQuestionsModal = () => {
               </p>
             </div>
           )}
+
+          <div
+            ref={ref}
+            className="flex w-full items-center justify-center py-8"
+          >
+            {isFetchingNextPage && (
+              <Loader2 className="text-main-500 h-6 w-6 animate-spin" />
+            )}
+            {!hasNextPage && savedQuestions.length > 0 && (
+              <p className="text-xs font-medium text-gray-400">
+                모든 질문을 불러왔습니다.
+              </p>
+            )}
+          </div>
         </div>
 
         <div className="pointer-events-none sticky bottom-0 h-6 bg-gradient-to-t from-white to-transparent" />

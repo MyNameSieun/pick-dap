@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import { QUERY_KEYS } from '@/lib/constants';
 import {
   fetchMyQuestions,
@@ -28,7 +28,7 @@ export const useFetchQuestionByIdxData = (idx: number | string) => {
   });
 };
 
-// 내가 작성한 모든 질문 (마이페이지용, 보안 위해 props로 userId를 받지 않음)
+// ** 내가 작성한 모든 질문
 export const useFetchMyQuestionData = (filters: QuestionFilterOptions) => {
   return useQuery({
     queryKey: QUERY_KEYS.question.myList(filters),
@@ -37,12 +37,27 @@ export const useFetchMyQuestionData = (filters: QuestionFilterOptions) => {
   });
 };
 
-// 내가 저장한 모든 질문 (마이페이지용)
-export const useFetchMySaveQuestionData = (filters?: QuestionFilterOptions) => {
-  return useQuery({
+const PAGE_SIZE = 10;
+
+export const useFetchInfiniteQuestionData = (
+  filters?: QuestionFilterOptions,
+) => {
+  return useInfiniteQuery({
     queryKey: QUERY_KEYS.question.mySaveList(filters),
-    queryFn: () => fetchMySaveQuestions(filters),
-    staleTime: 1000 * 60 * 5,
+    queryFn: async ({ pageParam }) => {
+      const from = pageParam * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
+      const questions = await fetchMySaveQuestions({ filters, from, to });
+
+      return questions;
+    },
+
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      if (lastPage.length < PAGE_SIZE) return undefined;
+      return allPages.length;
+    },
   });
 };
 

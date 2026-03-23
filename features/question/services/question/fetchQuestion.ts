@@ -237,16 +237,20 @@ export const fetchMyQuestions = async (filters: QuestionFilterOptions = {}) => {
 };
 
 // * 내가 저장한 질문
-export const fetchMySaveQuestions = async (
-  filters: QuestionFilterOptions = {},
-) => {
+export const fetchMySaveQuestions = async ({
+  filters = {},
+  from,
+  to,
+}: {
+  filters?: QuestionFilterOptions;
+  from: number;
+  to: number;
+}) => {
   const supabase = await createClient();
-
   const {
     data: { user },
   } = await supabase.auth.getUser();
   if (!user) throw new Error('로그인이 필요합니다.');
-
   const hasCategory = filters.category && filters.category !== 'ALL';
   const hasStatus = filters.status && filters.status !== 'ALL';
 
@@ -295,7 +299,6 @@ export const fetchMySaveQuestions = async (
   } else {
     query = query.order('created_at', { ascending: false });
   }
-
   if (filters.techs) {
     const techArray = filters.techs.split(',');
 
@@ -309,13 +312,13 @@ export const fetchMySaveQuestions = async (
     const ids = filteredQuestions.map((q) => q.id);
     query = query.in('id', ids);
   }
+  query = query.range(from, to);
 
   const { data, error } = await query;
   if (error) throw error;
 
   return (data as unknown as RawQuestionJoined[]).map(mapToQuestionDetail);
 };
-
 /**
  * * 타인 프로필용: 특정 유저의 질문 목록 조회
  * 공개된 프로필 페이지 등에서 사용
