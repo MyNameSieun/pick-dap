@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Check, ArrowRight, Lightbulb } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -14,9 +14,10 @@ import { cx } from 'class-variance-authority';
 import AiThinkingBubble from './AiThinkingBubble';
 import { CategoryTypeEnums } from '@/types/entity';
 import Loader from '@/components/ui/Loader';
-import { useFetchMySaveQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
+import { useFetchInfiniteQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
 import { QUERY_KEYS } from '@/lib/constants';
 import { useQueryClient } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
 
 interface AiNextSectionProps {
   questions: GenerateQuestionsResponse[];
@@ -38,15 +39,31 @@ const AiNextSection = ({
 
   const { mutateAsync: saveQuestion, isPending: isSaveQuestionPending } =
     useCreateQuestion({});
-  const { data: mySaveQuestion, isPending: isMySaveLoading } =
-    useFetchMySaveQuestionData();
+
+  const {
+    data: mySaveQuestion,
+    isPending: isMySaveLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFetchInfiniteQuestionData();
+
+  const { ref, inView } = useInView({ threshold: 0.1 });
+
+  const savedQuestions = mySaveQuestion?.pages.flatMap((page) => page);
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleChooseButton = () => {
     setIsEditMode(!isEditMode);
     if (isEditMode) setSelectedIds([]);
   };
 
-  if (isMySaveLoading) return <Loader />;
+  if (isMySaveLoading || isMySaveLoading || !savedQuestions) return <Loader />;
 
   const handleItemClick = (
     p: GenerateQuestionsResponse,
@@ -91,7 +108,7 @@ const AiNextSection = ({
     queryClient.invalidateQueries({
       queryKey: QUERY_KEYS.question.mySaveList(),
     });
-    
+
     setIsEditMode(false);
     setSelectedIds([]);
   };
@@ -148,7 +165,7 @@ const AiNextSection = ({
           questions.map((item, index) => {
             const isSelected = selectedIds.includes(item.id);
             const isAlreadySaved =
-              mySaveQuestion?.some((m) => m.title === item.question) ?? false;
+              savedQuestions?.some((m) => m.title === item.question) ?? false;
 
             return (
               <div
@@ -215,6 +232,10 @@ const AiNextSection = ({
             </p>
           </div>
         )}
+      </div>
+
+      <div ref={ref} className="flex w-full items-center justify-center py-8">
+        {isFetchingNextPage && <Loader />}
       </div>
     </div>
   );
