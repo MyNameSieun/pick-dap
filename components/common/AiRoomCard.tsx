@@ -9,18 +9,36 @@ import {
   useIsEditMode,
   useSelectedIds,
 } from '@/store/useEditStore';
-import { useFetchMyAiInterviews } from '@/features/interview/hooks/useFetchAiInterview';
 import { displayDate } from '@/lib/displayDate';
+import { useInView } from 'react-intersection-observer';
+import { useFetchInfiniteMyAiInterviews } from '@/features/interview/hooks/useFetchAiInterview';
+import { useEffect } from 'react';
 
 const AiRoomCard = () => {
   const isEditMode = useIsEditMode();
   const selectedIds = useSelectedIds();
   const { toggleSelectedId } = useEditActions();
-  const { data: myInterviews, isPending } = useFetchMyAiInterviews();
+  const {
+    data: myInterviews,
+    isPending,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFetchInfiniteMyAiInterviews();
+  const interviews = myInterviews?.pages.flatMap((page) => page);
 
-  if (isPending) return <Loader />;
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+  });
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
-  if (!myInterviews || myInterviews.length === 0) {
+  if (isPending || !interviews) return <Loader />;
+
+  if (!interviews || interviews.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-20 text-gray-500">
         <p className="b1 font-medium">아직 진행한 면접이 없습니다.</p>
@@ -38,7 +56,7 @@ const AiRoomCard = () => {
 
   return (
     <div className="w-full border-t border-gray-200">
-      {myInterviews.map((room) => {
+      {interviews.map((room) => {
         const { id, category_type, created_at, status, title } = room;
         const isSelected = selectedIds.includes(id);
 
@@ -85,6 +103,7 @@ const AiRoomCard = () => {
           </Link>
         );
       })}
+      <div ref={ref}></div>
     </div>
   );
 };

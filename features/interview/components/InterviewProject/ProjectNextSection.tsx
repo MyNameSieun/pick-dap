@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { twMerge } from 'tailwind-merge';
 import { Loader2, ZapOff, Check, ArrowRight } from 'lucide-react';
 import { usePathname } from 'next/navigation';
@@ -11,10 +11,11 @@ import Tags from '@/components/common/Tags/Tags';
 import { GenerateProjectsResponse } from '../../services/fetchGenerateProjects';
 import { useCreateQuestion } from '@/features/question/hooks/question/useCreateQuestion';
 import { cx } from 'class-variance-authority';
-import { useFetchMySaveQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
 import Loader from '@/components/ui/Loader';
 import { QUERY_KEYS } from '@/lib/constants';
 import { useQueryClient } from '@tanstack/react-query';
+import { useFetchInfiniteQuestionData } from '@/features/question/hooks/question/useFetchQuestionData';
+import { useInView } from 'react-intersection-observer';
 
 interface ProjectNextSectionProps {
   projects: GenerateProjectsResponse[];
@@ -36,8 +37,23 @@ const ProjectNextSection = ({
 
   const { mutateAsync: saveQuestion, isPending: isSaveQuestionPending } =
     useCreateQuestion({});
-  const { data: mySaveQuestion, isPending: isMySaveLoading } =
-    useFetchMySaveQuestionData();
+  const {
+    data: mySaveQuestion,
+    isPending: isMySaveLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFetchInfiniteQuestionData();
+
+  const { ref, inView } = useInView({ threshold: 0.1 });
+
+  const savedQuestions = mySaveQuestion?.pages.flatMap((page) => page);
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const handleChooseButton = () => {
     setIsEditMode(!isEditMode);
@@ -144,7 +160,7 @@ const ProjectNextSection = ({
           projects.map((p) => {
             const isSelected = selectedIds.includes(p.id);
             const isAlreadySaved =
-              mySaveQuestion?.some((m) => m.title === p.question) ?? false;
+              savedQuestions?.some((m) => m.title === p.question) ?? false;
 
             return (
               <div
@@ -206,6 +222,9 @@ const ProjectNextSection = ({
             </p>
           </div>
         )}
+      </div>
+      <div ref={ref} className="flex w-full items-center justify-center py-8">
+        {isFetchingNextPage && <Loader />}
       </div>
     </div>
   );

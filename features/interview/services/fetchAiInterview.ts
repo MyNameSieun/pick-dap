@@ -17,7 +17,13 @@ export const fetchAiInterview = async (interviewId: string) => {
 };
 
 // 로그인한 사용자의 모든 AI 면접 목록 조회
-export const fetchMyAiInterviews = async () => {
+export const fetchMyAiInterviews = async ({
+  from,
+  to,
+}: {
+  from: number;
+  to: number;
+}) => {
   const supabase = await createClient();
 
   const {
@@ -30,7 +36,8 @@ export const fetchMyAiInterviews = async () => {
   const { data, error } = await supabase
     .from('ai_interview')
     .select('*, profiles(nickname,avatar_url)')
-    .eq('user_id', user.id);
+    .eq('user_id', user.id)
+    .range(from, to);
 
   if (error)
     throw new Error(
