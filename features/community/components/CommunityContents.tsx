@@ -1,28 +1,42 @@
 'use client';
 
+import { useEffect } from 'react';
 import { FileText, PlusCircle } from 'lucide-react';
 import PostCard from './PostCard/PostCard';
 import Loader from '@/components/ui/Loader';
-import { useFetchPostData } from '../hooks/useFetchPostsData';
 import { Button } from '@/components/ui/button/Button';
 import { useRouter } from 'next/navigation';
+import { useInView } from 'react-intersection-observer';
 import usePostFilters from '../hooks/usePostFilters';
+import { useFetchInfinitePostData } from '../hooks/useFetchPostsData';
 
 const CommunityContents = ({ categorySlug }: { categorySlug: string }) => {
   const router = useRouter();
   const { sort, searchQuery } = usePostFilters();
-  const { data: posts, isPending } = useFetchPostData({
-    categorySlug,
-    sort,
-    searchQuery,
-  });
+  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
+    useFetchInfinitePostData({
+      categorySlug,
+      sort,
+      searchQuery,
+    });
+
+  const { ref, inView } = useInView({ threshold: 0.1 });
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   if (isPending) return <Loader />;
+
+  const allPosts = data?.pages.flatMap((page) => page) || [];
+
   return (
     <section className="flex w-full flex-col gap-6 py-4">
-      {posts && posts.length > 0 ? (
+      {allPosts.length > 0 ? (
         <div className="flex flex-col gap-4 md:gap-5">
-          {posts.map((post) => (
+          {allPosts.map((post) => (
             <div
               key={post.id}
               className="transition-transform duration-200 active:scale-[0.99]"
@@ -30,6 +44,13 @@ const CommunityContents = ({ categorySlug }: { categorySlug: string }) => {
               <PostCard post={post} />
             </div>
           ))}
+
+          <div
+            ref={ref}
+            className="flex w-full items-center justify-center py-8"
+          >
+            {isFetchingNextPage && <Loader />}
+          </div>
         </div>
       ) : (
         <div className="flex min-h-[350px] w-full flex-col items-center justify-center rounded-3xl border-2 border-dashed border-gray-100 bg-gray-50/50 px-6">

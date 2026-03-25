@@ -35,7 +35,9 @@ export const fetchPostsData = async ({
   sort = 'latest',
   searchQuery,
   userId,
-}: PostFilterOptions) => {
+  from,
+  to,
+}: PostFilterOptions & { from: number; to: number }) => {
   const supabase = await createClient();
 
   const {
@@ -67,6 +69,7 @@ export const fetchPostsData = async ({
   } else {
     query = query.order('create_at', { ascending: false });
   }
+  query = query.range(from, to);
 
   const { data, error } = await query;
 
@@ -107,7 +110,7 @@ export const fetchPostDetail = async (
 };
 export const fetchLikedPosts = async (
   userId: string,
-  filters?: PostFilterOptions,
+  { from, to, ...filters }: PostFilterOptions & { from: number; to: number },
 ) => {
   const supabase = await createClient();
   const { categorySlug, sort = 'latest' } = filters || {};
@@ -137,6 +140,7 @@ export const fetchLikedPosts = async (
   } else {
     query = query.order('create_at', { ascending: false });
   }
+  query = query.range(from, to);
 
   const { data, error } = await query;
   if (error) throw new Error(error.message);
@@ -151,7 +155,7 @@ export const fetchLikedPosts = async (
 
 export const fetchCommentedPosts = async (
   userId: string,
-  filters?: PostFilterOptions,
+  { from, to, ...filters }: PostFilterOptions & { from: number; to: number },
 ) => {
   const supabase = await createClient();
   const { categorySlug, sort = 'latest' } = filters || {};
@@ -182,6 +186,8 @@ export const fetchCommentedPosts = async (
   } else {
     query = query.order('create_at', { ascending: false });
   }
+
+  query = query.range(from, to);
 
   const { data, error } = await query;
   if (error) throw new Error(error.message);

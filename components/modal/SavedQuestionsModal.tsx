@@ -17,7 +17,6 @@ import { CategoryTypeEnums } from '@/types/entity';
 import { QuestionWithDetails } from '@/features/question/services/question/fetchQuestion';
 import { useInView } from 'react-intersection-observer';
 import { useEffect } from 'react';
-import Loader from '../ui/Loader';
 
 const SavedQuestionsModal = () => {
   const router = useRouter();

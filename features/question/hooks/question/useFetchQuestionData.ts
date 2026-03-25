@@ -24,7 +24,7 @@ export const useFetchQuestionByIdxData = (idx: number | string) => {
     queryKey: QUERY_KEYS.question.detail(Number(idx)),
     queryFn: () => fetchQuestionByIdx(Number(idx)),
     staleTime: 1000 * 60 * 5,
-    enabled: !!idx, // idx가 있을 때만 실행되도록
+    enabled: !!idx,
   });
 };
 
@@ -37,7 +37,7 @@ export const useFetchMyQuestionData = (filters: QuestionFilterOptions) => {
   });
 };
 
-const PAGE_SIZE = 10;
+const PAGE_SIZE = 5;
 
 export const useFetchInfiniteQuestionData = (
   filters?: QuestionFilterOptions,

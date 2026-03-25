@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useInfiniteQuery, useQuery } from '@tanstack/react-query';
 import {
   fetchCommentedPosts,
   fetchLikedPosts,
@@ -8,11 +8,28 @@ import {
 } from '../services/fetchPostsData';
 import { QUERY_KEYS } from '@/lib/constants';
 
+const PAGE_SIZE = 5;
+
 // 특정 카테고리 목록 조회
-export const useFetchPostData = (filters: PostFilterOptions) => {
-  return useQuery({
-    queryKey: QUERY_KEYS.post.list(filters),
-    queryFn: () => fetchPostsData(filters),
+export const useFetchInfinitePostData = (filters: PostFilterOptions) => {
+  return useInfiniteQuery({
+    queryKey: [...QUERY_KEYS.post.list(filters)],
+
+    queryFn: async ({ pageParam }) => {
+      const from = pageParam * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
+      return await fetchPostsData({ ...filters, from, to });
+    },
+
+    initialPageParam: 0,
+
+    getNextPageParam: (lastPage, allPages) => {
+      if (!lastPage || lastPage.length < PAGE_SIZE) {
+        return undefined;
+      }
+      return allPages.length;
+    },
   });
 };
 
@@ -30,36 +47,64 @@ export const useFetchPostDetail = (
 };
 
 // 내가 작성한 글 조회
-export const useFetchMyPosts = (
+export const useFetchInfiniteMyPosts = (
   userId: string | undefined,
   filters?: PostFilterOptions,
 ) => {
-  return useQuery({
-    queryKey: [...QUERY_KEYS.post.myList, filters],
-    queryFn: () => fetchPostsData({ ...filters, userId }),
-    enabled: !!userId,
-  });
-};
-// 작성한 댓글 기준 게시글 조회 훅
-export const useFetchMyCommentedPosts = (
-  userId: string | undefined,
-  filters?: PostFilterOptions,
-) => {
-  return useQuery({
-    queryKey: [...QUERY_KEYS.post.myList, 'commented', userId, filters],
-    queryFn: () => fetchCommentedPosts(userId!, filters),
+  return useInfiniteQuery({
+    queryKey: [...QUERY_KEYS.post.myList, filters, userId],
+    queryFn: async ({ pageParam }) => {
+      const from = pageParam * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
+      return await fetchPostsData({ ...filters, userId, from, to });
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length < PAGE_SIZE ? undefined : allPages.length;
+    },
     enabled: !!userId,
   });
 };
 
-// 좋아요 한 게시글 조회 훅
-export const useFetchMyLikedPosts = (
+// 작성한 댓글 기준 게시글 조회
+export const useFetchMyInfiniteCommentedPosts = (
   userId: string | undefined,
   filters?: PostFilterOptions,
 ) => {
-  return useQuery({
+  return useInfiniteQuery({
+    queryKey: [...QUERY_KEYS.post.myList, 'commented', userId, filters],
+    queryFn: async ({ pageParam }) => {
+      const from = pageParam * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
+      return await fetchCommentedPosts(userId!, { ...filters, from, to });
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length < PAGE_SIZE ? undefined : allPages.length;
+    },
+    enabled: !!userId,
+  });
+};
+
+// 좋아요 한 게시글 조회 (무한 스크롤)
+export const useFetchInfiniteMyLikedPosts = (
+  userId: string | undefined,
+  filters?: PostFilterOptions,
+) => {
+  return useInfiniteQuery({
     queryKey: [...QUERY_KEYS.post.myList, 'liked', userId, filters],
-    queryFn: () => fetchLikedPosts(userId!, filters),
+    queryFn: async ({ pageParam }) => {
+      const from = pageParam * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+
+      return await fetchLikedPosts(userId!, { ...filters, from, to });
+    },
+    initialPageParam: 0,
+    getNextPageParam: (lastPage, allPages) => {
+      return lastPage.length < PAGE_SIZE ? undefined : allPages.length;
+    },
     enabled: !!userId,
   });
 };

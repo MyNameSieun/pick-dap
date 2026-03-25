@@ -103,7 +103,12 @@ const AiRoomCard = () => {
           </Link>
         );
       })}
-      <div ref={ref}></div>
+      <div ref={ref} className="flex w-full items-center justify-center py-8">
+        {isFetchingNextPage && <Loader />}
+        {!hasNextPage && interviews.length > 0 && (
+          <p className="text-sm text-gray-400">모든 기록을 불러왔습니다.</p>
+        )}
+      </div>
     </div>
   );
 };
