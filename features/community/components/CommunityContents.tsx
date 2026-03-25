@@ -1,56 +1,56 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState } from 'react';
 import { FileText, PlusCircle } from 'lucide-react';
 import PostCard from './PostCard/PostCard';
 import Loader from '@/components/ui/Loader';
 import { Button } from '@/components/ui/button/Button';
 import { useRouter } from 'next/navigation';
-import { useInView } from 'react-intersection-observer';
 import usePostFilters from '../hooks/usePostFilters';
-import { useFetchInfinitePostData } from '../hooks/useFetchPostsData';
+import { useFetchPostDataByPage } from '../hooks/useFetchPostsData';
+import PaginationCustom from '@/components/common/PaginationCustom';
 
 const CommunityContents = ({ categorySlug }: { categorySlug: string }) => {
   const router = useRouter();
+
+  const PAGE_SIZE = 10;
+  const [page, setPage] = useState(0);
+
   const { sort, searchQuery } = usePostFilters();
-  const { data, isPending, hasNextPage, fetchNextPage, isFetchingNextPage } =
-    useFetchInfinitePostData({
-      categorySlug,
-      sort,
-      searchQuery,
-    });
 
-  const { ref, inView } = useInView({ threshold: 0.1 });
+  const { data, isPending } = useFetchPostDataByPage(
+    { categorySlug, sort, searchQuery },
+    page,
+  );
+  const posts = data?.posts || [];
+  const totalCount = data?.totalCount || 0;
 
-  useEffect(() => {
-    if (inView && hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
+  const totalPages = Math.ceil(totalCount / PAGE_SIZE);
 
   if (isPending) return <Loader />;
 
-  const allPosts = data?.pages.flatMap((page) => page) || [];
+  const hasPosts = posts && posts.length > 0;
 
   return (
     <section className="flex w-full flex-col gap-6 py-4">
-      {allPosts.length > 0 ? (
+      {hasPosts ? (
         <div className="flex flex-col gap-4 md:gap-5">
-          {allPosts.map((post) => (
-            <div
-              key={post.id}
-              className="transition-transform duration-200 active:scale-[0.99]"
-            >
-              <PostCard post={post} />
-            </div>
-          ))}
-
-          <div
-            ref={ref}
-            className="flex w-full items-center justify-center py-8"
-          >
-            {isFetchingNextPage && <Loader />}
+          <div className="flex flex-col gap-4 md:gap-5">
+            {posts.map((post) => (
+              <div
+                key={post.id}
+                className="transition-transform duration-200 active:scale-[0.99]"
+              >
+                <PostCard post={post} />
+              </div>
+            ))}
           </div>
+
+          <PaginationCustom
+            currentPage={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
       ) : (
         <div className="flex min-h-[350px] w-full flex-col items-center justify-center rounded-3xl border-2 border-dashed border-gray-100 bg-gray-50/50 px-6">

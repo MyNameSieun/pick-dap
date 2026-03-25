@@ -1,14 +1,15 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { FolderOpen, Zap, CheckCircle2 } from 'lucide-react';
+import { FolderOpen, Zap } from 'lucide-react';
 import { twMerge } from 'tailwind-merge';
 import { useQueries } from '@tanstack/react-query';
+import { useInView } from 'react-intersection-observer';
 
 import { Button } from '@/components/ui/button/Button';
 import Loader from '@/components/ui/Loader';
-import { useFetchProjectMyList } from '@/features/mypage/hooks/project/useFetchProject';
+import { useFetchInfiniteProjectMyList } from '@/features/mypage/hooks/project/useFetchProject';
 import { fetchProjectMyDetail } from '@/features/mypage/services/project/fetchProject';
 import { QUERY_KEYS } from '@/lib/constants';
 import { GenerateProjectsRequest } from '../../services/fetchGenerateProjects';
@@ -60,8 +61,28 @@ const ProjectPrevSection = ({
   isPending,
 }: ProjectPrevSectionProps) => {
   const router = useRouter();
-  const { data: projectMyLists, isPending: isListLoading } =
-    useFetchProjectMyList();
+
+  const {
+    data: infiniteData,
+    isPending: isListLoading,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useFetchInfiniteProjectMyList();
+
+  const { ref, inView } = useInView({
+    threshold: 0.1,
+  });
+
+  const allProjects = useMemo(() => {
+    return infiniteData?.pages.flatMap((page) => page) || [];
+  }, [infiniteData]);
+
+  useEffect(() => {
+    if (inView && hasNextPage && !isFetchingNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, hasNextPage, isFetchingNextPage, fetchNextPage]);
 
   const [selectedSlugs, setSelectedSlugs] = useState<string[]>([]);
 
@@ -78,7 +99,7 @@ const ProjectPrevSection = ({
   const allDetailsReady =
     projectDetailQueries.every((q) => q.data) && selectedSlugs.length > 0;
 
-  if (isListLoading) return <Loader />;
+  if (isListLoading && !isFetchingNextPage) return <Loader />;
 
   const handleToggleProject = (slug: string) => {
     setSelectedSlugs((prev) =>
@@ -89,8 +110,9 @@ const ProjectPrevSection = ({
   const handleGenerateClick = () => {
     if (!allDetailsReady) return;
 
-    const selectedProjects =
-      projectMyLists?.filter((p) => selectedSlugs.includes(p.slug)) || [];
+    const selectedProjects = allProjects.filter((p) =>
+      selectedSlugs.includes(p.slug),
+    );
     const representativeId = selectedProjects[0]?.id || '';
 
     const combinedData = projectDetailQueries.reduce<CombinedData>(
@@ -192,7 +214,7 @@ const ProjectPrevSection = ({
       </div>
 
       <div className="custom-scrollbar flex max-h-[400px] flex-col gap-3 overflow-y-auto pr-2">
-        {projectMyLists?.map((p) => {
+        {allProjects.map((p) => {
           const isSelected = selectedSlugs.includes(p.slug);
 
           return (
@@ -233,6 +255,14 @@ const ProjectPrevSection = ({
             </article>
           );
         })}
+        <div ref={ref} className="flex w-full items-center justify-center py-8">
+          {isFetchingNextPage && <Loader />}
+          {!hasNextPage && allProjects.length > 0 && (
+            <p className="text-sm text-gray-400">
+              모든 프로젝트를 불러왔습니다.
+            </p>
+          )}
+        </div>
       </div>
 
       <Button
@@ -244,7 +274,7 @@ const ProjectPrevSection = ({
         {isPending ? (
           <div className="flex items-center gap-2">
             <span>AI 분석 중...</span>
-            <Spinner size="sm" className="text-gray-500" />
+            <Spinner size="sm" className="text-white" />
           </div>
         ) : (
           <>

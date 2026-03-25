@@ -3,7 +3,14 @@ import { createClient } from '@/lib/supabase/server';
 import { supabase } from '@/lib/supabase/supabase';
 import { QueryData } from '@supabase/supabase-js';
 
-export const fetchMyListProject = async () => {
+// * 프로젝트 리스트
+export const fetchMyListProject = async ({
+  from,
+  to,
+}: {
+  from: number;
+  to: number;
+}) => {
   const supabase = await createClient();
 
   const {
@@ -15,7 +22,8 @@ export const fetchMyListProject = async () => {
     .from('project')
     .select('*')
     .eq('user_id', user?.id)
-    .order('created_at', { ascending: false });
+    .order('created_at', { ascending: false })
+    .range(from, to);
 
   if (error) {
     throw new Error('프로젝트 데이터를 불러오지 못했습니다.');
@@ -40,6 +48,7 @@ export type RawProjectDetailJoined = QueryData<
   typeof projectDetailJoinQuery
 >[number];
 
+// * 프로젝트 상세
 export const fetchProjectMyDetail = async (slug: string) => {
   const supabase = await createClient();
   const decodedSlug = decodeURIComponent(slug);

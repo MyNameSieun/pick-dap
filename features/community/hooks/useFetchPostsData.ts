@@ -4,11 +4,12 @@ import {
   fetchLikedPosts,
   fetchPostDetail,
   fetchPostsData,
+  fetchPostsInfiniteData,
   PostFilterOptions,
 } from '../services/fetchPostsData';
 import { QUERY_KEYS } from '@/lib/constants';
 
-const PAGE_SIZE = 5;
+const PAGE_SIZE = 10;
 
 // 특정 카테고리 목록 조회
 export const useFetchInfinitePostData = (filters: PostFilterOptions) => {
@@ -19,7 +20,7 @@ export const useFetchInfinitePostData = (filters: PostFilterOptions) => {
       const from = pageParam * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
 
-      return await fetchPostsData({ ...filters, from, to });
+      return await fetchPostsInfiniteData({ ...filters, from, to });
     },
 
     initialPageParam: 0,
@@ -57,13 +58,29 @@ export const useFetchInfiniteMyPosts = (
       const from = pageParam * PAGE_SIZE;
       const to = from + PAGE_SIZE - 1;
 
-      return await fetchPostsData({ ...filters, userId, from, to });
+      return await fetchPostsInfiniteData({ ...filters, userId, from, to });
     },
     initialPageParam: 0,
     getNextPageParam: (lastPage, allPages) => {
       return lastPage.length < PAGE_SIZE ? undefined : allPages.length;
     },
     enabled: !!userId,
+  });
+};
+
+// 커뮤니티 메인 리스트용 페이지네이션 훅
+export const useFetchPostDataByPage = (
+  filters: PostFilterOptions,
+  page: number,
+) => {
+  return useQuery({
+    queryKey: [...QUERY_KEYS.post.list(filters), page],
+    queryFn: async () => {
+      const from = page * PAGE_SIZE;
+      const to = from + PAGE_SIZE - 1;
+      return fetchPostsData({ ...filters, from, to });
+    },
+    placeholderData: (previousData) => previousData,
   });
 };
 
@@ -88,7 +105,7 @@ export const useFetchMyInfiniteCommentedPosts = (
   });
 };
 
-// 좋아요 한 게시글 조회 (무한 스크롤)
+// 좋아요 한 게시글 조회
 export const useFetchInfiniteMyLikedPosts = (
   userId: string | undefined,
   filters?: PostFilterOptions,
